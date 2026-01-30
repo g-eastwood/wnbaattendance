@@ -1,0 +1,63 @@
+---
+title: Does Winning Percentage Boost a Team's Live Game Attendance in the WNBA, and How do Individual Players Contribute? 
+author:
+  - name: Gabriela Eastwood
+    corresponding: true
+    email: geastwood@smith.edu
+    affiliations:
+      - Smith College
+
+keywords:
+  - WNBA
+  - Game Attendance
+  - Player Salary
+  - Winning Percentage
+abstract: |
+  expect abstract shortly
+
+key-points:
+  - winning percentage and game attendance
+date: last-modified
+bibliography: references.bib
+citation:
+  container-title: Earth and Space Science
+number-sections: true
+---
+
+## Introduction
+  Research on pay and performance in sports economics often centers on how teams value player contributions and how those valuations translate into compensation. A central challenge in this literature is determining the appropriate metrics for quantifying an individual player’s impact on team success and linking that impact to team revenues. Different modeling choices—both in how performance is measured and how revenue is attributed—can lead to significantly different conclusions about whether players are compensated fairly. These themes are especially important for emerging or rapidly growing leagues, where financial structures and performance metrics are still evolving. As a relatively young league with rapidly increasing visibility but limited publicly available financial data, accurately valuing player contributions in the WNBA is difficult. I have found attendance data to be the most reliably available indicator of revenue, making the link between on-court performance and fan demand especially important for understanding compensation dynamics.
+
+  The underlying assumptions of marginal revenue models is a simple, psychological one, that almost goes without saying - fans are more interested in watching good teams. In their 2014 paper, Coates, Humphreys and Zhou use a consumer-choice model to explain what impacts a fan’s choice to attend a live MLB game. While they look specifically at baseball, it is reasonable to assume that similar considerations apply to other sports as well. The authors explain the traditional model for explaining fan behavior: the uncertainty of outcome hypothesis, the idea that fans are more likely to attend games when the outcome is uncertain, making the game more exciting. But more recent behavioral economics suggests that people evaluate gains and losses relative to a reference point and tend to dislike losses more than they like equivalent gains. The authors argue that applying this idea of loss aversion may better explain why fans choose to go games than the uncertainty of outcome hypothesis. They use MLB live-game attendance data to find attendance patterns consistent with the hypothesis that fans are less likely to attend games they expect the home-team to lose. [@CoatesHumphreysZhou2014]
+  
+  Building on the idea that wins translate directly into fan interest and team revenue, Gerald Scully’s 1974 study on pay and performance in Major League Baseball is one of the first empirical studies on the labor market in a professional sports environment, investigating whether MLB players were undervalued relative to their estimated marginal revenue products. [@HolmesSimmonsBerri2018] Scully estimates players’ marginal revenue products by regressing a team’s revenue on their winning percentage and computing individual players’ contributions to their teams winning percentage. This allows him to evaluate how much each player contributed to the team’s total revenue in a season, estimating their marginal revenue product and comparing it to their salary. Scully’s study came two years after the first players strike in baseball history, and aimed to evaluate whether players’ claims that they were being systematically undervalued were accurate. Scully finds that the average MLB player at the time was being paid 20% of his marginal revenue contribution, and that exploitation was higher for early career players. [@Scully1974] He also finds that certain exceptional players were being overvalued compared to their estimated marginal revenue contributions, and hypothesizes this reveals that players can generate revenue for their teams outside of their effect on game outcomes (i.e. the Caitlyn Clark effect).
+  
+Subsequent scholars have raised important critiques of Scully’s method. Krautmann criticizes Scully’s method by showing that the results are highly sensitive to how a player’s contribution to team performance is measured. [@Krautmann1999] Because there are many possible ways to quantify an individual’s on-field contribution, his critique highlights the need—especially for my research—to use a rigorous and defensible metric for estimating the number of wins each player contributes. In his 1991 paper on salaries and performance in the MLB, Andrew Zimbalist notes that Scully’s model doesn’t account for how poor play can contribute to a team’s losses and thus may inflate the marginal revenue product of each player. [@Zimbalist1992]
+	
+  Finally, situating these revenue models within broader league structure, sports economists have written extensively about the relationship between winningness and team revenue, particularly about how competitive balance benefits teams across the league in generating revenue. While teams and fans want to win as many games as possible, significant imbalance in winning percentages across a professional sports league will tend to decrease viewership as spectators will only watch a game if they have some uncertainty about the outcome. [@PerlineNobleStoldt2018] The various professional sports leagues in the United States have all instituted financial restrictions on teams in their leagues in the interest of competitive balance, such as across-league revenue sharing, salary caps, and reverse of finish drafts. The fundamental premise behind all of these attempts to protect competitive balance is that by normalizing the amounts that teams are spending on their rosters you can weaken the ability of richer teams to ‘buy wins’ and level the playing field enough to keep things interesting. This ought to increase the revenue of the whole league by encouraging attendance and engagement. In their study of competitive balance in NCAA basketball, Perline, Noble and Stoldt found that the women’s game was significantly less balanced than the men’s game, looking at the standard deviation and the range of winning percentages for teams in the women’s division I conference. They hypothesize that the difference in the competitive balance of the men’s and women’s games could be one cause of lower revenue generation and attendance in the women’s game. The importance of class balance to the health of a league is interesting, but ultimately outside the scope of my research which seeks to quantify how players’ performance contributes to their team’s revenue in the WNBA.
+
+  In their 2023 paper comparing the in person attendance demand of the WNBA and the NBA, Agha and Berri attempt to establish whether different forces shape demand for attendance in the WNBA and the NBA. They model attendance in both leagues as a function of the population of the team’s home location, the winning percentage of the team, the per capita income of the area, championships won and player quality. Interestingly, they don’t generate significant results for the effect of winning percentage on game attendance in the WNBA, while it is significant in the NBA. [@AghaBerri2023] They hypothesize that this may be due to decreased media coverage of the WNBA, and the fact that the WNBA is a much younger league, but don’t explain why these factors would decrease the effect of winning percentage on game attendance. Although Agha and Berri did not find statistically significant effects, their work highlights an important relationship worth re-examining. Replicating their analysis with a simpler model focused solely on winning percentage may yield clearer evidence on how team performance influences attendance. I aim to build upon their work by combining their model with Scully’s and first regressing game attendance onto winning percentage, and then using player statistics to estimate individual player contributions to winning percentage. This would allow me to evaluate how a player’s on-court performance contributes to game attendance, and relatedly to revenue. In Scully’s original 1974 model, attendance multiplied by ticket price serves as an estimate for team revenue. While my analysis cannot capture broadcast or merchandise income, game attendance remains a meaningful indicator of team visibility and revenue generation, and it is by far the most complete and publicly available dataset. Focusing on attendance as the response variable is therefore both practical and theoretically justified.
+
+## Data & Methods {#sec-data-methods}
+To quantify individual players’ contributions to a team’s, I plan to use the Win Shares metric from Basketball Reference. These metrics were developed using Dean Oliver’s metrics from Basketball on Paper, and the Basketball Reference team has extensive documentation of their formula online. While Basketball Reference publishes players’ Win Shares metrics for their overall career and for the current season, I will have to use the formula to reverse engineer the metrics for prior seasons. The Offensive Win Share metric is simply the marginal offense of a specific player (calculated using Dean Oliver’s points produced and offensive possessions measures) divided by the marginal points per win for the player’s team. Marginal offense for each player is calculated as the difference between the points they produce and the number of points an average offense would be expected to produce in the same number of possessions: marginal offense = (points produced) − 0.92 × (league points per possession) × (offensive possessions). Marginal points per win is a metric that quantifies how many points a team is expected to need to win, considering the team’s average pace (possessions per game) in the context of the league average pace. Defensive Win Share puts a player’s Defensive Rating (points allowed per 100 defensive possessions) into the league pace context using the same marginal points per win metric. A player’s overall win share is simply the offensive and defensive win shares added. [@BasketballReference_WS]
+
+My analysis relies on two primary data sources, to fit the two parts of my model connecting attendance to winning percentage and winning percentage to individual player contributions. The first source is the “Across the Timeline: WNBA League Attendance Dashboard”, which compiles game-level attendance data for all WNBA teams across multiple seasons. This dashboard allows me to examine trends in fan engagement over time and compare attendance across teams, and contains a record of the in-person attendance for every WNBA game since 1997, when the league began. [@AcrossTheTimeline_WNBA_Attendance] Interestingly the data includes teams that are no longer in existence, but I only plan on using records from active teams. The second source is Basketball Reference’s individual WNBA player stat sheets, a comprehensive collection of player-level performance metrics. These stat sheets provide detailed statistics for each player in categories such as points, rebounds, assists, turnovers, etc. [@BasketballReference] Importantly, with these stat sheets I can compute Win Shares as a metric for player contribution as outlined above. Basketball Reference also has a repository of team and league statistics useful for computing the team and league pace metrics necessary for the Win Shares computation.
+
+```{r}
+library(readr)
+library(dplyr)
+library(knitr)
+
+atlanta_dream_2025 <- read_csv("wnba-attendance (1).csv")
+
+kable(atlanta_dream_2025)
+```
+Just as an example of what the attendance data looks like, this is the attendance of home games (and a special match played in Vancouver) in 2025 for the Atlanta Dream. Already, you can notice two major outliers in the attendance record. One is the August 15th game played in Vancouver, which was the first WNBA game played outside the US [@WNBA_CanadaGame_Website] and was likely singularly advertised and well attended. The other outlier is the season opener played on May 22nd against the Indiana Fever. We would expect season opener's to be well attended, but this outsized effect is likely due to Caitlyn Clark's stardom.
+
+
+## Conclusion
+
+## References {.unnumbered}
+
+:::{#refs}
+
+:::
