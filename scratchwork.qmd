@@ -1,0 +1,636 @@
+---
+title: "scratchwork"
+format: html
+---
+
+```{r}
+library(wehoop)
+library(dplyr)
+library(lubridate)
+library(slider)
+library(stringr)
+library(purrr)
+library(tibble)
+```
+
+## Wrangling gamelog data from wehoop:
+
+```{r}
+# 1. Pull league-wide gamelogs from wehoop
+
+seasons <- 2016:2024
+
+gamelogs_raw <- map_dfr(
+  seasons,
+  #team_id,
+  function(s) {
+    res <- tryCatch(
+      wnba_leaguegamelog(season = s, season_type = "Regular Season", league_id = "10"),
+      error = function(e) {
+        message(sprintf("wnba_leaguegamelog failed for season %s: %s", s, e$message))
+        return(NULL)
+      }
+    )
+    if (is.null(res)) return(NULL)
+
+    as_tibble(res) %>% mutate(season = s)
+  }
+)
+
+gamelogs <- gamelogs_raw$LeagueGameLog
+```
+
+```{r}
+# 2. clean gamelogs
+gamelogs <- gamelogs %>%
+  mutate(
+    game_date = as.Date(GAME_DATE),
+    win_flag = if_else(WL == "W", 1L, 0L),
+    isHome    = str_detect(MATCHUP, "vs"),
+    isAway    = str_detect(MATCHUP, "@")
+  ) %>%
+  arrange(TEAM_ID, game_date)
+```
+
+```{r}
+# 3. rolling win counts for 44 past games (length of a wnba season)
+gamelogs <- gamelogs %>%
+  group_by(TEAM_ID) %>%
+  mutate(
+    # rolling window of PREVIOUS 44 games, so exclude current game
+    rolling_wins_44 =
+      slide_int(
+        win_flag,
+        ~ sum(.x, na.rm = TRUE),
+        .before = 44,
+        .after = -1,      # exclude current game
+        .complete = FALSE
+      ),
+    
+    rolling_games_44 =
+      slide_int(
+        win_flag,
+        ~ length(.x),
+        .before = 44,
+        .after = -1,
+        .complete = FALSE
+      )
+  ) %>%
+  ungroup()
+```
+
+```{r}
+# 4. create home games
+home_games <- gamelogs %>%
+  filter(isHome == TRUE) %>%
+  mutate(
+    dow   = wday(game_date, label = TRUE),
+    month = month(game_date),
+    near_sellout = NA  # placeholder for later
+  )
+
+home_games <- home_games %>%
+  mutate(
+    opponent_abbrev = str_extract(MATCHUP, "(?<=vs\\. |@ ).+")
+  )
+```
+
+```{r}
+# get opponent names
+team_lookup <- home_games %>%
+  distinct(TEAM_ABBREVIATION, TEAM_NAME)
+
+home_games <- home_games %>%
+  mutate(
+    opponent_abbrev = str_extract(MATCHUP, "(?<=vs\\. |@ ).+")
+  ) %>%
+  left_join(team_lookup, 
+            by = c("opponent_abbrev" = "TEAM_ABBREVIATION"),
+            suffix = c("", "_opponent"))
+```
+
+```{r}
+home_games <- home_games %>%
+  rename(
+    team_name = TEAM_NAME,
+    opponent  = TEAM_NAME_opponent
+  ) %>%
+  select(
+    SEASON_ID, TEAM_ID, team_name,
+    opponent, GAME_ID, GAME_DATE,
+    rolling_wins_44, rolling_games_44,
+    win_flag,
+    dow, month,
+    everything()
+  )
+```
+
+## Pulling attendance data:
+
+```{r}
+library(readr)
+
+att_path <- "attendance_data/"
+
+att_files <- list.files(att_path, pattern = "\\.csv$", full.names = TRUE)
+
+attendance_raw <- map_dfr(att_files, read_csv)
+```
+
+```{r}
+attendance_clean <- attendance_raw %>%
+  mutate(
+    game_date = as.Date(Date, format = "%B %d, %Y"),
+    attendance = as.integer(Attendance)
+  ) %>%
+  select(Season, game_date, Team, Opponent, attendance)
+```
+
+```{r}
+home_games <- home_games %>%
+  mutate(
+    team_name = toupper(team_name),
+    game_date = as.Date(game_date),
+    opponent = toupper(opponent)
+  )
+
+attendance_clean <- attendance_clean %>%
+  mutate(
+    Team = toupper(Team)
+  )
+```
+
+```{r}
+home_games <- home_games |>
+  filter(SEASON_ID >= 22018, SEASON_ID <= 22025)|>
+  mutate(GAME_DATE = as.Date(GAME_DATE))
+
+full_data <- left_join(
+  home_games,
+  attendance_clean,
+  by = join_by(team_name == Team,
+               GAME_DATE == game_date)
+)
+```
+
+## Finding games with Caitlin Clark:
+
+```{r}
+player_gamelogs <- wnba_playergamelogs(
+  PLAYER_NAME = "Caitlin Clark",
+  seasons = 2024:2025
+)
+
+player_gamelogs_df <- map_dfr(player_gamelogs, ~ .x)
+```
+
+```{r}
+player_gamelogs_df %>%
+  distinct(PLAYER_NAME) %>%
+  filter(grepl("Clark", PLAYER_NAME))
+
+```
+
+```{r}
+cc_games <- player_gamelogs_df %>%
+  filter(PLAYER_NAME == "Caitlin Clark") %>%
+  mutate(caitlin_clark_game = if_else(MIN > 0, 1L, 0L)) %>%
+  select(GAME_ID, caitlin_clark_game)
+```
+
+```{r}
+full_data <- full_data %>%
+  mutate(
+    caitlin_clark_game = if_else(
+      team_name == "INDIANA FEVER" &
+      game_date >= as.Date("2024-05-14"),
+      1L, 0L
+    )
+  )
+```
+
+## Initializing first attendance model:
+
+```{r}
+full_data$team_name  <- factor(full_data$team_name)
+full_data$Season     <- factor(full_data$Season)
+full_data$dow        <- factor(full_data$dow)
+full_data$month      <- factor(full_data$month)
+full_data$opponent   <- factor(full_data$opponent)
+
+attendance_model <- lm(
+  attendance ~ rolling_wins_44 + dow + month + team_name + Season + caitlin_clark_game,
+  data = full_data
+)
+
+summary(attendance_model)
+
+```
+
+```{r}
+library(modelsummary)
+
+models <- list(
+  "OLS Model" = attendance_model
+)
+
+modelsummary(
+  models,
+  shape = model ~ term,
+  output = "table_model.tex",   # or "table_model.tex" / "table_model.docx"
+  statistic = "({std.error})",
+  stars = TRUE,
+  gof_omit = "IC|Log|Adj|Pseudo",
+  coef_map = c(
+    "(Intercept)"     = "Intercept",
+    "rolling_wins_44" = "Rolling Wins (44 games)",
+    "caitlin_clark_game" = "Caitlin Clark",
+    "team_nameCHICAGO SKY" = "Chicago Sky",
+    "team_nameCONNECTICUT SUN" = "Connecticut Sun",
+    "team_nameDALLAS WINGS" = "Dallas Wings",
+    "team_nameINDIANA FEVER" = "Indiana Fever",
+    "team_nameLAS VEGAS ACES" = "Las Vegas Aces",
+    "team_nameLOS ANGELES SPARKS" = "Los Angeles Sparks",
+    "team_nameMINNESOTA LYNX" = "Minnesota Lynx",
+    "team_nameNEW YORK LIBERTY" = "New York Liberty",
+    "team_namePHOENIX MERCURY" = "Phoenix Mercury",
+    "team_nameSEATTLE STORM" = "Seattle Storm",
+    "team_nameWASHINGTON MYSTICS" = "Washington Mystics"
+  )
+)
+
+library(gt)
+library(webshot2)
+
+# Create a gt table
+tbl <- modelsummary(
+  models,
+  shape = model ~ term,
+  output = "gt",
+  statistic = "({std.error})",
+  stars = TRUE,
+  gof_omit = "IC|Log|Adj|Pseudo",
+  coef_map = c(
+    "(Intercept)"     = "Intercept",
+    "rolling_wins_44" = "Rolling Wins (44 games)",
+    "caitlin_clark_game" = "Caitlin Clark",
+    "team_nameCHICAGO SKY" = "Chicago Sky",
+    "team_nameCONNECTICUT SUN" = "Connecticut Sun",
+    "team_nameDALLAS WINGS" = "Dallas Wings",
+    "team_nameINDIANA FEVER" = "Indiana Fever",
+    "team_nameLAS VEGAS ACES" = "Las Vegas Aces",
+    "team_nameLOS ANGELES SPARKS" = "Los Angeles Sparks",
+    "team_nameMINNESOTA LYNX" = "Minnesota Lynx",
+    "team_nameNEW YORK LIBERTY" = "New York Liberty",
+    "team_namePHOENIX MERCURY" = "Phoenix Mercury",
+    "team_nameSEATTLE STORM" = "Seattle Storm",
+    "team_nameWASHINGTON MYSTICS" = "Washington Mystics"
+)
+)
+
+# Save as PNG
+gtsave(tbl, filename = "table_model.png")
+
+
+
+```
+
+```{r}
+library(modelsummary)
+library(gt)
+library(webshot2)
+
+models <- list(
+  "OLS Model" = attendance_model
+)
+
+coef_labels <- c(
+  "(Intercept)"           = "Intercept",
+  "rolling_wins_44"       = "Rolling Wins (44 games)",
+  "caitlin_clark_game"    = "Caitlin Clark",
+  "team_nameCHICAGO SKY"        = "Chicago Sky",
+  "team_nameCONNECTICUT SUN"    = "Connecticut Sun",
+  "team_nameDALLAS WINGS"       = "Dallas Wings",
+  "team_nameINDIANA FEVER"      = "Indiana Fever",
+  "team_nameLAS VEGAS ACES"     = "Las Vegas Aces",
+  "team_nameLOS ANGELES SPARKS" = "Los Angeles Sparks",
+  "team_nameMINNESOTA LYNX"     = "Minnesota Lynx",
+  "team_nameNEW YORK LIBERTY"   = "New York Liberty",
+  "team_namePHOENIX MERCURY"    = "Phoenix Mercury",
+  "team_nameSEATTLE STORM"      = "Seattle Storm",
+  "team_nameWASHINGTON MYSTICS" = "Washington Mystics"
+)
+
+# PNG table 
+tbl <- modelsummary(
+  models,
+  shape = model ~ term,
+  output = "gt",
+  statistic = "({std.error})",
+  stars = TRUE,
+  gof_omit = "IC|Log|Adj|Pseudo",
+  coef_map = coef_labels
+)
+
+gtsave(
+  tbl,
+  filename = "images/table_model.png",
+  vwidth = 1600,
+  vheight = 1200
+)
+
+```
+
+```{r}
+#figures
+library(ggplot2)
+library(teamcolors)
+
+full_model_plot <- ggplot(full_data, aes(x = rolling_wins_44, y = attendance)) +
+  geom_point(alpha = 0.25) +
+  geom_smooth(method = "loess", se = TRUE, size = 1.2) +
+  labs(
+    title = "Attendance vs Rolling Wins (Last 44 Games)",
+    x = "Rolling Wins (44-game window)",
+    y = "Attendance"
+  ) +
+  theme_minimal(base_size = 10)
+
+ggsave("images/basic_plot.png", full_model_plot,
+       width = 5, height = 3, dpi = 300)
+```
+
+```{r}
+season_data <- full_data|>
+  filter(SEASON_ID < 22025)
+
+model_plot_season <- ggplot(season_data, aes(x = rolling_wins_44, y = attendance)) +
+  geom_point(alpha = 0.15, size = 0.8) +
+  geom_smooth(method = "loess", se = FALSE, color = "blue") +
+  facet_wrap(~ Season) +
+  labs(
+    title = "Attendance vs Rolling Wins by Team",
+    x = "Rolling Wins (44-game window)",
+    y = "Attendance"
+  ) +
+  theme_minimal(base_size = 10)
+
+ggsave("images/season_plot.png",
+       model_plot_season,
+       width = 5,
+       height = 3,
+       dpi = 300)
+```
+
+```{r}
+library(car)
+cr <- crPlots(model_ols, terms = ~ rolling_wins_44)
+
+library(broom)
+
+df_aug <- augment(model_ols)
+
+adj_plot <- ggplot(df_aug, aes(rolling_wins_44, .resid + .fitted - mean(.fitted))) +
+  geom_point(alpha = 0.3) +
+  geom_smooth(method = "loess", se = FALSE, size = 1.2) +
+  labs(
+    title = "Partial Residual Plot: Effect of Rolling Wins on Attendance",
+    x = "Rolling Wins (44-game window)",
+    y = "Partial Residual (Adjusted Attendance)"
+  ) +
+  theme_minimal(base_size = 10)
+
+ggsave("images/adjusted_residual_plot.png", adj_plot,
+       width = 5,
+       height = 3,
+       dpi = 300)
+```
+
+```{r}
+wnba_cols <- teamcolors %>%
+  filter(league == "wnba") %>%
+  select(name, primary)|>
+  mutate(name = toupper(name))
+
+data_plot <- full_data %>%
+  left_join(wnba_cols, by = c("team_name" = "name"))
+
+team_color_plot <- ggplot(data_plot, aes(x = rolling_wins_44, y = attendance, color = team_name)) +
+  geom_point(alpha = 0.3, size = 1.3) +
+  geom_smooth(method = "loess", se = FALSE, linewidth = 1) +
+  scale_color_manual(
+    values = setNames(data_plot$primary, data_plot$team_name)
+  ) +
+  labs(
+    title = "Attendance vs. Rolling Wins (by Teams)",
+    x = "Rolling Wins (Last 44 Games)",
+    y = "Attendance",
+    color = "Team"
+  ) +
+  theme_minimal(base_size = 10)
+
+ggsave("images/team_colors_plot.png",
+       team_color_plot,
+       width = 5, height = 3, dpi = 300)
+```
+
+```{r}
+attendance_desc <- ggplot(attendance_clean, aes(x = factor(Season), y = attendance)) +
+  geom_boxplot(outlier.alpha = 0.2, linewidth = 0.6, fill = "grey90") +
+  geom_jitter(alpha = 0.15, width = 0.15, size = 1) +
+  labs(
+    title = "Distribution of WNBA Game Attendance by Season",
+    x = "Season",
+    y = "Attendance"
+  ) +
+  theme_minimal(base_size = 10) +
+  theme(
+    panel.grid.major.x = element_blank(),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+
+ggsave("images/attendance_boxplots.png",
+       attendance_desc,
+       width = 6,
+       height = 4,
+       dpi = 300)
+```
+
+## real good plot:
+
+```{r}
+beta_wins <- coef(attendance_model)["rolling_wins_44"]
+```
+
+```{r}
+library(dplyr)
+
+plot_data <- full_data %>%
+  mutate(
+    rolling_wins_c = rolling_wins_44 - mean(rolling_wins_44, na.rm = TRUE),
+    fitted_linear  = beta_wins * rolling_wins_c
+  )
+```
+
+```{r}
+plot_data <- plot_data %>%
+  mutate(
+    attendance_resid = resid(attendance_model)
+  )
+```
+
+```{r}
+library(broom)
+
+plot_data <- augment(attendance_model)
+```
+
+```{r}
+library(ggplot2)
+
+beta_wins <- coef(attendance_model)["rolling_wins_44"]
+
+take1 <- ggplot(
+  plot_data,
+  aes(x = rolling_wins_44, y = .resid, color = team_name)
+) +
+  geom_point(alpha = 0.25, size = 1.2) +
+  geom_abline(
+    intercept = 0,
+    slope = beta_wins,
+    linewidth = 1.2,
+    color = "black"
+  ) +
+  scale_color_manual(
+    values = setNames(wnba_cols$primary, wnba_cols$name)
+  ) +
+  labs(
+    title = "Attendance vs. Rolling Win Count",
+    subtitle = "Residual attendance after team, season, and calendar controls",
+    x = "Rolling Wins (Last 44 Games)",
+    y = "Residual Attendance"
+  ) +
+  theme_minimal(base_size = 10) +
+  theme(legend.position = "none")
+
+```
+
+```{r}
+teams_to_plot <- c(
+  "INDIANA FEVER",
+  "LAS VEGAS ACES",
+  "NEW YORK LIBERTY",
+  "ATLANTA DREAM"
+)
+```
+
+```{r}
+coef_vec <- coef(attendance_model)
+
+beta_wins <- coef_vec["rolling_wins_44"]
+
+team_fes <- tibble(
+  team_name = teams_to_plot,
+  intercept = coef_vec[paste0("team_name", teams_to_plot)]
+)
+
+```
+
+```{r}
+library(tidyr)
+
+x_grid <- seq(
+  min(plot_data$rolling_wins_44, na.rm = TRUE),
+  max(plot_data$rolling_wins_44, na.rm = TRUE),
+  length.out = 100
+)
+
+line_data <- expand_grid(
+  rolling_wins_44 = x_grid,
+  team_name = teams_to_plot
+) %>%
+  left_join(team_fes, by = "team_name") %>%
+  mutate(
+    fitted_attendance = intercept + beta_wins * rolling_wins_44
+  )
+
+```
+
+```{r}
+fe_team_lines_plot <- ggplot() +
+
+  # Background points (all games)
+  geom_point(
+    data = plot_data,
+    aes(x = rolling_wins_44, y = .resid, color = team_name),
+    alpha = 0.25,
+    size = 1.2
+  ) +
+
+  # Model-implied fixed-effect lines
+  geom_line(
+    data = line_data,
+    aes(
+      x = rolling_wins_44,
+      y = fitted_attendance,
+      color = team_name
+    ),
+    linewidth = 1.3
+  ) +
+
+  scale_color_manual(
+    values = setNames(wnba_cols$primary, wnba_cols$name)
+  ) +
+
+  labs(
+    title = "Attendance and Team Performance (Fixed Effects)",
+    x = "Rolling Wins (Last 44 Games)",
+    y = "Residual Attendance",
+    color = "Team"
+  ) +
+
+  theme_minimal(base_size = 10) +
+  theme(
+    legend.position = "right"
+  )
+
+fe_team_lines_plot
+```
+
+```{r}
+ggsave(
+  "images/attendance_win_count_intercept.png",
+  take1,
+  width = 6,
+  height = 4,
+  dpi = 300
+)
+
+```
+
+```{r}
+library(ggplot2)
+
+cc_plot <- take1 +
+  geom_point(
+    data = subset(plot_data, caitlin_clark_game == 1),
+    aes(x = rolling_wins_44, y = .resid),
+    shape = 21,
+    size = 2.6,
+    stroke = 0.7,
+    fill = "white",
+    color = "black"
+  ) 
+
+cc_plot
+```
+
+```{r}
+ggsave(
+  "images/caitlin_clark.png",
+  cc_plot,
+  width = 6,
+  height = 4,
+  dpi = 300
+)
+```
