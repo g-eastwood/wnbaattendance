@@ -7,6 +7,7 @@
 *.synctex.gz
 *.png
 _freeze/
+notebooks/*
 
 /agujournal2019.cls
 /trackchanges.sty
