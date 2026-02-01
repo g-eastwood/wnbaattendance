@@ -1,0 +1,19 @@
+\begin{table}
+\centering
+\begin{talltblr}[         %% tabularray outer open
+entry=none,label=none,
+note{}={+ p \num{< 0.1}, * p \num{< 0.05}, ** p \num{< 0.01}, *** p \num{< 0.001}},
+]                     %% tabularray outer close
+{                     %% tabularray inner open
+colspec={Q[]Q[]Q[]Q[]Q[]Q[]Q[]Q[]Q[]Q[]Q[]Q[]Q[]Q[]Q[]},
+hline{2}={1-15}{solid, black, 0.05em},
+hline{1}={1-15}{solid, black, 0.1em},
+hline{4}={1-15}{solid, black, 0.1em},
+column{2-15}={}{halign=c},
+column{1}={}{halign=l},
+}                     %% tabularray inner close
+& Intercept & Rolling Wins (44 games) & Caitlin Clark & Chicago Sky & Connecticut Sun & Dallas Wings & Indiana Fever & Las Vegas Aces & Los Angeles Sparks & Minnesota Lynx & New York Liberty & Phoenix Mercury & Seattle Storm & Washington Mystics \\
+OLS Model & \num{1415.280}*** & \num{112.452}*** & \num{8842.640}*** & \num{2755.001}*** & \num{1481.964}*** & \num{662.895}* & \num{1843.775}*** & \num{2127.572}*** & \num{4004.113}*** & \num{3513.979}*** & \num{1906.352}*** & \num{5247.058}*** & \num{4117.292}*** & \num{740.985}* \\
+& (\num{389.132}) & (\num{11.992}) & (\num{616.136}) & (\num{317.601}) & (\num{344.943}) & (\num{315.358}) & (\num{367.477}) & (\num{342.537}) & (\num{317.110}) & (\num{324.719}) & (\num{316.743}) & (\num{315.004}) & (\num{325.813}) & (\num{319.150}) \\
+\end{talltblr}
+\end{table}
