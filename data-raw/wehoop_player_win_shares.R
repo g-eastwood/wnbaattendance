@@ -99,12 +99,7 @@ team_wins_2024 <- tibble::tribble(
   "Los Angeles Sparks",    8
 )
 
-team_wins_2024 <- team_wins_2024|>
-  mutate(
-    team_name = toupper(team_name)
-  )
-
-player_ws_2024 <- player_ws_2024 %>%
+player_ws_2024 <- player_ws_2024 |>
   left_join(team_wins_2024, by = join_by("TEAM_NAME" == "team_name")) |>
   mutate(
     player_win_shares = win_share * team_wins
