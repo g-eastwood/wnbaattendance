@@ -1,3 +1,7 @@
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/g-eastwood/wnbaattendance/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/g-eastwood/wnbaattendance/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+
 This repository houses the code, data, and manuscript for the research paper:
 
 > **WNBA Game Attendance and Rolling Win Count**
