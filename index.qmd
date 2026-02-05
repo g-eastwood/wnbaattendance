@@ -55,7 +55,7 @@ We also rely on the wehoop R packages API call to access league wide game-logs t
 #| label: tbl-attendance
 #| fig-cap: "Example of Attendance Data from 2025 Regular Season."
 
-read.csv("attendance_data/att_25.csv") |>
+read_csv("attendance_data/att_25.csv") |>
   select(
     Date,
     Team,
@@ -65,8 +65,8 @@ read.csv("attendance_data/att_25.csv") |>
     State,
     Attendance
   ) |>
-  filter(Team == "Atlanta Dream")|>
-  head(10) |>   # show first 10 rows (adjust as needed)
+  filter(Team == "Atlanta Dream") |>
+  head(10) |> # show first 10 rows (adjust as needed)
   gt() |>
   tab_header(
     title = "WNBA Game Attendance (2025 Season)",
@@ -75,11 +75,6 @@ read.csv("attendance_data/att_25.csv") |>
   cols_label(
     Date = "Game Date",
     Team = "Home Team",
-    Opponent = "Opponent",
-    Arena = "Arena",
-    City = "City",
-    State = "State",
-    Attendance = "Attendance"
   ) |>
   fmt_number(
     columns = Attendance,
@@ -162,20 +157,20 @@ display_plot <- player_ws_2024 |>
     win_share,
     player_win_shares,
     team_wins
-  )|>
-  mutate(attendance = player_win_shares*112)|>
-  arrange(desc(player_win_shares))|>
-  head(n=15)
+  ) |>
+  mutate(attendance = player_win_shares * 112) |>
+  arrange(desc(player_win_shares)) |>
+  head(n = 15)
 
 # Format numeric columns nicely
 display_plot |>
   mutate(
     marginal_offense = round(marginal_offense, 1),
-    defensive_index  = round(defensive_index, 1),
-    minutes          = round(minutes, 0),
-    off_win_share    = round(off_win_share, 2),
-    def_win_share    = round(def_win_share, 2),
-    win_share        = round(win_share, 2),
+    defensive_index = round(defensive_index, 1),
+    minutes = round(minutes, 0),
+    off_win_share = round(off_win_share, 2),
+    def_win_share = round(def_win_share, 2),
+    win_share = round(win_share, 2),
     player_win_shares = round(player_win_shares, 2)
   ) |>
   gt() |>
