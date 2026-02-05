@@ -44,9 +44,50 @@ Our analysis relies on three primary data sources, to fit the two parts of our m
 
 We also rely on the wehoop R packages API call to access league wide game-logs to generate rolling win counts [@hutchinson_gilani_2021_wehoop].
 
-![Example of Attendance Data from 2025 Regular Season](images/attendance_2025_table.png){width=0.9\textwidth}
+```{r}
+#| label: tbl-attendance
+#| fig-cap: "Example of Attendance Data from 2025 Regular Season."
+library(gt)
+library(dplyr)
 
-Figure 1 shows the attendance of home games (and a special match played in Vancouver) in 2025 for the Atlanta Dream. Already, you can notice a major outlier: the season opener played on May 22nd against the Indiana Fever. We would expect season openers to be well attended, but this outsized effect is likely due to Caitlyn Clark's stardom.
+read.csv("attendance_data/att_25.csv") |>
+  select(
+    Date,
+    Team,
+    Opponent,
+    Arena,
+    City,
+    State,
+    Attendance
+  ) %>%
+  filter(Team == "Atlanta Dream")|>
+  head(10) %>%   # show first 10 rows (adjust as needed)
+  gt() %>%
+  tab_header(
+    title = "WNBA Game Attendance (2025 Season)",
+    subtitle = "Sample of game-level attendance records"
+  ) %>%
+  cols_label(
+    Date = "Game Date",
+    Team = "Home Team",
+    Opponent = "Opponent",
+    Arena = "Arena",
+    City = "City",
+    State = "State",
+    Attendance = "Attendance"
+  ) %>%
+  fmt_number(
+    columns = Attendance,
+    decimals = 0
+  ) %>%
+  tab_options(
+    table.font.size = px(11),
+    table.width = pct(100)
+  )
+```
+
+
+@tbl-attendance shows the attendance of home games (and a special match played in Vancouver) in 2025 for the Atlanta Dream. Already, you can notice a major outlier: the season opener played on May 22nd against the Indiana Fever. We would expect season openers to be well attended, but this outsized effect is likely due to Caitlyn Clark's stardom.
 
 ![Distribution of WNBA game attendance by season](images/attendance_boxplots.png){width=0.9\textwidth}
 

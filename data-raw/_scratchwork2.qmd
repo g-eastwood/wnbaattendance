@@ -13,6 +13,9 @@ attendance_2024 <- full_data %>%
 ## offensive contribution:
 
 ```{r}
+library(tidyverse)
+player_games_clean <- read_rds(here::here("data/player_games_2024.rds"))
+
 player_games_clean <- player_games_clean %>%
   mutate(
     FGA = as.numeric(FGA),
@@ -236,51 +239,6 @@ ggsave(
   height = 3.5,
   dpi = 300
 )
-
-```
-
-```{r}
-library(gt)
-library(dplyr)
-
-attendance_2025 <- read.csv("attendance_data/att_25.csv")
-
-attendance_table <- attendance_2025 %>%
-  select(
-    Date,
-    Team,
-    Opponent,
-    Arena,
-    City,
-    State,
-    Attendance
-  ) %>%
-  filter(Team == "Atlanta Dream")|>
-  head(10) %>%   # show first 10 rows (adjust as needed)
-  gt() %>%
-  tab_header(
-    title = "WNBA Game Attendance (2025 Season)",
-    subtitle = "Sample of game-level attendance records"
-  ) %>%
-  cols_label(
-    Date = "Game Date",
-    Team = "Home Team",
-    Opponent = "Opponent",
-    Arena = "Arena",
-    City = "City",
-    State = "State",
-    Attendance = "Attendance"
-  ) %>%
-  fmt_number(
-    columns = Attendance,
-    decimals = 0
-  ) %>%
-  tab_options(
-    table.font.size = px(11),
-    table.width = pct(100)
-  )
-
-attendance_table
 
 ```
 
