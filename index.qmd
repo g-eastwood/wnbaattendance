@@ -28,6 +28,7 @@ format: pdf
 library(ggplot2)
 library(tidyverse)
 library(modelsummary)
+library(knitr)
 ```
 
 ```{r}
@@ -59,6 +60,13 @@ To quantify individual players’ contributions to a team’s, we reconstruct Wi
 Our analysis relies on three primary data sources, to fit the two parts of our model connecting attendance to winning percentage and winning percentage to individual player contributions. The first source is the “Across the Timeline: WNBA League Attendance Dashboard”, which compiles game-level attendance data for all WNBA teams across multiple seasons. This dashboard allows us to examine trends in fan engagement over time and compare attendance across teams, and it contains a record of the in-person attendance for every WNBA game since 1997, when the league began [@AcrossTheTimeline_WNBA_Attendance]. The data includes teams that no longer exist, but we only plan on using records from active teams. The second source is Basketball Reference’s individual WNBA player stat sheets, a comprehensive collection of player-level performance metrics. These stat sheets provide detailed statistics for each player in categories such as points, rebounds, assists, turnovers, etc [@BasketballReference]. Importantly, with these stat sheets we can compute Win Shares as a metric for player contribution as outlined above. Basketball Reference also has a repository of team and league statistics useful for computing the team and league pace metrics necessary for the Win Shares computation.
 
 We also rely on the wehoop R packages API call to access league wide game-logs to generate rolling win counts [@hutchinson_gilani_2021_wehoop].
+
+```{r}
+attendance_clean|>
+  filter(Team == "ATLANTA DREAM")|>
+  filter(Season == 2025)
+```
+
 
 Figure 1 shows the attendance of home games (and a special match played in Vancouver) in 2025 for the Atlanta Dream. Already, you can notice a major outlier: the season opener played on May 22nd against the Indiana Fever. We would expect season openers to be well attended, but this outsized effect is likely due to Caitlyn Clark's stardom.
 
