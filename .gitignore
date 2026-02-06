@@ -3,6 +3,7 @@
 
 /.quarto/
 /_manuscript
+index_files/
 
 *.synctex.gz
 *.png

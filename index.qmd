@@ -34,7 +34,6 @@ library(gt)
 wnba_attendance <- read_csv(here::here("data/wnba_attendance.csv"))
 wnba_gl <- read_rds(here::here("data/wnba_gl.rds"))
 full_data <- read_csv("clean_data/full_data.csv")
-df_aug <- read.csv("clean_data/df_aug.csv")
 ```
 
 ## Introduction
@@ -169,6 +168,9 @@ The model's incomplete explanation of variance in game attendance makes sense be
 coef_vec <- coef(attendance_model)
 beta_wins <- coef_vec["rolling_wins_44"]
 
+df_aug <- attendance_model |>
+  broom::augment()
+
 ggplot(
   df_aug,
   aes(x = rolling_wins_44, y = .resid, color = team_name)
@@ -189,7 +191,7 @@ ggplot(
   theme_minimal(base_size = 10) +
   theme(legend.position = "none") +
   geom_point(
-    data = subset(df_aug, caitlin_clark_game == 1),
+    data = filter(df_aug, caitlin_clark_game == 1),
     aes(x = rolling_wins_44, y = .resid),
     shape = 21,
     size = 2.6,
@@ -197,7 +199,6 @@ ggplot(
     fill = "white",
     color = "black"
   )
-
 ```
 
 @fig-clark shows the estimated coefficient from the OLS line on the rolling win count over the past 44 days, controlling for team fixed effects, season fixed effects, day-of-week and month effects, and the presence of Caitlin Clark in the game. The y-axis shows residual attendance, or observed attendance minus predicted attendance based on the fixed effects, meaning that each point represents how many more (or fewer) fans showed up than we would have expected, controlling for the team, season, timing, and Caitlin Clark. This allows us to visually understand the effect of rolling win count on attendance by removing variance from other sources from the plot. Looking at the highlighted points, which represent games in which Caitlin Clark played, we see that most have negative residuals. This means that when she is on the court, the rolling win count does not affect attendance in the way we would otherwise expect.
