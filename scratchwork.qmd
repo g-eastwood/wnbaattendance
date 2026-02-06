@@ -222,6 +222,8 @@ full_data$dow        <- factor(full_data$dow)
 full_data$month      <- factor(full_data$month)
 full_data$opponent   <- factor(full_data$opponent)
 
+write.csv(full_data, "clean_data/full_data.csv", row.names = FALSE)
+
 attendance_model <- lm(
   attendance ~ rolling_wins_44 + dow + month + team_name + Season + caitlin_clark_game,
   data = full_data
@@ -368,6 +370,8 @@ ggsave("images/basic_plot.png", full_model_plot,
 season_data <- full_data|>
   filter(SEASON_ID < 22025)
 
+write.csv(season_data, "clean_data/season_data.csv", row.names = FALSE)
+
 model_plot_season <- ggplot(season_data, aes(x = rolling_wins_44, y = attendance)) +
   geom_point(alpha = 0.15, size = 0.8) +
   geom_smooth(method = "loess", se = FALSE, color = "blue") +
@@ -393,6 +397,7 @@ cr <- crPlots(model_ols, terms = ~ rolling_wins_44)
 library(broom)
 
 df_aug <- augment(model_ols)
+write.csv(df_aug, "clean_data/df_aug.csv", row.names = FALSE)
 
 adj_plot <- ggplot(df_aug, aes(rolling_wins_44, .resid + .fitted - mean(.fitted))) +
   geom_point(alpha = 0.3) +
@@ -418,6 +423,8 @@ wnba_cols <- teamcolors %>%
 
 data_plot <- full_data %>%
   left_join(wnba_cols, by = c("team_name" = "name"))
+
+write.csv(data_plot, "clean_data/plotting_data.csv", row.names = FALSE)
 
 team_color_plot <- ggplot(data_plot, aes(x = rolling_wins_44, y = attendance, color = team_name)) +
   geom_point(alpha = 0.3, size = 1.3) +
