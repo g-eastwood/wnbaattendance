@@ -79,7 +79,45 @@ Figure 2 shows the attendance distributions across the years studied. There is n
 
 Utilizing the framework of Scully's 1974 paper into pay and performance in the MLB, we regressed live game attendance onto a rolling winning count to understand how a team's strength is related to their home turnout in the WNBA. We chose not to use to-date season winning percentage because we worried that sparse data at the beginning of the season would affect our results. Instead, we computed a rolling win count, which looked back at a team's 44 prior games (the length of a WNBA season) and count how many games were won across that period. We chose to leave this as a count instead of a winning percentage to make the results easier to interpret. 
 
-![Regression results for attendance model](images/table_model.png){width=0.9\textwidth}
+```{r}
+full_data <- read_csv("clean_data/full_data.csv")
+
+attendance_model <- lm(
+  attendance ~ rolling_wins_44 + dow + month + team_name + Season + caitlin_clark_game,
+  data = full_data
+)
+
+models <- list(
+  "OLS Model" = attendance_model
+)
+
+tbl <- modelsummary(
+  models,
+  shape = model ~ term,
+  output = "gt",
+  statistic = "({std.error})",
+  stars = TRUE,
+  gof_omit = "IC|Log|Adj|Pseudo",
+  coef_map = c(
+    "(Intercept)"     = "Intercept",
+    "rolling_wins_44" = "Rolling Wins (44 games)",
+    "caitlin_clark_game" = "Caitlin Clark",
+    "team_nameCHICAGO SKY" = "Chicago Sky",
+    "team_nameCONNECTICUT SUN" = "Connecticut Sun",
+    "team_nameDALLAS WINGS" = "Dallas Wings",
+    "team_nameINDIANA FEVER" = "Indiana Fever",
+    "team_nameLAS VEGAS ACES" = "Las Vegas Aces",
+    "team_nameLOS ANGELES SPARKS" = "Los Angeles Sparks",
+    "team_nameMINNESOTA LYNX" = "Minnesota Lynx",
+    "team_nameNEW YORK LIBERTY" = "New York Liberty",
+    "team_namePHOENIX MERCURY" = "Phoenix Mercury",
+    "team_nameSEATTLE STORM" = "Seattle Storm",
+    "team_nameWASHINGTON MYSTICS" = "Washington Mystics"
+)
+)
+
+tbl
+```
 
 We fit an Ordinary Least Squares Regression model onto the data, regressing attendance onto rolling wins over the prior 44 games, and including fixed effects for day of week, month, team, and season. We chose to include these basic controls in order to account for market level factors on game attendance outside of what happens on the court. The model has an adjusted $R^2$ of 0.63, which means the factors included explain a substantial amount of variation in game-level attendance, but far from all. Interestingly, before including an indicator variable for Caitlin Clark's presence in a game the adjusted $R^2$ was 0.56, meaning that her presence explains an additional 7% of the variance in attendance. The fixed effect of Caitlin Clark's presence in the game is 8843, meaning that her presence is expected to boost attendance by 8,843 fans. The Caitlin Clark effect on WNBA game attendance is well recorded [@bleacherreport_wnba_attendance_2025], informing our decision to include her presence as an indicator variable in the model, and the effect on $R^2$ provides further justification for this decision. 
 
