@@ -22,3 +22,5 @@ notebooks/*
 .Rdata
 .httr-oauth
 .DS_Store
+
+**/*.quarto_ipynb

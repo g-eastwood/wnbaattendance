@@ -1,4 +1,4 @@
-
+---
 title: "Winning and Attendance in the WNBA: Team Performance and Player Win Shares"
 
 author:
