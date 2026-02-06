@@ -1,5 +1,7 @@
 project:
-  type: manuscript
+  type: default
+  render: 
+    - index.qmd
 
 execute:
   freeze: auto

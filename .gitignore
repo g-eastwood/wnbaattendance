@@ -10,6 +10,10 @@ _freeze/
 notebooks/*
 *.html
 *.ipynb
+*.tex
+*.xml
+*.docx
+*.pdf
 
 /agujournal2019.cls
 /trackchanges.sty
