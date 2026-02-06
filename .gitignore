@@ -3,6 +3,7 @@
 
 /.quarto/
 /_manuscript
+index_files/
 
 *.synctex.gz
 *.png
@@ -22,3 +23,5 @@ notebooks/*
 .Rdata
 .httr-oauth
 .DS_Store
+
+**/*.quarto_ipynb
