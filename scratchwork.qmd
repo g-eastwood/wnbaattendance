@@ -307,7 +307,7 @@ library(gt)
 library(webshot2)
 
 models <- list(
-  "OLS Model" = attendance_model
+  "model_ols" = attendance_model
 )
 
 coef_labels <- c(
@@ -391,12 +391,10 @@ ggsave("images/season_plot.png",
 ```
 
 ```{r}
-library(car)
-cr <- crPlots(model_ols, terms = ~ rolling_wins_44)
 
 library(broom)
 
-df_aug <- augment(model_ols)
+df_aug <- augment(models$model_ols)
 write.csv(df_aug, "clean_data/df_aug.csv", row.names = FALSE)
 
 adj_plot <- ggplot(df_aug, aes(rolling_wins_44, .resid + .fitted - mean(.fitted))) +
@@ -484,10 +482,10 @@ plot_data <- full_data %>%
 ```
 
 ```{r}
-plot_data <- plot_data %>%
-  mutate(
-    attendance_resid = resid(attendance_model)
-  )
+library(broom)
+
+plot_data <- augment(attendance_model, data = plot_data)
+
 ```
 
 ```{r}
@@ -502,7 +500,7 @@ library(ggplot2)
 beta_wins <- coef(attendance_model)["rolling_wins_44"]
 
 take1 <- ggplot(
-  plot_data,
+  df_aug,
   aes(x = rolling_wins_44, y = .resid, color = team_name)
 ) +
   geom_point(alpha = 0.25, size = 1.2) +
@@ -537,7 +535,6 @@ teams_to_plot <- c(
 
 ```{r}
 coef_vec <- coef(attendance_model)
-
 beta_wins <- coef_vec["rolling_wins_44"]
 
 team_fes <- tibble(

@@ -28,6 +28,16 @@ format: pdf
 library(ggplot2)
 ```
 
+```{r}
+#reading in cleaned data:
+
+attendance_clean <- read.csv("clean_data/attendance_clean.csv")
+full_data <- read_csv("clean_data/full_data.csv")
+plot_data <- read_csv("clean_data/plotting_data.csv")
+df_aug <- read.csv("clean_data/df_aug.csv")
+```
+
+
 ## Introduction
 Research on pay and performance in sports economics often centers on how teams value player contributions and how those valuations translate into compensation. A central challenge in the field is determining the appropriate metrics for quantifying an individual player’s impact on team success and linking that impact to team revenues and attendance. Different modeling choices can lead to significantly different conclusions about whether players are compensated fairly for their contributions to the game. As a relatively young league with rapid growth in viewership [@wnba2024recordseason] but limited publicly available financial data, accurately valuing player contributions in the WNBA is difficult. We have found attendance data to be the most reliably available indicator of revenue, making the link between on-court performance and fan demand especially important for understanding the valuation of players.
 
@@ -54,8 +64,6 @@ Figure 1 shows the attendance of home games (and a special match played in Vanco
 
 ```{r}
 # Distribution of WNBA game attendance by season
-attendance_clean <- read.csv("clean_data/attendance_clean.csv")
-
 attendance_desc <- ggplot(attendance_clean, aes(x = factor(Season), y = attendance)) +
   geom_boxplot(outlier.alpha = 0.2, linewidth = 0.6, fill = "grey90") +
   geom_jitter(alpha = 0.15, width = 0.15, size = 1) +
@@ -80,8 +88,6 @@ Figure 2 shows the attendance distributions across the years studied. There is n
 Utilizing the framework of Scully's 1974 paper into pay and performance in the MLB, we regressed live game attendance onto a rolling winning count to understand how a team's strength is related to their home turnout in the WNBA. We chose not to use to-date season winning percentage because we worried that sparse data at the beginning of the season would affect our results. Instead, we computed a rolling win count, which looked back at a team's 44 prior games (the length of a WNBA season) and count how many games were won across that period. We chose to leave this as a count instead of a winning percentage to make the results easier to interpret. 
 
 ```{r}
-full_data <- read_csv("clean_data/full_data.csv")
-
 attendance_model <- lm(
   attendance ~ rolling_wins_44 + dow + month + team_name + Season + caitlin_clark_game,
   data = full_data
@@ -124,6 +130,40 @@ We fit an Ordinary Least Squares Regression model onto the data, regressing atte
 The model's incomplete explanation of variance in game attendance makes sense because there is high variance in game attendance, and noise may be introduced by one-off events. Rolling win count has a positive and statistically significant effect on attendance, with an estimated 112 additional attendees per each additional rolling win. This supports our expectation that recent team success boosts game attendance, but reminds us that are also a lot of other factors at play. Many of the team effects in the table above are large and statistically significant, demonstrating that teams have different fanbases- affecting attendance in ways that are not attributable to team performance alone. These results confirm our decision to include team indicator variables, because including these fixed effects helps ensure that the performance coefficient is not confounded by fixed differences in team demand. Not shown in Figure 3 are the seasonal fixed effects, which are significant and reflect the attendance trends shown in Figure 2.
 
 ![Attendance and Rolling Wins; games highlighted include Caitlin Clark](images/caitlin_clark.png){width=0.9\textwidth}
+```{r}
+coef_vec <- coef(attendance_model)
+beta_wins <- coef_vec["rolling_wins_44"]
+
+ggplot(
+  df_aug,
+  aes(x = rolling_wins_44, y = .resid, color = team_name)
+) +
+  geom_point(alpha = 0.25, size = 1.2) +
+  geom_abline(
+    intercept = 0,
+    slope = beta_wins,
+    linewidth = 1.2,
+    color = "black"
+  )  +
+  labs(
+    title = "Attendance vs. Rolling Win Count",
+    subtitle = "Residual attendance after team, season, and calendar controls",
+    x = "Rolling Wins (Last 44 Games)",
+    y = "Residual Attendance"
+  ) +
+  theme_minimal(base_size = 10) +
+  theme(legend.position = "none") +
+  geom_point(
+    data = subset(df_aug, caitlin_clark_game == 1),
+    aes(x = rolling_wins_44, y = .resid),
+    shape = 21,
+    size = 2.6,
+    stroke = 0.7,
+    fill = "white",
+    color = "black"
+  )
+
+```
 
 Figure 4 shows the estimated coefficient from the OLS line on the rolling win count over the past 44 days, controlling for team fixed effects, season fixed effects, day-of-week and month effects, and the presence of Caitlin Clark in the game. The y-axis shows residual attendance, or observed attendance minus predicted attendance based on the fixed effects, meaning that each point represents how many more (or fewer) fans showed up than we would have expected, controlling for the team, season, timing, and Caitlin Clark. This allows us to visually understand the effect of rolling win count on attendance by removing variance from other sources from the plot. Looking at the highlighted points, which represent games in which Caitlin Clark played, we see that most have negative residuals. This means that when she is on the court, the rolling win count does not affect attendance in the way we would otherwise expect.
 
