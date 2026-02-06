@@ -24,6 +24,9 @@ number-sections: true
 
 format: pdf
 ---
+```{r}
+library(ggplot2)
+```
 
 ## Introduction
 Research on pay and performance in sports economics often centers on how teams value player contributions and how those valuations translate into compensation. A central challenge in the field is determining the appropriate metrics for quantifying an individual player’s impact on team success and linking that impact to team revenues and attendance. Different modeling choices can lead to significantly different conclusions about whether players are compensated fairly for their contributions to the game. As a relatively young league with rapid growth in viewership [@wnba2024recordseason] but limited publicly available financial data, accurately valuing player contributions in the WNBA is difficult. We have found attendance data to be the most reliably available indicator of revenue, making the link between on-court performance and fan demand especially important for understanding the valuation of players.
@@ -49,7 +52,26 @@ We also rely on the wehoop R packages API call to access league wide game-logs t
 
 Figure 1 shows the attendance of home games (and a special match played in Vancouver) in 2025 for the Atlanta Dream. Already, you can notice a major outlier: the season opener played on May 22nd against the Indiana Fever. We would expect season openers to be well attended, but this outsized effect is likely due to Caitlyn Clark's stardom.
 
-![Distribution of WNBA game attendance by season](images/attendance_boxplots.png){width=0.9\textwidth}
+```{r}
+# Distribution of WNBA game attendance by season
+attendance_clean <- read.csv("clean_data/attendance_clean.csv")
+
+attendance_desc <- ggplot(attendance_clean, aes(x = factor(Season), y = attendance)) +
+  geom_boxplot(outlier.alpha = 0.2, linewidth = 0.6, fill = "grey90") +
+  geom_jitter(alpha = 0.15, width = 0.15, size = 1) +
+  labs(
+    title = "Distribution of WNBA Game Attendance by Season",
+    x = "Season",
+    y = "Attendance"
+  ) +
+  theme_minimal(base_size = 10) +
+  theme(
+    panel.grid.major.x = element_blank(),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+
+attendance_desc
+```
 
 Figure 2 shows the attendance distributions across the years studied. There is no attendance data from 2020, because all games that year were played in the WNBA bubble. These boxplots demonstrate the widely reported increase in WNBA game attendance, the attendance distributions from 2024 and 2025 are significantly higher than the years that came before and the range of attendance is larger.
 

@@ -7,10 +7,9 @@
 *.synctex.gz
 *.png
 _freeze/
-<<<<<<< HEAD
 notebooks/*
-=======
->>>>>>> abea859101ccb6f5f17a637184909fd473346d0c
+*.html
+*.ipynb
 
 /agujournal2019.cls
 /trackchanges.sty
