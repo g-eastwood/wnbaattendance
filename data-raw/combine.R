@@ -40,12 +40,3 @@ wnba_gl <- wnba_gl |>
 write_rds(wnba_gl, here::here("data/wnba_gl.rds"))
 
 
-
-# Consider this alternative model specification
-mod_attendance <- lm(
-  attendance ~ rolling_wins_44 + factor(wday(GAME_DATE)) + factor(month(GAME_DATE)) + TEAM_NAME + SEASON_ID + is_cc,
-  data = wnba_gl
-)
-
-summary(mod_attendance)
-
