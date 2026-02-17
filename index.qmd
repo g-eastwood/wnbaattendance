@@ -1,6 +1,5 @@
-
+---
 title: "Winning and Attendance in the WNBA: Team Performance and Player Win Shares"
-
 author:
   - name: Gabriela Eastwood
     corresponding: true
@@ -21,27 +20,24 @@ key-points:
 date: last-modified
 bibliography: references.bib
 number-sections: true
-
-format: pdf
 ---
 ```{r}
-library(ggplot2)
+#| message: false
 library(tidyverse)
 library(modelsummary)
 library(knitr)
+library(gt)
 ```
 
 ```{r}
 #reading in cleaned data:
-
-attendance_clean <- read.csv("clean_data/attendance_clean.csv")
+wnba_attendance <- read_csv(here::here("data/wnba_attendance.csv"))
+wnba_gl <- read_rds(here::here("data/wnba_gl.rds"))
 full_data <- read_csv("clean_data/full_data.csv")
-plot_data <- read_csv("clean_data/plotting_data.csv")
-df_aug <- read.csv("clean_data/df_aug.csv")
 ```
 
-
 ## Introduction
+
 Research on pay and performance in sports economics often centers on how teams value player contributions and how those valuations translate into compensation. A central challenge in the field is determining the appropriate metrics for quantifying an individual player’s impact on team success and linking that impact to team revenues and attendance. Different modeling choices can lead to significantly different conclusions about whether players are compensated fairly for their contributions to the game. As a relatively young league with rapid growth in viewership [@wnba2024recordseason] but limited publicly available financial data, accurately valuing player contributions in the WNBA is difficult. We have found attendance data to be the most reliably available indicator of revenue, making the link between on-court performance and fan demand especially important for understanding the valuation of players.
 
 The underlying assumption of marginal revenue models is simple: fans are more interested in watching good teams. In their 2014 paper, Coates et al. use a consumer-choice model to explain what impacts a fan’s choice to attend a live MLB game. While they look specifically at baseball, it is reasonable to assume that similar considerations apply to other sports as well. Coates et al. explain the traditional model for explaining fan behavior: the uncertainty of outcome hypothesis. This is idea that fans are more likely to attend games when the outcome is uncertain, making the game more exciting. But more recent behavioral economics suggests that people evaluate gains and losses relative to a reference point and tend to dislike losses more than they like equivalent gains [@CoatesHumphreysZhou2014]. They argue that applying this idea of loss aversion may better explain why fans choose to go games than the uncertainty of outcome hypothesis. They use MLB live-game attendance data to find attendance patterns consistent with the hypothesis that fans are less likely to attend games in which they expect the home-team to lose [@CoatesHumphreysZhou2014].
@@ -62,17 +58,48 @@ Our analysis relies on three primary data sources, to fit the two parts of our m
 We also rely on the wehoop R packages API call to access league wide game-logs to generate rolling win counts [@hutchinson_gilani_2021_wehoop].
 
 ```{r}
-attendance_clean|>
-  filter(Team == "ATLANTA DREAM")|>
-  filter(Season == 2025)
+#| label: tbl-attendance
+#| fig-cap: "Example of Attendance Data from 2025 Regular Season."
+
+wnba_attendance |>
+  select(
+    Date,
+    Team,
+    Opponent,
+    Arena,
+    City,
+    State,
+    Attendance
+  ) |>
+  filter(Team == "Atlanta Dream") |>
+  head(10) |> # show first 10 rows (adjust as needed)
+  gt() |>
+  tab_header(
+    title = "WNBA Game Attendance (2025 Season)",
+    subtitle = "Sample of game-level attendance records"
+  ) |>
+  cols_label(
+    Date = "Game Date",
+    Team = "Home Team",
+  ) |>
+  fmt_number(
+    columns = Attendance,
+    decimals = 0
+  ) |>
+  tab_options(
+    table.font.size = px(11),
+    table.width = pct(100)
+  )
 ```
 
 
-Figure 1 shows the attendance of home games (and a special match played in Vancouver) in 2025 for the Atlanta Dream. Already, you can notice a major outlier: the season opener played on May 22nd against the Indiana Fever. We would expect season openers to be well attended, but this outsized effect is likely due to Caitlyn Clark's stardom.
+@tbl-attendance shows the attendance of home games (and a special match played in Vancouver) in 2025 for the Atlanta Dream. Already, you can notice a major outlier: the season opener played on May 22nd against the Indiana Fever. We would expect season openers to be well attended, but this outsized effect is likely due to Caitlyn Clark's stardom.
 
 ```{r}
+#| label: fig-boxplots
+#| fig-cap: "Distribution of WNBA game attendance by season"
 # Distribution of WNBA game attendance by season
-attendance_desc <- ggplot(attendance_clean, aes(x = factor(Season), y = attendance)) +
+ggplot(wnba_attendance, aes(x = factor(Season), y = attendance)) +
   geom_boxplot(outlier.alpha = 0.2, linewidth = 0.6, fill = "grey90") +
   geom_jitter(alpha = 0.15, width = 0.15, size = 1) +
   labs(
@@ -85,17 +112,17 @@ attendance_desc <- ggplot(attendance_clean, aes(x = factor(Season), y = attendan
     panel.grid.major.x = element_blank(),
     axis.text.x = element_text(angle = 45, hjust = 1)
   )
-
-attendance_desc
 ```
 
-Figure 2 shows the attendance distributions across the years studied. There is no attendance data from 2020, because all games that year were played in the WNBA bubble. These boxplots demonstrate the widely reported increase in WNBA game attendance, the attendance distributions from 2024 and 2025 are significantly higher than the years that came before and the range of attendance is larger.
+@fig-boxplots shows the attendance distributions across the years studied. There is no attendance data from 2020, because all games that year were played in the WNBA bubble. These boxplots demonstrate the widely reported increase in WNBA game attendance, the attendance distributions from 2024 and 2025 are significantly higher than the years that came before and the range of attendance is larger.
 
 ## Attendance and Rolling Win Counts
 
 Utilizing the framework of Scully's 1974 paper into pay and performance in the MLB, we regressed live game attendance onto a rolling winning count to understand how a team's strength is related to their home turnout in the WNBA. We chose not to use to-date season winning percentage because we worried that sparse data at the beginning of the season would affect our results. Instead, we computed a rolling win count, which looked back at a team's 44 prior games (the length of a WNBA season) and count how many games were won across that period. We chose to leave this as a count instead of a winning percentage to make the results easier to interpret. 
 
 ```{r}
+#| label: tbl-model
+#| tbl-cap: "Regression results for attendance model"
 attendance_model <- lm(
   attendance ~ rolling_wins_44 + dow + month + team_name + Season + caitlin_clark_game,
   data = full_data
@@ -105,7 +132,7 @@ models <- list(
   "OLS Model" = attendance_model
 )
 
-tbl <- modelsummary(
+modelsummary(
   models,
   shape = model ~ term,
   output = "gt",
@@ -127,19 +154,22 @@ tbl <- modelsummary(
     "team_namePHOENIX MERCURY" = "Phoenix Mercury",
     "team_nameSEATTLE STORM" = "Seattle Storm",
     "team_nameWASHINGTON MYSTICS" = "Washington Mystics"
+  )
 )
-)
-
-tbl
 ```
 
 We fit an Ordinary Least Squares Regression model onto the data, regressing attendance onto rolling wins over the prior 44 games, and including fixed effects for day of week, month, team, and season. We chose to include these basic controls in order to account for market level factors on game attendance outside of what happens on the court. The model has an adjusted $R^2$ of 0.63, which means the factors included explain a substantial amount of variation in game-level attendance, but far from all. Interestingly, before including an indicator variable for Caitlin Clark's presence in a game the adjusted $R^2$ was 0.56, meaning that her presence explains an additional 7% of the variance in attendance. The fixed effect of Caitlin Clark's presence in the game is 8843, meaning that her presence is expected to boost attendance by 8,843 fans. The Caitlin Clark effect on WNBA game attendance is well recorded [@bleacherreport_wnba_attendance_2025], informing our decision to include her presence as an indicator variable in the model, and the effect on $R^2$ provides further justification for this decision. 
 
-The model's incomplete explanation of variance in game attendance makes sense because there is high variance in game attendance, and noise may be introduced by one-off events. Rolling win count has a positive and statistically significant effect on attendance, with an estimated 112 additional attendees per each additional rolling win. This supports our expectation that recent team success boosts game attendance, but reminds us that are also a lot of other factors at play. Many of the team effects in the table above are large and statistically significant, demonstrating that teams have different fanbases- affecting attendance in ways that are not attributable to team performance alone. These results confirm our decision to include team indicator variables, because including these fixed effects helps ensure that the performance coefficient is not confounded by fixed differences in team demand. Not shown in Figure 3 are the seasonal fixed effects, which are significant and reflect the attendance trends shown in Figure 2.
+The model's incomplete explanation of variance in game attendance makes sense because there is high variance in game attendance, and noise may be introduced by one-off events. Rolling win count has a positive and statistically significant effect on attendance, with an estimated 112 additional attendees per each additional rolling win. This supports our expectation that recent team success boosts game attendance, but reminds us that are also a lot of other factors at play. Many of the team effects in the table above are large and statistically significant, demonstrating that teams have different fanbases- affecting attendance in ways that are not attributable to team performance alone. These results confirm our decision to include team indicator variables, because including these fixed effects helps ensure that the performance coefficient is not confounded by fixed differences in team demand. Not shown in @tbl-model are the seasonal fixed effects, which are significant and reflect the attendance trends shown in @fig-boxplots.
 
 ```{r}
+#| label: fig-clark
+#| fig-cap: "Attendance and Rolling Wins; games highlighted include Caitlin Clark"
 coef_vec <- coef(attendance_model)
 beta_wins <- coef_vec["rolling_wins_44"]
+
+df_aug <- attendance_model |>
+  broom::augment()
 
 ggplot(
   df_aug,
@@ -161,7 +191,7 @@ ggplot(
   theme_minimal(base_size = 10) +
   theme(legend.position = "none") +
   geom_point(
-    data = subset(df_aug, caitlin_clark_game == 1),
+    data = filter(df_aug, caitlin_clark_game == 1),
     aes(x = rolling_wins_44, y = .resid),
     shape = 21,
     size = 2.6,
@@ -169,10 +199,116 @@ ggplot(
     fill = "white",
     color = "black"
   )
-
 ```
 
-Figure 4 shows the estimated coefficient from the OLS line on the rolling win count over the past 44 days, controlling for team fixed effects, season fixed effects, day-of-week and month effects, and the presence of Caitlin Clark in the game. The y-axis shows residual attendance, or observed attendance minus predicted attendance based on the fixed effects, meaning that each point represents how many more (or fewer) fans showed up than we would have expected, controlling for the team, season, timing, and Caitlin Clark. This allows us to visually understand the effect of rolling win count on attendance by removing variance from other sources from the plot. Looking at the highlighted points, which represent games in which Caitlin Clark played, we see that most have negative residuals. This means that when she is on the court, the rolling win count does not affect attendance in the way we would otherwise expect.
+@fig-clark shows the estimated coefficient from the OLS line on the rolling win count over the past 44 days, controlling for team fixed effects, season fixed effects, day-of-week and month effects, and the presence of Caitlin Clark in the game. The y-axis shows residual attendance, or observed attendance minus predicted attendance based on the fixed effects, meaning that each point represents how many more (or fewer) fans showed up than we would have expected, controlling for the team, season, timing, and Caitlin Clark. This allows us to visually understand the effect of rolling win count on attendance by removing variance from other sources from the plot. Looking at the highlighted points, which represent games in which Caitlin Clark played, we see that most have negative residuals. This means that when she is on the court, the rolling win count does not affect attendance in the way we would otherwise expect.
+
+## Individual Player Contributions to Team Success and Attendance
+
+In order to better understand individual players' on-court contributions to team success, we attribute team-level winning performance to individual players using the Win Share framework of Oliver (2004), which allocates team wins based on players' offensive and defensive contributions. Player-level box score data were obtained from WNBA player level game logs for the 2024 regular season, including the offensive and defensive statistics necessary to compute Win Shares: minutes, shooting, turnovers, rebounds, steals, blocks, etc.
+
+Offensive Win Shares are the difference between the points a player produced and the points an average offense would be expected to produce in the same number of possessions, scaled by the marginal points per win for the team. Defensive Win Shares are computed by comparing a player's defensive performance to the league average, adjusting for the team's pace and scaled by the marginal points per win for the team. A player's total Win Shares are the sum of the offensive and defensive Win Shares, aggregated to the team level to estimate a player's contribution to the team's seasonal wins. Because Win Shares are derived from box-score statistics, they can provide only an approximation of player impact and shouldn't be interpreted as direct measurements of wins caused by an individual player. We multiply player Win Shares by 112- the marginal effect of a win on attendance estimated in Section 3 to quantify the estimated effect of each player's contribution in the 2024 season.
+
+```{r}
+#| label: fig-winshares-dist
+#| fig-cap: "Distribution of Player Win Shares in the 2024 Regular Season - dashed line shows mean. "
+
+player_ws_2024 <- read_rds(here::here("data/player_ws_2024.rds"))
+
+ggplot(player_ws_2024, aes(x = player_win_shares)) +
+  geom_histogram(
+    bins = 30,
+    color = "white",
+    alpha = 0.85
+  ) +
+  labs(
+    title = "Distribution of Player Win Shares in the WNBA (2024)",
+    x = "Player Win Shares",
+    y = "Number of Players"
+  ) +
+  theme_minimal(base_size = 11) +
+  geom_vline(
+    xintercept = mean(player_ws_2024$win_share, na.rm = TRUE),
+    linetype = "dashed",
+    linewidth = 0.8
+  )
+```
+
+@fig-winshares-dist shows the distribution of player win shares in the 2024 regular reason. Player Win Shares are highly skewed, with a small number of players accounting for a disproportionate share of team success. This reflects the nature of a sport like basketball, where star players often have an outsized effect on game outcome.
+
+
+```{r}
+#| label: tbl-winshares
+#| fig-cap: "Top 15 Player Win Shares and Estimated Attendance Contributions in the 2024 Regular Season."
+
+display_plot <- player_ws_2024 |>
+  select(
+    PLAYER_NAME,
+    TEAM_NAME,
+    marginal_offense,
+    defensive_index,
+    minutes,
+    off_win_share,
+    def_win_share,
+    win_share,
+    player_win_shares,
+    team_wins
+  ) |>
+  mutate(attendance = player_win_shares * 112) |>
+  arrange(desc(player_win_shares)) |>
+  head(n = 15)
+
+# Format numeric columns nicely
+display_plot |>
+  mutate(
+    marginal_offense = round(marginal_offense, 1),
+    defensive_index = round(defensive_index, 1),
+    minutes = round(minutes, 0),
+    off_win_share = round(off_win_share, 2),
+    def_win_share = round(def_win_share, 2),
+    win_share = round(win_share, 2),
+    player_win_shares = round(player_win_shares, 2)
+  ) |>
+  gt() |>
+  tab_header(
+    title = "Top 15 Player Win Shares (2024)"
+  ) |>
+  cols_label(
+    PLAYER_NAME = "Player",
+    TEAM_NAME = "Team",
+    marginal_offense = "Marginal Offense",
+    defensive_index = "Defensive Index",
+    minutes = "Minutes",
+    off_win_share = "Off WS",
+    def_win_share = "Def WS",
+    win_share = "Total WS",
+    player_win_shares = "Scaled WS",
+    team_wins = "Team Wins",
+    attendance = "Est. Attendance"
+  ) |>
+  fmt_number(
+    columns = c(off_win_share, def_win_share, win_share, player_win_shares),
+    decimals = 2
+  ) |>
+  fmt_number(
+    columns = c(marginal_offense, defensive_index),
+    decimals = 1
+  ) |>
+  fmt_number(
+    columns = minutes,
+    decimals = 0
+  ) |>
+  tab_options(
+    table.font.size = px(12),
+    table.width = pct(100)
+  )
+```
+
+@tbl-winshares shows the offensive and defensive contributions, win shares, and attendance impacts of the top fifteen players of the 2024 regular season ranked by estimated win shares. The top contributors to team success are primarily high-minute players with strong offensive production. It's important to note that Win Shares are dependent on the context of a player's specific team, so a player like A'ja Wilson can have the highest marginal offense and defensive index while being the third best according to Win Shares.
+
+To interpret what the estimated attendance contribution numbers mean in context, we must remind ourselves that the model slope from Section 3 represents the effect of an additional win within a rolling 44 game period. The estimates on attendance from Figure 6, on the other hand, reflect the wins attributable to each of the top 15 players within the 44 game period of a WNBA season. This means that the attendance contribution estimate should be interpreted as the estimated attendance contribution in an imaginary 45th game. It is important to note that these contributions attributable to each player are not *in addition to* the model estimates from above, but rather a decomposition of those estimates. Figure 6 also provides more context to the Caitlin Clark fixed effects reported in Figure 3, proving that her 8,842 fan attendance boost vastly outperforms what you would expect based only on her play.
+
+
 
 ## Conclusion
 

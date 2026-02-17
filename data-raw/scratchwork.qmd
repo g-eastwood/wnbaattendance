@@ -13,75 +13,9 @@ library(purrr)
 library(tibble)
 ```
 
-## Wrangling gamelog data from wehoop:
-
-```{r}
-# 1. Pull league-wide gamelogs from wehoop
-
-seasons <- 2016:2024
-
-gamelogs_raw <- map_dfr(
-  seasons,
-  #team_id,
-  function(s) {
-    res <- tryCatch(
-      wnba_leaguegamelog(season = s, season_type = "Regular Season", league_id = "10"),
-      error = function(e) {
-        message(sprintf("wnba_leaguegamelog failed for season %s: %s", s, e$message))
-        return(NULL)
-      }
-    )
-    if (is.null(res)) return(NULL)
-
-    as_tibble(res) %>% mutate(season = s)
-  }
-)
-
-gamelogs <- gamelogs_raw$LeagueGameLog
-```
-
-```{r}
-# 2. clean gamelogs
-gamelogs <- gamelogs %>%
-  mutate(
-    game_date = as.Date(GAME_DATE),
-    win_flag = if_else(WL == "W", 1L, 0L),
-    isHome    = str_detect(MATCHUP, "vs"),
-    isAway    = str_detect(MATCHUP, "@")
-  ) %>%
-  arrange(TEAM_ID, game_date)
-```
-
-```{r}
-# 3. rolling win counts for 44 past games (length of a wnba season)
-gamelogs <- gamelogs %>%
-  group_by(TEAM_ID) %>%
-  mutate(
-    # rolling window of PREVIOUS 44 games, so exclude current game
-    rolling_wins_44 =
-      slide_int(
-        win_flag,
-        ~ sum(.x, na.rm = TRUE),
-        .before = 44,
-        .after = -1,      # exclude current game
-        .complete = FALSE
-      ),
-    
-    rolling_games_44 =
-      slide_int(
-        win_flag,
-        ~ length(.x),
-        .before = 44,
-        .after = -1,
-        .complete = FALSE
-      )
-  ) %>%
-  ungroup()
-```
-
 ```{r}
 # 4. create home games
-home_games <- gamelogs %>%
+home_games <- wnba_gamelogs %>%
   filter(isHome == TRUE) %>%
   mutate(
     dow   = wday(game_date, label = TRUE),
@@ -123,45 +57,6 @@ home_games <- home_games %>%
     dow, month,
     everything()
   )
-```
-
-## Pulling attendance data:
-
-```{r}
-library(readr)
-
-att_path <- "attendance_data/"
-
-att_files <- list.files(att_path, pattern = "\\.csv$", full.names = TRUE)
-
-attendance_raw <- map_dfr(att_files, read_csv)
-```
-
-```{r}
-attendance_clean <- attendance_raw %>%
-  mutate(
-    game_date = as.Date(Date, format = "%B %d, %Y"),
-    attendance = as.integer(Attendance)
-  ) %>%
-  select(Season, game_date, Team, Opponent, attendance)
-```
-
-```{r}
-home_games <- home_games %>%
-  mutate(
-    team_name = toupper(team_name),
-    game_date = as.Date(game_date),
-    opponent = toupper(opponent)
-  )
-
-attendance_clean <- attendance_clean %>%
-  mutate(
-    Team = toupper(Team)
-  )
-
-dir.create("clean_data", showWarnings = FALSE)
-
-write.csv(attendance_clean, "clean_data/attendance_clean.csv", row.names = FALSE)
 ```
 
 ```{r}

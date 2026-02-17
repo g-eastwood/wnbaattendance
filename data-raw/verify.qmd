@@ -1,0 +1,65 @@
+---
+title: "Data Verification"
+format: html
+---
+
+## Gamelogs
+
+```{r}
+library(tidyverse)
+wnba_gl <- read_rds(here::here("data/wnba_gl.rds"))
+```
+
+```{r}
+wnba_gl |>
+  group_by(SEASON_ID) |>
+  summarize(
+    num_teams = n_distinct(TEAM_ID),
+    num_games = n(),
+    num_wins = sum(win_flag, na.rm = TRUE),
+    mean_wpct = sum(win_flag, na.rm = TRUE) / n(),
+    mean_rolling_wins = mean(rolling_wins_44),
+    num_cc = sum(is_cc, na.rm = TRUE)
+  )
+```
+
+```{r}
+ggplot(wnba_gl, aes(x = rolling_wins_44, color = SEASON_ID)) +
+  geom_vline(xintercept = 22, linetype = 3) +
+  geom_density()
+```
+
+```{r}
+ggplot(wnba_gl, aes(x = rolling_wins_44)) +
+  geom_vline(xintercept = 22, linetype = 3) +
+  geom_density() +
+  facet_wrap(vars(TEAM_ID))
+```
+
+```{r}
+ggplot(wnba_gl, aes(y = attendance, x = rolling_wins_44, color = is_cc)) +
+  geom_point() +
+  facet_wrap(vars(TEAM_NAME))
+```
+
+```{r}
+ggplot(wnba_gl, aes(x = game_date, y = attendance, color = factor(is_cc))) +
+  geom_point() +
+  facet_wrap(vars(TEAM_NAME))
+```
+
+## Modeling
+
+```{r}
+# Consider this alternative model specification
+mod_attendance <- lm(
+  log(attendance + 1) ~ rolling_wins_44 + factor(wday(GAME_DATE)) + factor(month(GAME_DATE)) + TEAM_NAME + SEASON_ID + is_cc,
+  data = filter(wnba_gl, !SEASON_ID %in% c(22021))
+)
+
+summary(mod_attendance)
+anova(mod_attendance)
+
+```
+
+

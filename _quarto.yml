@@ -1,7 +1,8 @@
 project:
-  type: default
-  render: 
-    - index.qmd
+  type: manuscript
+  render:
+    - "*.qmd"
+    - "!data-raw/"
 
 execute:
   freeze: auto
@@ -11,9 +12,7 @@ format:
     toc: true
     comments:
       hypothesis: true
-  docx: default
-  jats: default
-  agu-pdf: default
+  pdf: default
 
 
 
