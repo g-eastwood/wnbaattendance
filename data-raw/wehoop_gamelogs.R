@@ -6,7 +6,7 @@ library(wehoop)
 
 # 1. Pull league-wide gamelogs from wehoop
 
-seasons <- 2016:2024
+seasons <- 1997:2024
 
 fetch_gamelog_season <- function(s) {
   res <- tryCatch(
