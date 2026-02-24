@@ -19,8 +19,10 @@ wnba_gl |>
     num_wins = sum(win_flag, na.rm = TRUE),
     mean_wpct = sum(win_flag, na.rm = TRUE) / n(),
     mean_rolling_wins = mean(rolling_wins_44),
+    mean_attendance = mean(attendance, na.rm = TRUE),
     num_cc = sum(is_cc, na.rm = TRUE)
-  )
+  ) |>
+  print(n = Inf)
 ```
 
 ```{r}
@@ -45,15 +47,47 @@ ggplot(wnba_gl, aes(y = attendance, x = rolling_wins_44, color = is_cc)) +
 ```{r}
 ggplot(wnba_gl, aes(x = game_date, y = attendance, color = factor(is_cc))) +
   geom_point() +
-  facet_wrap(vars(TEAM_NAME))
+  facet_wrap(vars(TEAM_ID))
 ```
+
+## Elo ratings
+
+```{r}
+library(elo)
+
+wnba_gl <- wnba_gl |>
+  mutate(opp_score = parse_number(PTS) - parse_number(PLUS_MINUS))
+
+elo <- elo.run(score(PTS, opp_score) ~ TEAM_ID + opponent, data = wnba_gl, k = 20) |>
+  as.data.frame()
+
+wnba_gl <- bind_cols(wnba_gl, select(elo, contains("elo")))
+
+```
+
+```{r}
+ggplot(wnba_gl, aes(x = game_date, y = elo.A, color = factor(is_cc))) +
+  geom_point() +
+  facet_wrap(vars(TEAM_ID))
+```
+
+
+```{r}
+wnba_gl |>
+  summarize(cor = cor(elo.A, rolling_wins_44))
+
+ggplot(wnba_gl, aes(x = rolling_wins_44, y = elo.A)) +
+  geom_point() +
+  facet_wrap(vars(TEAM_ID))
+```
+
 
 ## Modeling
 
 ```{r}
 # Consider this alternative model specification
 mod_attendance <- lm(
-  log(attendance + 1) ~ rolling_wins_44 + factor(wday(GAME_DATE)) + factor(month(GAME_DATE)) + TEAM_NAME + SEASON_ID + is_cc,
+  log(attendance + 1) ~ elo.A + elo.B + factor(wday(GAME_DATE)) + factor(month(GAME_DATE)) + TEAM_ID + SEASON_ID + is_cc,
   data = filter(wnba_gl, !SEASON_ID %in% c(22021))
 )
 
