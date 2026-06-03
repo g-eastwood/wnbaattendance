@@ -1,0 +1,1767 @@
+% Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod]{scrartcl}
+\usepackage{xcolor}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{5}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+
+\usepackage{longtable,booktabs,array}
+\newcounter{none} % for unnumbered tables
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+
+
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
+
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{longtable}
+\usepackage{colortbl}
+\usepackage{array}
+\usepackage{anyfontsize}
+\usepackage{multirow}
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Winning and Attendance in the WNBA},
+  pdfauthor={Gabriela Eastwood; Benjamin S. Baumer; Andrew Zimbalist},
+  pdfkeywords={WNBA, Game Attendance, Player Salary, Winning
+Percentage},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{Winning and Attendance in the WNBA}
+\author{Gabriela Eastwood \and Benjamin S. Baumer \and Andrew Zimbalist}
+\date{2026-06-03}
+\begin{document}
+\maketitle
+\begin{abstract}
+A central question in the intersection between sports economics and
+sports analytics is how to quantify the effects of what happens on the
+court or field on a team's revenue. In general, the literature expects
+that stronger teams will see higher live game attendance, but previous
+research has not found a statistically significant relationship between
+winning percentage and attendance in the WNBA (Agha and Berri 2023). Our
+study improves upon theirs by using a rolling win count from the past 44
+games played rather than a seasonal winning-percentage to predict per
+game attendance. This avoids look-ahead bias, as fans cannot be expected
+to know a team's future performance when deciding to attend a game.
+Using game-level data for all WNBA regular-season games from 2018--2024,
+we estimated an ordinary least squares model of per-game attendance with
+team and season fixed effects and a dummy variable for whether Caitlin
+Clark played. We then translated player win shares into expected
+attendance impacts by mapping individual contributions to team wins onto
+the estimated attendance--winning relationship. We chose to focus on
+attendance as a proxy for revenue following the research framework from
+Scully (1974), due to concerns about revenue data availability. We used
+attendance data from the ``Across the Timeline: WNBA League Attendance
+Dashboard'', which records game-level attendance data for all WNBA
+games. We find a significant relationship between rolling win count and
+game attendance, with game attendance expected to increase by 112 people
+for each additional win in the 44 game window. This means that a player
+like Allisha Gray, for example, who we estimate contributed 10 wins to
+the Atlanta Dream in 2024, boosted attendance by approximately 1,100
+attendees per game. These results highlight the importance of short-run
+performance in shaping fan demand and provide a framework for linking
+individual player performance to team-level revenue outcomes in women's
+professional sports.
+\end{abstract}
+
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+\section{Introduction}\label{sec-intro}
+
+\subsection{Gabriela introduction}\label{gabriela-introduction}
+
+In the years prior to the 2020 WNBA collective bargaining agreement
+(CBA), NBA Commissioner Adam Silver publicly characterized the women's
+league as unpopular and unprofitable (Garcia 2020). Again during the CBA
+renegotiations in 2025, NBA and WNBA leadership made similar negative
+claims about the women's league's long term viability. While league
+leadership has been ironically pessimistic about the health of the WNBA
+in recent years, their claims stand in tension with recent trends: the
+league has enjoyed a significant increase in attendance and fan interest
+in the past several seasons.
+
+While this trend is encouraging for anyone interested in the success of
+the WNBA, breaking down further the underlying components of this trend
+is necessary both to explain and sustain this growth. For decades,
+league officials and sports economists have debated the primary drivers
+of game attendance, identifying game-related and market-related factors
+impacting fan interest and game attendance. Much of this research,
+beginning with foundational work in the 1970s, assumes that fans are
+more likely to attend games when the home team is expected to do well.
+This relationship is widely tested and supported in men's professional
+sports, but women's leagues and the WNBA in particular are still largely
+underresearched. As a relatively young league with rapid growth in
+viewership (WNBA 2024) but limited publicly available financial data,
+game attendance remains the most readily available proxy variable for
+public interest in the WNBA.
+
+A key line of research in sports economics links fan demand to
+expectations about game outcomes. Early work such as the
+uncertainty-of-outcome hypothesis suggests that attendance is higher
+when game results are less predictable, increasing perceived excitement.
+In their 2014 paper, Coates et al use more recent behavioral economics
+models to suggest that people evaluate gains and losses relative to a
+reference point and tend to dislike losses more than they like
+equivalent gains (Coates et al. 2014). They argue that applying this
+idea of loss aversion may better explain why fans choose to go games
+than the uncertainty of outcome hypothesis. They use MLB live-game
+attendance data to find attendance patterns consistent with the
+hypothesis that fans are less likely to attend games in which they
+expect the home-team to lose (Coates et al. 2014). These frameworks
+together suggest that attendance decisions are sensitive not only to
+team quality, but to expectations about competitive performance and
+likely game outcomes.
+
+In the first study in sports economics that sought to empirically
+identify the factors that affected attendance, Noll (1974) considered
+data from MLB, the NFL, NHL, NBA and ABA (American Basketball
+Association) for the 1969-70 and 1970-71 seasons and found that demand
+was a function of population, interactions of income with star players,
+team win percentage, and per capita income. Multiple subsequent studies
+on men's professional team sports continued to find a statistically
+significant correlation between team quality and attendance. In these
+studies, a debate emerged about the direction of causality: did strong
+team performance engender higher attendance or vice versa (Baade and
+Tiehen 1990; Clapp and Hakes 2005; Davis 2008, 2009; Horowitz 2007;
+Lemke et al. 2010)? While no Granger causality tests were run, the
+predominant view has been causality running from team performance to
+attendance (Hall et al. 2002).
+
+Finally, situating these revenue models within broader league structure,
+sports economists have written extensively about the relationship
+between winningness and team revenue, particularly about how competitive
+balance benefits teams across the league in generating revenue. While
+teams and fans want to win as many games as possible, significant
+imbalance in winning percentages across a professional sports league
+will tend to decrease viewership as spectators will only watch a game if
+they have some uncertainty about the outcome (Perline et al. 2018). In
+their study of competitive balance in NCAA basketball, Perline et
+al.~found that the women's game was significantly less balanced than the
+men's game, looking at the standard deviation and the range of winning
+percentages for teams in the women's division I conference (Perline et
+al. 2018). They hypothesize that the difference in the competitive
+balance of the men's and women's games could be one cause of lower
+revenue generation and attendance in the women's game.
+
+In their study of attendance determinants in the WNBA, Agha and Berri
+argue that a major reason why attendance is considerably lower at WNBA
+games than NBA games is that the women's league is still in its early
+years, only beginning play in 1997 compared to the NBA's 1946. To
+account for this, they compare attendance in the tenth season of the
+WNBA (2006) and the NBA (1955/56) (Agha and Berri, 2023, p.~36.) In
+their respective tenth years, the WNBA average attendance per home game
+exceeded the NBA's by more than 2,000 fans per game. This comparison
+suggests that the current disparity in attendance between the women's
+and men's league should not be interpreted as a lack of demand, but
+rather a sign of the league's maturity. Considering the league's age as
+a factor in demand for attendance, it is interesting to inquire further
+into whether patterns of fan behavior change as the league matures. Agha
+and Berri attempt to establish whether different forces shape demand for
+attendance in the WNBA and the NBA, finding that team performance was
+not a statistically significant predictor of game attendance in the
+WNBA. As noted above, this is contrary to the virtually unanimous
+finding in the existing scholarship for men's leagues. However, their
+study only employed data from 2004 through 2017 and thus can not capture
+the more recent improvements in attendance shown in figure 1.
+
+Of course, all of this differential cannot be attributed to the age of
+the league. Additional important factors include: the WNBA plays during
+the summer months in order to promote arena use outside of the NBA
+season; there is less money spent on promotion, reduced media coverage,
+historical prejudice, arena amenities and age, and ticket prices, among
+others. To be sure, the sports management literature also includes
+several studies that find a major motivation behind fandom for women's
+sports leagues to be an area's overall support for feminist issues
+(Delia 2020; Guest and Luijten 2018; Leslie-Walker and Mulvenna 2022).
+Nonetheless, to the extent that the league's age is a factor, it is
+interesting to inquire into the patterns of fan behavior and whether
+they might change as the league matures. Agha and Berri (2023) found
+that their variable on team performance was not statistically
+significant as an explainer of team attendance. As noted above, this is
+contrary to heretofore virtually unanimous finding in the existing
+scholarship for men's leagues. Note, however, that Agha and Berri (2023)
+employed data only from 2004 through 2017 and that its performance
+variable was team win percentage during the previous year.
+
+In viewing more recent attendance figures for the WNBA in the context of
+the league's history, we hoped to determine whether predictors of
+attendance have shifted over time, due to the WNBA's relative
+instability as a young league. Specifically, we find that in recent
+years the strength of the effect of team strength on game attendance has
+increased, paralleling documented trends in men's leagues.
+
+In this paper we build upon the literature on team performance and game
+attendance in the context of the WNBA and introduce a period-based model
+that allows us to more accurately capture the current state of league
+growth.
+
+\subsection{still to be incorporated in
+intro:}\label{still-to-be-incorporated-in-intro}
+
+Differences in the literature over how to measure team quality (wins,
+wins lagged, number of championships in past years, win probability,
+star power), attendance (logs, lags, linear regression or censored), the
+inclusion of control variables and non-linear forms also emerged
+(Wiseman and Chatterjee 2003; {Woltring et al.} 2018; Kim and Chang
+2023; DeSchriver and Jensen 2002; Paul et al. 2019).
+
+The use of only last year's win percentage to measure team performance
+is problematic because fans are more likely to respond to the more
+recent performance of the team. Thus, while a team's win percentage in
+2016 might have an appreciable impact on the team's attendance at the
+beginning of the 2017 season, as the season wears on, this impact should
+consistently diminish.
+
+Professional men's team sport leagues have demonstrated a clear
+relationship between team quality and attendance. It is reasonable to
+anticipate that as women's sports mature and are perceived increasingly
+as a normal sports league, rather than a political concession or oddity,
+they will begin to assert similar fan demand characteristics. In
+particular, fan demand will become more responsive to team quality.
+Using game attendance\footnote{Note that, as in most sports leagues,
+  there is always the possibility finagling with game attendance
+  figures. The WNBA appears to give attendance counting instructions to
+  teams that define attendance as turnstile count, plus season ticket
+  sales, plus complimentary tickets and promotions. There is
+  considerable for these factors to be manipulated, rendering the
+  possibility of noise in the attendance figures we use.} and team
+performance data from 1997 through 2025, we test these hypotheses.
+
+\subsection{Andrew other passage}\label{andrew-other-passage}
+
+The relationship between attendance and winning percentage has been
+examined, but such studies often look at winning percentage as causation
+for attendance. Davis (2008) and Horowitz (2007) both found that
+attendance and winning percentage were related. Horowitz concluded a
+bidirectional relationship between the two, while Davis suggested that
+causation runs from winning percentage to attendance. In a following
+study, Davis (2009) found winning percentage as a significant
+determinant of attendance for 12 National League teams; though the study
+did not establish causation both ways. Lemke et al. (2010) found
+attendance increases as home team win probability increases. There is
+evidence that causation may run from attendance to winning percentage,
+but the bulk of the literature has been researched the other way.
+
+The present study controls for payroll and stadium capacity as both have
+been shown to affect attendance. Wiseman and Chatterjee (2003) found
+team payroll was positively correlated to team winning percentage (9).
+Additionally, they found that this relationship has grown stronger since
+the late 1990's. Hall et al. (2002) did not find causality evidence from
+payroll to team winning percentage in their entire dataset, but they did
+note an increased correlation in the 1990's. Additionally, they stated
+that an MLB team with a payroll of at least 150\% of the league average
+could expect a winning percentage of at least .550. This is an important
+finding, because Vrooman (2012) identified .550 as a benchmark winning
+percentage for qualifying as a playoff team.
+
+\section{Data}\label{sec-data}
+
+\subsection{Game logs and attendance}\label{game-logs-and-attendance}
+
+Our analysis is based on game-level data that spans WNBA history,
+beginning in 1997 and continuing through the end of the 2025 season. Our
+final data set contains observations from 6,164 games.
+
+First, we collected game-level attendance data from (Across the
+Timeline, n.d.). We supplemented these data with arena capacities that
+we collected manually\footnote{We were only able to collect an estimate
+  for the \emph{current} arena capacity, which is not necessarily the
+  same as the arena capacity on the day of the game.}. Attendance data
+was unavailable for only 152 games, while (due to the COVID-19 pandemic)
+2 games (accurately) recorded attendance of 0.
+
+Second, we collected game-level performance data from the
+\textbf{wehoop} R package (Gilani and Hutchinson 2021), which uses the
+official WNBA API. These data include the final score of the game. We
+also used the \textbf{wehoop} package to identify whether Caitlin Clark
+played more than 0 minutes in the game.
+
+Table~\ref{tbl-attendance} shows a sample of the data. While many other
+variables are omitted from the table, we note that the attendance, the
+teams playing in the game, the outcome, the arena, and whether Caitlin
+Clark played in the game, are recorded.
+
+\begin{table}
+
+\caption{\label{tbl-attendance}}
+
+\centering{
+
+\caption*{
+{\fontsize{20}{25}\selectfont  WNBA Game Data (1997-2025)\fontsize{8}{10}\selectfont } \\ 
+{\fontsize{14}{17}\selectfont  Sample of game-level records\fontsize{8}{10}\selectfont }
+} 
+\fontsize{8.0pt}{10.0pt}\selectfont
+\begin{tabular*}{1\linewidth}{@{\extracolsep{\fill}}rlllrrr}
+\toprule
+Game Date & Home & Away & Arena & Attendance & Plus Minus & Clark \\ 
+\midrule\addlinespace[2.5pt]
+19596 & SEA & CHI & Climate Pledge Arena & 9,893 & -5 & 0 \\ 
+15492 & SAN & PHO & AT\&T Center & 6,534 & 19 & 0 \\ 
+18068 & CHI & IND & Wintrust Arena & 4,945 & -7 & 0 \\ 
+13291 & SEA & HOU & KeyArena & 7,541 & -25 & 0 \\ 
+13732 & LAS & PHO & Staples Center & 10,079 & -3 & 0 \\ 
+19868 & PHO & DAL & Footprint Center & 8,339 & -15 & 0 \\ 
+11895 & PHO & SAC & US Airways Center & 9,344 & -15 & 0 \\ 
+12258 & SEA & PHO & KeyArena & 6,753 & 29 & 0 \\ 
+16591 & CHI & IND & Allstate Arena & 8,123 & 23 & 0 \\ 
+18042 & LVA & LAS & Mandalay Bay Events Center & 7,249 & 13 & 0 \\ 
+\bottomrule
+\end{tabular*}
+
+Sample of Game-level WNBA data. The data indicates (among other things)
+which teams were playing, who won, the arena, the attendance, and
+whether Caitlin Clark played in the game.
+
+}
+
+\end{table}%
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+Figure~\ref{fig-boxplots} shows the distribution of attendance across
+all seasons, with a logarithmic scale on the vertical axis. There is no
+attendance data from 2020, because all games that year were played in
+the WNBA bubble due to the COVID-19 pandemic, and some games in 2021
+continued to be played with artificially low attendance.
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+Several broad observations can be made from Figure~\ref{fig-boxplots}.
+First, after some initial enthusiasm during the first three years of the
+league, attendance largely plateaued or steadily but slightly declined
+from 2000 to 2017. The two years preceding the pandemic (2018-2019) had
+notably lower attendance. Since the pandemic, attendance has rebounded,
+exceeding its initial levels in 2024 and reaching new heights in 2025.
+In fact, average WNBA attendance in 2025 was 10,986, which was 1.1\%
+higher than the previous high in 1998.
+
+These last two years coincide with the arrival of Caitlin Clark, the
+2024 Rookie of the Year Award winner who is widely regarded as a
+generational talent. Disentangling the ``Caitlin Clark effect'' from the
+league's overall attendance trends is one of our goals.
+
+\protect\phantomsection\label{cell-fig-boxplots}
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-boxplots-1.pdf}}
+
+}
+
+\caption{\label{fig-boxplots}Distribution of WNBA game attendance by
+season. Note that the vertical axis has a logarithmic scale. Caitlin
+Clark's games in 2024-2025 are separated by color.}
+
+\end{figure}%
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+\subsection{Estimating team strength}\label{sec-elo}
+
+We used the game-level results data to model the strength of each WNBA
+team as a time series. Measuring team strength is necessary to test our
+hypothesis that attendance is in part driven by the desire of fans to
+see quality basketball. We considered season-to-date winning percentage
+and a rolling 44-game (the length of a typical WNBA season) winning
+percentage before settling on Elo rating (Elo 1978). Originally
+developed for rating chess players, Elo rating is well-understood in
+sports analytics as a measure of team strength that updates after each
+game, and---unlike winning percentage and rolling winning
+percentage---takes into account not only the outcome but also the
+estimated team strength of both teams.
+
+Let \(\theta_{i}(t)\) be the strength of team \(i\) at time \(t\), where
+Elo rating are typically centered at 1500. Then if the probability that
+team \(i\) beats team \(j\) is modeled by a logistic curve with base 10
+and scale factor 400, the win probability is given by: \[
+  \Pr(i \text{ beats }j \text{ at time }t) = \frac{1}{1 + 10^{\frac{\theta_{j}(t) - \theta_{i}(t)}{400}}} \,.
+\] Each team starts the 1997 season with \(\hat{\theta}_{i}(0) = 1500\),
+and following each game, team \(i\)'s rating is updated via the formula
+\[
+  \hat{\theta}_{i}(t+1) = \hat{\theta}_{i}(t) + K \cdot I(i \text{ beats } j) \,,
+\] where \(I(i \text{ beats } j)\) is an indicator variable that is 1 if
+\(i\) beats \(j\) and \(-1\) if \(j\) beats \(i\), and \(K = 32\) is a
+constant that controls how sensitive the ratings are to each game.
+Figure~\ref{fig-elo} shows the evolution of Elo rating
+\(\hat{\theta}_i(t)\) by franchise for the 12 teams who were active
+during the 2024 season. The recent poor performance of the Los Angeles
+Sparks, the 2010 dominance of the Seattle Storm, and the recent rise of
+the New York Liberty and Indiana Fever are easily visible.
+
+\protect\phantomsection\label{cell-fig-elo}
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-elo-1.pdf}}
+
+}
+
+\caption{\label{fig-elo}Evolution of team Elo ratings in the WNBA
+(1997-2025). Only franchises active in 2024 are shown. The recent poor
+performance of the Los Angeles Sparks, the 2010 dominance of the Seattle
+Storm, and the recent rise of the New York Liberty and Indiana Fever are
+easily visible. Note that all franchises begin with a 1500 rating.}
+
+\end{figure}%
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+\subsection{Estimating home win
+probability}\label{estimating-home-win-probability}
+
+The Elo ratings estimated above can then be plugged back into the win
+probability formula to estimate the home teams's chances of winning. We
+also added a 12-point home court advantage to our home win probability
+model, so that: \[
+  \hat{p}_{ij}(\hat{\theta}_i(t), \hat{\theta}_j(t), t) = \Pr(i \text{ beats }j \text{ at time }t \text{ at home}) = \frac{1}{1 + 10^{\frac{\hat{\theta}_{j}(t) - \left( \theta_{i}(t) + 12 \right)  }{400}}} \,.
+\] We arrived at 12 points by manually calibrating the win probabilities
+to match the observed frequencies. While the model was less accurate at
+the extremes (it was consistently reluctant to predict nearly certain
+home wins and losses), it fit very well in the middle where most of the
+games occur (see Table~\ref{tbl-calibrate}).
+
+\begin{table}
+
+\caption{\label{tbl-calibrate}Calibration of home win probability model,
+based on Elo ratings. We note that in the most frequent situations,
+where the home team was a slight favorite, the observed home win
+probability is within 3 percentage points of the predicted home
+probability. However, in those rarer occasions where a home win was
+extremely likely or unlikely, the model was less accurate.}
+
+\centering{
+
+\caption*{
+{\fontsize{20}{25}\selectfont  WNBA Home Win Probability Model Calibration (1997-2025)\fontsize{8}{10}\selectfont } \\ 
+{\fontsize{14}{17}\selectfont  10 Equally-spaced Bins\fontsize{8}{10}\selectfont }
+} 
+\fontsize{8.0pt}{10.0pt}\selectfont
+\begin{tabular*}{1\linewidth}{@{\extracolsep{\fill}}crrrr}
+\toprule
+Wpct Bin & Games & Bin Midpoint & Obs Home Wpct & Diff \\ 
+\midrule\addlinespace[2.5pt]
+(0.153,0.233] & 51 & 0.212 & 0.059 & -0.153 \\ 
+(0.233,0.311] & 170 & 0.284 & 0.188 & -0.096 \\ 
+(0.311,0.39] & 441 & 0.360 & 0.211 & -0.149 \\ 
+(0.39,0.468] & 744 & 0.432 & 0.349 & -0.083 \\ 
+(0.468,0.547] & 971 & 0.508 & 0.485 & -0.023 \\ 
+(0.547,0.625] & 1,136 & 0.586 & 0.601 & 0.016 \\ 
+(0.625,0.704] & 1,150 & 0.664 & 0.697 & 0.033 \\ 
+(0.704,0.782] & 910 & 0.737 & 0.815 & 0.078 \\ 
+(0.782,0.861] & 490 & 0.810 & 0.894 & 0.084 \\ 
+(0.861,0.94] & 101 & 0.884 & 0.950 & 0.066 \\ 
+\bottomrule
+\end{tabular*}
+
+}
+
+\end{table}%
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+\section{Methods}\label{methods}
+
+Our goal is to model the attendance (\(y\)) at a given WNBA game, as a
+function of several different measures of fan engagement detailed in
+Section~\ref{sec-fan}. We also include several control variables to
+account for time and city-related effects (see
+Section~\ref{sec-control}).
+
+We also know the arena in which the game took place and the capacity of
+that arena. Thus, and alternative response variable is percentage of
+arena capacity filled (\(\gamma\)).
+
+\subsection{Response variables}\label{response-variables}
+
+In Figure~\ref{fig-attendance-year}, we observe the relationship between
+attendance and estimated home win probability. In most years, the slope
+appears to be positive.
+
+\protect\phantomsection\label{cell-fig-attendance-year}
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-attendance-year-1.pdf}}
+
+}
+
+\caption{\label{fig-attendance-year}WNBA attendance by season, against
+estimated home win probability. We note that in most years, the slope of
+the association appears to be positive.}
+
+\end{figure}%
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+In Figure~\ref{fig-capacity-year}, we note similar trends in the
+relationship between the percentage of the arena capacity filled and the
+estimated home win probability. We also note that since arena capacity
+cannot exceed 1, there are edge effects created by sellouts. Those
+sellouts are much more frequent in the last two years of data, and many
+of the sellouts involve Caitlin Clark.
+
+\protect\phantomsection\label{cell-fig-capacity-year}
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-capacity-year-1.pdf}}
+
+}
+
+\caption{\label{fig-capacity-year}WNBA percentage of arena capacity
+filled by season, against estimated home win probability. We note the
+edge effects caused by sellouts, which occur much more frequently in
+2024 and 2025.}
+
+\end{figure}%
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+Because the raw attendance figures are not normally distributed, we
+model the logarithm of attendance. Similarly, because the percentage of
+arena capacity are bound above by 1 and below by 0, we employ a Tobit
+regression model.
+
+\subsection{Modeling fan engagement}\label{sec-fan}
+
+In Section~\ref{sec-elo}, we described our use of Elo rating to estimate
+the strength of the home team (\(\hat{\theta}_i(t)\)), the strength of
+the visiting team (\(\hat{\theta}_j(t)\)) and the home win probability
+(\(\hat{p}_{ij}(t)\)) (which is itself a function of the estimated team
+strengths).
+
+As noted in Section~\ref{sec-intro}, there are multiple notions of what
+drives fan engagement relevant to the WNBA. Each of these notions can be
+captured by a simple bivariate function of the corresponding strengths
+of the teams (\(f_k(\hat{\theta}_i(t), \hat{\theta}_i(t))\)).
+
+\begin{itemize}
+\tightlist
+\item
+  Quality of play: fans may wish to attend a game in person if the
+  quality of play is high. We model this as the sum of the Elo rating of
+  the two teams
+  (\(f_1(\hat{\theta}_i(t), \hat{\theta}_i(t)) = \hat{\theta}_i(t) + \hat{\theta}_j(t)\))
+\item
+  Loss aversion: fans may wish to attend a game to see their team (the
+  home team) win. We model this using the estimated home win probability
+  function above
+  (\(f_2(\hat{\theta}_i(t), \hat{\theta}_i(t)) = \hat{p}_{ij}(t)\))
+\item
+  Uncertainty outcome hypothesis: fans may wish to attend a game for
+  which the outcome is unclear. We model this as
+  (\(f_3(\hat{\theta}_i(t), \hat{\theta}_i(t)) = |\hat{\theta}_i(t) - \hat{\theta}_j(t)|\))
+\end{itemize}
+
+\subsection{Control variables}\label{sec-control}
+
+As time-related control variables, we include the the season
+(\(\tau_1\)), the month of the year (\(\tau_2\)), and day of the week
+(\(\tau_3\)) as fixed effects. To control for city-related effects, we
+also include the team name (\(\phi_1\)), as well as the median income
+(\(\phi_2\), in thousands of USD) and population (\(\phi_3\), in
+millions) of the home city\footnote{Because the population and median
+  income statistics were available at irregular time periods (due to the
+  COVID-19 pandemic and other factors), we chose to use the median of
+  the population and median income across all of the available years of
+  data as a constant value. While this does mean that the growth in
+  cities like Phoenix or Las Vegas is ignored, we doubt this will
+  meaningfully affect our results, especially since the team fixed
+  effect should capture some of that variability.}. Finally, we include
+an indicator based on whether Caitlin Clark played more than 0 minutes
+in the game (\(\chi\)).
+
+\subsection{Interaction}\label{interaction}
+
+Testing our primary hypotheses requires analyzing how the relationship
+between attendance and fan engagement has changed over time. To capture
+this, we include an interaction term between our measures of fan
+engagement (\(f_k\)) and season (\(\tau_1\)).
+
+\subsection{Model formulation for attendance}\label{sec-mod-attend}
+
+Like Coates et al. (2014), we model the natural logarithm of attendance.
+
+Our general regression model for attendance is: \[
+  \ln{y} = \beta_0^{(k)} + \beta_1^{(k)} f_k + \underbrace{\beta_2^{(k)} \tau_1 + \beta_3^{(k)} \tau_2 + \beta_4^{(k)} \tau_3}_{\text{time-related}} + \underbrace{\beta_5^{(k)} \phi_1 + \beta_6^{(k)} \phi_2 + \beta_7^{(k)} \phi_3}_{\text{ city-related }} + \beta_8^{(k)} \chi + \underbrace{\beta_9^{(k)} f_k \tau_1}_{\text{interaction}} + \epsilon \,,
+\] where \(k \in \{1, 2, 3\}\), and \(\beta_j^{(k)} \in \mathbb{R}\) for
+\(j = \{0, 1, 6, 7, 8\}\), while the other \(\beta_j^{(k)}\)
+coefficients are vectors of length equal to the number of factor levels
+in their corresponding categorical explanatory variable. Most notably
+\(\beta_2^{(k)}\) and \(\beta_9^{(k)}\) have 29 values (corresponding to
+each season after 1997) and \(\beta_5^{(k)}\) has 19 values
+(corresponding to each team). Only current WNBA franchises are included
+in the regression model. We also excluded all data from the 2020 and
+2021 seasons, since there were no fans allowed in all or parts of both
+seasons.
+
+\subsection{Model formulation for percentage of arena
+capacity}\label{sec-mod-cap}
+
+We fit the same set of models with \(\gamma\) as the response, but the
+in Tobit framework.
+
+\section{Results}\label{results}
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+\subsection{Attendance}\label{sec-attend}
+
+In keeping with recent guidance from Wasserstein and Lazar (2016) and
+Wasserstein et al. (2019), and with a sample size of over 5000
+observations and dozens of coefficients, we are less interested in the
+p-values shown in Table~\ref{tbl-coefs}, and focus our attention on the
+magnitude and practical impact of the fitted coefficients. (All
+variables except for population achieve ``statistical significance'' at
+the 5\%-level, as shown in Table~\ref{tbl-anova}). Residual analysis for
+the attendance models are shown in Section~\ref{sec-resid-attend}.
+
+{
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.0896}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.3582}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1343}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1493}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1493}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1194}}@{}}
+
+\caption{\label{tbl-coefs}Fitted coefficients for scalar terms in models
+for the natural logarithm of attendance.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Model
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Term
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Estimate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Std Error
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Statistic
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+P Value
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+f1 & (Intercept) & 9.027 & 0.129 & 69.908 & 0.000 \\
+f2 & (Intercept) & 8.968 & 0.155 & 58.003 & 0.000 \\
+f3 & (Intercept) & 9.078 & 0.132 & 68.750 & 0.000 \\
+f2 & I(abs(elo.A - elo.B)) & 0.001 & 0.001 & 0.524 & 0.600 \\
+f1 & I(elo.A + elo.B - 3000) & 0.002 & 0.001 & 3.320 & 0.001 \\
+f3 & I(home\_win\_prob - 0.5) & 0.422 & 0.402 & 1.050 & 0.294 \\
+f1 & is\_cc & 0.705 & 0.049 & 14.514 & 0.000 \\
+f2 & is\_cc & 0.699 & 0.050 & 14.089 & 0.000 \\
+f3 & is\_cc & 0.653 & 0.048 & 13.627 & 0.000 \\
+f1 & median\_income & -0.007 & 0.002 & -3.687 & 0.000 \\
+f2 & median\_income & -0.006 & 0.002 & -3.144 & 0.002 \\
+f3 & median\_income & -0.008 & 0.002 & -4.003 & 0.000 \\
+f1 & median\_pop & 0.021 & 0.007 & 2.967 & 0.003 \\
+f2 & median\_pop & 0.014 & 0.007 & 1.888 & 0.059 \\
+f3 & median\_pop & 0.017 & 0.007 & 2.382 & 0.017 \\
+
+\end{longtable}
+
+}
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+Consider first the strong evidence for the Caitlin Clark effect. Even
+for the smallest coefficient in Table~\ref{tbl-coefs}, the expected
+attendance nearly doubles (i.e., is multiplied by \(\exp(0.653)\) =
+1.92) when Clark plays in the game, and this is \emph{after} controlling
+for the Indiana Fever team effect, the level of fan engagement, and the
+season effects!
+
+Conversely, the evidence for the quality of play and uncertainty of
+outcome hypotheses is weak, with those coefficients barely moving the
+needle. A 10 percentage point increase in the probability of the home
+team winning is associated with a modest 4.31\% increase in the expected
+attendance, after controlling for our other factors.
+
+{
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0714}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.5000}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0357}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0952}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0833}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1190}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0952}}@{}}
+
+\caption{\label{tbl-anova}Analysis of variance for terms in models for
+the natural logarithm of attendance.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Model
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Term
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Df
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Sumsq
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Meansq
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Statistic
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+P Value
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+f2 & I(abs(elo.A - elo.B)) & 1 & 10.851 & 10.851 & 99.987 & 0.000 \\
+f1 & I(elo.A + elo.B - 3000) & 1 & 40.473 & 40.473 & 401.255 & 0.000 \\
+f3 & I(home\_win\_prob - 0.5) & 1 & 39.923 & 39.923 & 395.845 & 0.000 \\
+f1 & is\_cc & 1 & 22.763 & 22.763 & 225.675 & 0.000 \\
+f2 & is\_cc & 1 & 21.472 & 21.472 & 197.854 & 0.000 \\
+f3 & is\_cc & 1 & 19.936 & 19.936 & 197.668 & 0.000 \\
+f1 & median\_income & 1 & 1.502 & 1.502 & 14.890 & 0.000 \\
+f2 & median\_income & 1 & 1.307 & 1.307 & 12.039 & 0.001 \\
+f3 & median\_income & 1 & 1.629 & 1.629 & 16.153 & 0.000 \\
+f1 & median\_pop & 1 & 0.278 & 0.278 & 2.759 & 0.097 \\
+f2 & median\_pop & 1 & 0.322 & 0.322 & 2.964 & 0.085 \\
+f3 & median\_pop & 1 & 0.154 & 0.154 & 1.528 & 0.216 \\
+f1 & factor(month(game\_date)) & 4 & 12.644 & 3.161 & 31.339 & 0.000 \\
+f2 & factor(month(game\_date)) & 4 & 12.434 & 3.109 & 28.645 & 0.000 \\
+f3 & factor(month(game\_date)) & 4 & 11.842 & 2.960 & 29.354 & 0.000 \\
+f1 & factor(wday(game\_date)) & 6 & 14.323 & 2.387 & 23.667 & 0.000 \\
+f2 & factor(wday(game\_date)) & 6 & 15.293 & 2.549 & 23.487 & 0.000 \\
+f3 & factor(wday(game\_date)) & 6 & 14.704 & 2.451 & 24.300 & 0.000 \\
+f1 & name\_current & 12 & 117.498 & 9.791 & 97.074 & 0.000 \\
+f2 & name\_current & 12 & 132.317 & 11.026 & 101.605 & 0.000 \\
+f3 & name\_current & 12 & 122.443 & 10.204 & 101.171 & 0.000 \\
+f2 & I(abs(elo.A - elo.B)):factor(season\_id) & 26 & 6.526 & 0.251 &
+2.313 & 0.000 \\
+f1 & I(elo.A + elo.B - 3000):factor(season\_id) & 26 & 27.457 & 1.056 &
+10.470 & 0.000 \\
+f3 & I(home\_win\_prob - 0.5):factor(season\_id) & 26 & 31.440 & 1.209 &
+11.990 & 0.000 \\
+f1 & factor(season\_id) & 26 & 152.181 & 5.853 & 58.029 & 0.000 \\
+f2 & factor(season\_id) & 26 & 150.433 & 5.786 & 53.315 & 0.000 \\
+f3 & factor(season\_id) & 26 & 147.101 & 5.658 & 56.098 & 0.000 \\
+
+\end{longtable}
+
+}
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+Table~\ref{tbl-glance} characterizes the model fits. We can see that
+while all models achieve a similar fit, models \(f_1\) (corresponding to
+the quality of play hypothesis) and \(f_3\) (corresponding to the home
+win probability) are slightly superior by most metrics.
+
+{
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0541}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0901}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.1261}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0541}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0901}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0721}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0270}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0901}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0811}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0811}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0811}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.1081}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0450}}@{}}
+
+\caption{\label{tbl-glance}Comparison of models.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+model
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+r.squared
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+adj.r.squared
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+sigma
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+statistic
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+p.value
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+df
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+logLik
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+AIC
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+BIC
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+deviance
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+df.residual
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+nobs
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+f1 & 0.436 & 0.427 & 0.318 & 49.459 & 0 & 78 & -1337.102 & 2834.204 &
+3356.582 & 502.715 & 4984 & 5063 \\
+f2 & 0.394 & 0.384 & 0.329 & 41.460 & 0 & 78 & -1522.340 & 3204.680 &
+3727.057 & 540.879 & 4984 & 5063 \\
+f3 & 0.436 & 0.428 & 0.318 & 49.471 & 0 & 78 & -1336.828 & 2833.656 &
+3356.033 & 502.660 & 4984 & 5063 \\
+
+\end{longtable}
+
+}
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+Figure~\ref{fig-season-coefs} shows that after controlling for the
+Caitlin Clark effect, expected attendance is only just returning its
+1997 baseline in the most recent season. This is a mixed blessing. On
+the one hand, even after controlling for Clark, league expected
+attendance has fully recovered from the COVID-19 pandemic and the
+malaise of the early 2000s and 2010s. On the other hand, it seems
+unlikely that the league would have achieved record high attendance
+without Clark.
+
+\protect\phantomsection\label{cell-fig-season-coefs}
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-season-coefs-1.pdf}}
+
+}
+
+\caption{\label{fig-season-coefs}Estimated season-level fixed effects
+for natural logarithm of attendance models.}
+
+\end{figure}%
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+Figure~\ref{fig-season-slopes} shows a general increase in the slope of
+the interaction terms in all three models in recent years. For all three
+models, these change in slope coefficients were decidedly negative until
+around 2015. This suggests that the relationship between attendance and
+fan engagement was more moderate during those years. (Note that for all
+three models, the main effect of the fan engagement term in
+Table~\ref{tbl-coefs} is positive.) While the change in slope associated
+with model \(f_1\) is still negative, it is closer to zero than it has
+been in the past. The changes in slope associated with models \(f_2\)
+and \(f_3\) are now positive, although it is difficult to assess the
+long-term trend due to the pandemic being only a few years past.
+
+\protect\phantomsection\label{cell-fig-season-slopes}
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-season-slopes-1.pdf}}
+
+}
+
+\caption{\label{fig-season-slopes}Estimated season-level changes in
+slopes for natural logarithm of attendance models.}
+
+\end{figure}%
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+\subsection{Percentage of Arena
+Capacity}\label{percentage-of-arena-capacity}
+
+Because our response variable \(\gamma\) is constrained between 0 and 1,
+but has significant mass at 1 exactly, we fit a Papke-Wooldridge
+fractional response model (Papke and Wooldridge 1996) with HC1 sandwich
+estimators for the covariance matrix.
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+Table~\ref{tbl-coefs2} reports the coefficients from the percentage of
+arena capacity models.
+
+{
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.0833}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.3333}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1528}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1389}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1528}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1389}}@{}}
+
+\caption{\label{tbl-coefs2}Table of coefficients from percentage of
+arena capacity models.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+model
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+term
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+estimate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+std.error
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+statistic
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+p.value
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+f1 & (Intercept) & 0.0420351 & 0.3060837 & 0.1373320 & 0.8907684 \\
+f1 & I(elo.A + elo.B - 3000) & 0.0053038 & 0.0012483 & 4.2489239 &
+0.0000215 \\
+f1 & median\_income & 0.0192855 & 0.0046684 & 4.1310605 & 0.0000361 \\
+f1 & median\_pop & -0.0975090 & 0.0147117 & -6.6279729 & 0.0000000 \\
+f1 & is\_cc & 2.8268291 & 0.2623045 & 10.7768979 & 0.0000000 \\
+f2 & (Intercept) & 0.3066991 & 0.3737256 & 0.8206531 & 0.4118439 \\
+f2 & I(abs(elo.A - elo.B)) & -0.0012487 & 0.0029263 & -0.4267265 &
+0.6695786 \\
+f2 & median\_income & 0.0164644 & 0.0046623 & 3.5314191 & 0.0004133 \\
+f2 & median\_pop & -0.0948250 & 0.0144747 & -6.5511069 & 0.0000000 \\
+f2 & is\_cc & 2.9022797 & 0.2595776 & 11.1807804 & 0.0000000 \\
+f3 & (Intercept) & 0.0502670 & 0.3202932 & 0.1569407 & 0.8752916 \\
+f3 & I(home\_win\_prob - 0.5) & 2.3584200 & 0.8986874 & 2.6242941 &
+0.0086829 \\
+f3 & median\_income & 0.0179402 & 0.0047330 & 3.7904230 & 0.0001504 \\
+f3 & median\_pop & -0.1017634 & 0.0149716 & -6.7970886 & 0.0000000 \\
+f3 & is\_cc & 2.8717453 & 0.2611669 & 10.9958230 & 0.0000000 \\
+
+\end{longtable}
+
+}
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+Table~\ref{tbl-glance2} shows the model fit metrics for the percentage
+of arena capacity models.
+
+{
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0732}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1707}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0976}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1220}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1098}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1098}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1098}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.1463}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 16\tabcolsep) * \real{0.0610}}@{}}
+
+\caption{\label{tbl-glance2}Comparison of percentage of arena capacity
+models.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+model
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+null.deviance
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+df.null
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+logLik
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+AIC
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+BIC
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+deviance
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+df.residual
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+nobs
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+f1 & 916.6665 & 5062 & -2973.023 & 6104.046 & 6619.894 & 559.5177 & 4984
+& 5063 \\
+f2 & 916.6665 & 5062 & -2999.275 & 6156.550 & 6672.398 & 574.1421 & 4984
+& 5063 \\
+f3 & 916.6665 & 5062 & -2986.255 & 6130.510 & 6646.358 & 564.3610 & 4984
+& 5063 \\
+
+\end{longtable}
+
+}
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+Table~\ref{tbl-anova2} shows the analysis of variance for the percentage
+of arena capacity models.
+
+{
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0612}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.4286}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0306}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0918}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1224}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1837}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0816}}@{}}
+
+\caption{\label{tbl-anova2}Analysis of variance for terms in models for
+percentage of arena capacity.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Model
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Term
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Df
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Deviance
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Df Residual
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Residual Deviance
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+P Value
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+f2 & I(abs(elo.A - elo.B)) & 1 & 0.032 & 5061 & 916.634 & 0.858 \\
+f1 & I(elo.A + elo.B - 3000) & 1 & 8.035 & 5061 & 908.631 & 0.005 \\
+f3 & I(home\_win\_prob - 0.5) & 1 & 0.906 & 5061 & 915.760 & 0.341 \\
+f1 & is\_cc & 1 & 24.002 & 5010 & 573.411 & 0.000 \\
+f2 & is\_cc & 1 & 23.389 & 5010 & 581.441 & 0.000 \\
+f3 & is\_cc & 1 & 22.520 & 5010 & 579.403 & 0.000 \\
+f1 & median\_income & 1 & 0.977 & 5012 & 601.451 & 0.323 \\
+f2 & median\_income & 1 & 1.038 & 5012 & 608.706 & 0.308 \\
+f3 & median\_income & 1 & 0.972 & 5012 & 606.342 & 0.324 \\
+f1 & median\_pop & 1 & 4.038 & 5011 & 597.414 & 0.044 \\
+f2 & median\_pop & 1 & 3.876 & 5011 & 604.830 & 0.049 \\
+f3 & median\_pop & 1 & 4.419 & 5011 & 601.923 & 0.036 \\
+f1 & factor(month(game\_date)) & 4 & 13.370 & 5025 & 696.118 & 0.010 \\
+f2 & factor(month(game\_date)) & 4 & 13.218 & 5025 & 706.988 & 0.010 \\
+f3 & factor(month(game\_date)) & 4 & 12.953 & 5025 & 701.429 & 0.012 \\
+f1 & factor(wday(game\_date)) & 6 & 18.624 & 5029 & 709.487 & 0.005 \\
+f2 & factor(wday(game\_date)) & 6 & 18.719 & 5029 & 720.205 & 0.005 \\
+f3 & factor(wday(game\_date)) & 6 & 19.034 & 5029 & 714.381 & 0.004 \\
+f1 & name\_current & 12 & 93.689 & 5013 & 602.429 & 0.000 \\
+f2 & name\_current & 12 & 97.243 & 5013 & 609.745 & 0.000 \\
+f3 & name\_current & 12 & 94.115 & 5013 & 607.314 & 0.000 \\
+f2 & I(abs(elo.A - elo.B)):factor(season\_id) & 26 & 7.299 & 4984 &
+574.142 & 1.000 \\
+f1 & I(elo.A + elo.B - 3000):factor(season\_id) & 26 & 13.894 & 4984 &
+559.518 & 0.974 \\
+f3 & I(home\_win\_prob - 0.5):factor(season\_id) & 26 & 15.042 & 4984 &
+564.361 & 0.957 \\
+f1 & factor(season\_id) & 26 & 180.519 & 5035 & 728.112 & 0.000 \\
+f2 & factor(season\_id) & 26 & 177.710 & 5035 & 738.924 & 0.000 \\
+f3 & factor(season\_id) & 26 & 182.345 & 5035 & 733.416 & 0.000 \\
+
+\end{longtable}
+
+}
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+Figure~\ref{fig-season-coefs2} shows that\ldots{}
+
+\protect\phantomsection\label{cell-fig-season-coefs2}
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-season-coefs2-1.pdf}}
+
+}
+
+\caption{\label{fig-season-coefs2}Estimated season-level fixed effects
+for percentage of arena capacity models.}
+
+\end{figure}%
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+Figure~\ref{fig-season-slopes2} shows that\ldots{}
+
+\protect\phantomsection\label{cell-fig-season-slopes2}
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-season-slopes2-1.pdf}}
+
+}
+
+\caption{\label{fig-season-slopes2}Estimated season-level changes in
+slopes for percentage of arena capacity models.}
+
+\end{figure}%
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+\section{Conclusion}\label{conclusion}
+
+\subsection{Limitations}\label{limitations}
+
+Because the percentage of arena capacity data is right-censored, we
+considered a Tobit regression model (McDonald and Moffitt 1980), but our
+residuals violated the normality and homoskedasticity conditions. We
+also considered fitting a Beta regression model with a logit link
+function, and converting the fixed effects for seasons to random
+effects, but those models didn't converge.
+
+\subsection{Future work}\label{future-work}
+
+\subsection{Discussion}\label{discussion}
+
+\section*{References}\label{references}
+\addcontentsline{toc}{section}{References}
+
+\protect\phantomsection\label{refs}
+\begin{CSLReferences}{1}{1}
+\bibitem[\citeproctext]{ref-AcrossTheTimeline_WNBA_Attendance}
+Across the Timeline. n.d. \emph{{WNBA Attendance --- Across the
+Timeline}}. Across the Timeline;
+\url{https://www.acrossthetimeline.com/wnba/attendance.html}.
+\url{https://www.acrossthetimeline.com/wnba/attendance.html}.
+
+\bibitem[\citeproctext]{ref-AghaBerri2023}
+Agha, Nola, and David Berri. 2023. {``Demand for Basketball: A
+Comparison of the WNBA and NBA.''} \emph{International Journal of Sport
+Finance} 18 (1): 35--44.
+\url{https://doi.org/10.32731/IJSF/181.022023.03}.
+
+\bibitem[\citeproctext]{ref-baade1990analysis}
+Baade, Robert A, and Laura J Tiehen. 1990. {``An Analysis of Major
+League Baseball Attendance, 1969-1987.''} \emph{Journal of Sport and
+Social Issues} 14 (1): 14--32.
+\url{https://doi.org/10.1177/019372359001400102}.
+
+\bibitem[\citeproctext]{ref-clapp2005long}
+Clapp, Christopher M, and Jahn K Hakes. 2005. {``How Long a Honeymoon?
+The Effect of New Stadiums on Attendance in Major League Baseball.''}
+\emph{Journal of Sports Economics} 6 (3): 237--63.
+\url{https://doi.org/10.1177/1527002504265957}.
+
+\bibitem[\citeproctext]{ref-CoatesHumphreysZhou2014}
+Coates, Dennis, Brad R. Humphreys, and Li Zhou. 2014.
+{``Reference-Dependent Preferences, Loss Aversion, and Live Game
+Attendance.''} \emph{Economic Inquiry} 52 (3): 959--73.
+\url{https://doi.org/10.1111/ecin.12061}.
+
+\bibitem[\citeproctext]{ref-davis2008interaction}
+Davis, Michael C. 2008. {``The Interaction Between Baseball Attendance
+and Winning Percentage: A VAR Analysis.''} \emph{International Journal
+of Sport Finance} 3 (1): 58--73.
+\url{https://doi.org/10.1177/155862350800300105}.
+
+\bibitem[\citeproctext]{ref-davis2009analyzing}
+Davis, Michael C. 2009. {``Analyzing the Relationship Between Team
+Success and MLB Attendance with GARCH Effects.''} \emph{Journal of
+Sports Economics} 10 (1): 44--58.
+\url{https://doi.org/10.1177/1527002508327387}.
+
+\bibitem[\citeproctext]{ref-delia2020psychological}
+Delia, Elizabeth B. 2020. {``The Psychological Meaning of Team Among
+Fans of Women's Sport.''} \emph{Journal of Sport Management} 34 (6):
+579--90. \url{https://doi.org/10.1123/jsm.2019-0404}.
+
+\bibitem[\citeproctext]{ref-deschriver2002determinants}
+DeSchriver, Timothy D, and Paul E Jensen. 2002. {``Determinants of
+Spectator Attendance at NCAA Division II Football Contests.''}
+\emph{Journal of Sport Management} 16 (4): 311--30.
+\url{https://doi.org/10.1123/jsm.16.4.311}.
+
+\bibitem[\citeproctext]{ref-Elo1978}
+Elo, A. E. 1978. \emph{The Rating of Chessplayers, Past and Present}.
+New York: Arco Publishing.
+
+\bibitem[\citeproctext]{ref-garcia2020betting}
+Garcia, Christopher. 2020. {``"Betting on Women": A Feminist Political
+Economic Critique of Ideological Sports Narratives Surrounding the
+WNBA.''} \emph{The Political Economy of Communication} 8 (1).
+\url{https://polecom.org/index.php/polecom/article/view/119}.
+
+\bibitem[\citeproctext]{ref-hutchinson_gilani_2021_wehoop}
+Gilani, Saiem, and Geoffery Hutchinson. 2021. {``Wehoop: Access Women's
+Basketball Play by Play Data.''} In \emph{CRAN: Contributed Packages}.
+The R Foundation. \url{https://doi.org/10.32614/cran.package.wehoop}.
+
+\bibitem[\citeproctext]{ref-guest2018fan}
+Guest, Andrew M, and Anne Luijten. 2018. {``Fan Culture and Motivation
+in the Context of Successful Women's Professional Team Sports: A
+Mixed-Methods Case Study of Portland Thorns Fandom.''} \emph{Sport in
+Society} 21 (7): 1013--30.
+\url{https://doi.org/10.1080/17430437.2017.1346620}.
+
+\bibitem[\citeproctext]{ref-hall2002testing}
+Hall, Stephen, Stefan Szymanski, and Andrew S Zimbalist. 2002.
+{``Testing Causality Between Team Performance and Payroll: The Cases of
+Major League Baseball and English Soccer.''} \emph{Journal of Sports
+Economics} 3 (2): 149--68.
+\url{https://doi.org/10.1177/152700250200300204}.
+
+\bibitem[\citeproctext]{ref-horowitz2007if}
+Horowitz, Ira. 2007. {``If You Play Well They Will Come-and Vice Versa:
+Bidirectional Causality in Major-League Baseball.''} \emph{Managerial
+and Decision Economics} 28 (2): 93--105.
+\url{https://doi.org/10.1002/mde.1308}.
+
+\bibitem[\citeproctext]{ref-kim2023winning}
+Kim, Rhino, and Sue Ryung Chang. 2023. {``Winning Back Attendance:
+Effects of Winning Performance, Online Search, and the MLB Rule Changes
+for More Dynamic Games.''} \emph{Asia Marketing Journal} 25 (3):
+148--59. \url{https://doi.org/10.53728/2765-6500.1616}.
+
+\bibitem[\citeproctext]{ref-lemke2010estimating}
+Lemke, Robert J, Matthew Leonard, and Kelebogile Tlhokwane. 2010.
+{``Estimating Attendance at Major League Baseball Games for the 2007
+Season.''} \emph{Journal of Sports Economics} 11 (3): 316--48.
+\url{https://doi.org/10.1177/1527002509337212}.
+
+\bibitem[\citeproctext]{ref-leslie2022football}
+Leslie-Walker, Anika, and Claire Mulvenna. 2022. {``The Football
+Association's Women's Super League and Female Soccer Fans: Fan
+Engagement and the Importance of Supporter Clubs.''} \emph{Soccer \&
+Society} 23 (3): 314--27.
+\url{https://doi.org/10.1080/14660970.2022.2037218}.
+
+\bibitem[\citeproctext]{ref-mcdonald1980uses}
+McDonald, John F, and Robert A Moffitt. 1980. {``The Uses of {Tobit}
+Analysis.''} \emph{The Review of Economics and Statistics}, 318--21.
+\url{https://www.jstor.org/stable/1924766}.
+
+\bibitem[\citeproctext]{ref-noll1974attendance}
+Noll, Roger G. 1974. \emph{Attendance and Price Setting}. The Brookings
+Institution.
+
+\bibitem[\citeproctext]{ref-papke1996econometric}
+Papke, Leslie E, and Jeffrey M Wooldridge. 1996. {``Econometric Methods
+for Fractional Response Variables with an Application to 401 (k) Plan
+Participation Rates.''} \emph{Journal of Applied Econometrics} 11 (6):
+619--32.
+\url{https://doi.org/10.1002/(SICI)1099-1255(199611)11:6\%3C619::AID-JAE418\%3E3.0.CO;2-1}.
+
+\bibitem[\citeproctext]{ref-paul2019attendance}
+Paul, Rodney, Andrew Weinbach, and Nick Riccardi. 2019. {``Attendance in
+the Canadian Hockey League: The Impact of Winning, Fighting, Uncertainty
+of Outcome, and Weather on Junior Hockey Attendance.''}
+\emph{International Journal of Financial Studies} 7 (1): 12.
+\url{https://doi.org/10.3390/ijfs7010012}.
+
+\bibitem[\citeproctext]{ref-PerlineNobleStoldt2018}
+Perline, Martin M., Jeffrey S. Noble, and G. Clayton Stoldt. 2018.
+{``Competitive Balance in NCAA {`Power Conferences:'} The Case of Men's
+and Women's Basketball.''} \emph{The Sport Journal} 21.
+
+\bibitem[\citeproctext]{ref-vrooman2012theory}
+Vrooman, John. 2012. \emph{Theory of the Big Dance: The Playoff Pay-Off
+in Pro Sports Leagues}. New York, NY: Oxford University Press.
+
+\bibitem[\citeproctext]{ref-wasserstein2016asa}
+Wasserstein, Ronald L, and Nicole A Lazar. 2016. {``The ASA Statement on
+p-Values: Context, Process, and Purpose.''} In \emph{The American
+Statistician}, No. 2, vol. 70. Taylor \& Francis.
+\url{https://doi.org/10.1080/00031305.2016.1154108}.
+
+\bibitem[\citeproctext]{ref-wasserstein2019moving}
+Wasserstein, Ronald L, Allen L Schirm, and Nicole A Lazar. 2019.
+{``Moving to a World Beyond {`p\textless{} 0.05'}.''} In \emph{The
+American Statistician}, No. sup1, vol. 73. Taylor \& Francis.
+\url{https://doi.org/10.1080/00031305.2019.1583913}.
+
+\bibitem[\citeproctext]{ref-wiseman2003team}
+Wiseman, Frederick, and Sangit Chatterjee. 2003. {``Team Payroll and
+Team Performance in Major League Baseball: 1985--2002.''}
+\emph{Economics Bulletin} 1 (2): 1--10.
+\url{https://accessecon.com/pubs/eb/2003/volume1/eb-03a10003a.pdf}.
+
+\bibitem[\citeproctext]{ref-wnba2024recordseason}
+WNBA. 2024. {``WNBA Delivers Record‑setting 2024 Season.''}
+\url{https://www.wnba.com/news/wnba-delivers-record-setting-2024-season}.
+
+\bibitem[\citeproctext]{ref-woltring2018attendance}
+{Woltring, Mitchell T et al.} 2018. {``Attendance Still Matters in MLB:
+The Relationship with Winning Percentage.''} \emph{The Sport Journal}.
+
+\end{CSLReferences}
+
+\section{Appendix}\label{appendix}
+
+\subsection{Residual analysis of attendance
+models}\label{sec-resid-attend}
+
+\begin{figure}
+
+\begin{minipage}[t]{0.50\linewidth}
+
+\begin{verbatim}
+$f1
+NULL
+
+$f2
+NULL
+
+$f3
+NULL
+\end{verbatim}
+
+\end{minipage}%
+%
+\begin{minipage}[t]{0.50\linewidth}
+
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-resids-1.pdf}}
+
+}
+
+\caption{\label{fig-resids-1}Residual plots for models.}
+
+\end{figure}%
+
+\end{minipage}%
+\newline
+\begin{minipage}[t]{0.50\linewidth}
+
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-resids-2.pdf}}
+
+}
+
+\caption{\label{fig-resids-2}Residual plots for models.}
+
+\end{figure}%
+
+\end{minipage}%
+%
+\begin{minipage}[t]{0.50\linewidth}
+
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-resids-3.pdf}}
+
+}
+
+\caption{\label{fig-resids-3}Residual plots for models.}
+
+\end{figure}%
+
+\end{minipage}%
+\newline
+\begin{minipage}[t]{0.50\linewidth}
+
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-resids-4.pdf}}
+
+}
+
+\caption{\label{fig-resids-4}Residual plots for models.}
+
+\end{figure}%
+
+\end{minipage}%
+%
+\begin{minipage}[t]{0.50\linewidth}
+
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-resids-5.pdf}}
+
+}
+
+\caption{\label{fig-resids-5}Residual plots for models.}
+
+\end{figure}%
+
+\end{minipage}%
+\newline
+\begin{minipage}[t]{0.50\linewidth}
+
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-resids-6.pdf}}
+
+}
+
+\caption{\label{fig-resids-6}Residual plots for models.}
+
+\end{figure}%
+
+\end{minipage}%
+%
+\begin{minipage}[t]{0.50\linewidth}
+
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-resids-7.pdf}}
+
+}
+
+\caption{\label{fig-resids-7}Residual plots for models.}
+
+\end{figure}%
+
+\end{minipage}%
+\newline
+\begin{minipage}[t]{0.50\linewidth}
+
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-resids-8.pdf}}
+
+}
+
+\caption{\label{fig-resids-8}Residual plots for models.}
+
+\end{figure}%
+
+\end{minipage}%
+%
+\begin{minipage}[t]{0.50\linewidth}
+
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-resids-9.pdf}}
+
+}
+
+\caption{\label{fig-resids-9}Residual plots for models.}
+
+\end{figure}%
+
+\end{minipage}%
+\newline
+\begin{minipage}[t]{0.50\linewidth}
+
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-resids-10.pdf}}
+
+}
+
+\caption{\label{fig-resids-10}Residual plots for models.}
+
+\end{figure}%
+
+\end{minipage}%
+%
+\begin{minipage}[t]{0.50\linewidth}
+
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-resids-11.pdf}}
+
+}
+
+\caption{\label{fig-resids-11}Residual plots for models.}
+
+\end{figure}%
+
+\end{minipage}%
+\newline
+\begin{minipage}[t]{0.50\linewidth}
+
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-resids-12.pdf}}
+
+}
+
+\caption{\label{fig-resids-12}Residual plots for models.}
+
+\end{figure}%
+
+\end{minipage}%
+%
+\begin{minipage}[t]{0.50\linewidth}
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+\end{minipage}%
+
+\end{figure}%
+
+
+
+
+\end{document}
