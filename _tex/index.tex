@@ -195,8 +195,7 @@
 \hypersetup{
   pdftitle={Winning and Attendance in the WNBA},
   pdfauthor={Gabriela Eastwood; Benjamin S. Baumer; Andrew Zimbalist},
-  pdfkeywords={WNBA, Game Attendance, Player Salary, Winning
-Percentage},
+  pdfkeywords={WNBA, Game Attendance},
   colorlinks=true,
   linkcolor={blue},
   filecolor={Maroon},
@@ -340,38 +339,60 @@ not a statistically significant predictor of game attendance in the
 WNBA. As noted above, this is contrary to the virtually unanimous
 finding in the existing scholarship for men's leagues. However, their
 study only employed data from 2004 through 2017 and thus can not capture
-the more recent improvements in attendance shown in figure 1.
+the more recent improvements in attendance shown in figure 1. They also
+measure a team's strength using the team's winning percentage from the
+previous year which raises issues because fans are more likely to
+respond to the more recent performance of the team. Thus, while a team's
+win percentage in 2016 might have an appreciable impact on the team's
+attendance at the beginning of the 2017 season, as the season wears on,
+this impact should consistently diminish. For this reason, we chose to
+use a team's ELO rating as the measure of team strength because the ELO
+rating updates with each game, thus more accurately reflecting the
+information that fans have access to in deciding to attend games.
 
-Of course, all of this differential cannot be attributed to the age of
-the league. Additional important factors include: the WNBA plays during
-the summer months in order to promote arena use outside of the NBA
-season; there is less money spent on promotion, reduced media coverage,
-historical prejudice, arena amenities and age, and ticket prices, among
-others. To be sure, the sports management literature also includes
-several studies that find a major motivation behind fandom for women's
-sports leagues to be an area's overall support for feminist issues
-(Delia 2020; Guest and Luijten 2018; Leslie-Walker and Mulvenna 2022).
-Nonetheless, to the extent that the league's age is a factor, it is
-interesting to inquire into the patterns of fan behavior and whether
-they might change as the league matures. Agha and Berri (2023) found
-that their variable on team performance was not statistically
-significant as an explainer of team attendance. As noted above, this is
-contrary to heretofore virtually unanimous finding in the existing
-scholarship for men's leagues. Note, however, that Agha and Berri (2023)
-employed data only from 2004 through 2017 and that its performance
-variable was team win percentage during the previous year.
+Despite the issues with Agha and Berri's study, their observation that
+between 2004 and 2017 the relationship between team strength and
+attendance in the WNBA was weak is not incorrect. The disparity between
+raw attendance numbers and attendance driving factors in the NBA and
+WNBA cannot be attributed to the age of the leagues alone. Additional
+important factors include: the WNBA plays during the summer months in
+order to promote arena use outside of the NBA season; there is less
+money spent on promotion, reduced media coverage, historical prejudice,
+arena amenities and age, and ticket prices, among others. Sports
+management literature also includes several studies that find a major
+motivation behind fandom for women's sports leagues to be an area's
+overall support for feminist issues, suggesting that fans in those areas
+may attend games out of ideological support rather than to see good
+basketball (Delia 2020; Guest and Luijten 2018; Leslie-Walker and
+Mulvenna 2022). Factors like the summer season, reduced media coverage,
+and the association of game attendance with feminist causes all
+contribute to the argument that the WNBA functions fundamentally
+differently to the NBA- at least in terms of attendance drivers. This
+conception of the WNBA as fundamentally different to the NBA is
+dangerous both to the league's reputation and future growth, motivating
+our more thorough examination of game attendance in the context of the
+league's history.
 
-In viewing more recent attendance figures for the WNBA in the context of
+It is reasonable to anticipate that as women's sports mature and are
+perceived increasingly as a normal sports league, rather than a
+political concession or oddity, they will begin to assert similar fan
+demand characteristics. In particular, fan demand will become more
+responsive to team quality. Using game attendance\footnote{Note that, as
+  in most sports leagues, there is always the possibility finagling with
+  game attendance figures. The WNBA appears to give attendance counting
+  instructions to teams that define attendance as turnstile count, plus
+  season ticket sales, plus complimentary tickets and promotions. There
+  is considerable for these factors to be manipulated, rendering the
+  possibility of noise in the attendance figures we use.} and team
+performance data from 1997 through 2025, we test these hypotheses. In
+viewing more recent attendance figures for the WNBA in the context of
 the league's history, we hoped to determine whether predictors of
 attendance have shifted over time, due to the WNBA's relative
 instability as a young league. Specifically, we find that in recent
-years the strength of the effect of team strength on game attendance has
-increased, paralleling documented trends in men's leagues.
-
-In this paper we build upon the literature on team performance and game
-attendance in the context of the WNBA and introduce a period-based model
-that allows us to more accurately capture the current state of league
-growth.
+years the strength of the effect of a game's uncertainty, the strength
+of both teams, and the likelihood of the home team to win, on game
+attendance has increased, paralleling documented trends in men's
+leagues.
 
 \subsection{still to be incorporated in
 intro:}\label{still-to-be-incorporated-in-intro}
@@ -382,30 +403,6 @@ star power), attendance (logs, lags, linear regression or censored), the
 inclusion of control variables and non-linear forms also emerged
 (Wiseman and Chatterjee 2003; {Woltring et al.} 2018; Kim and Chang
 2023; DeSchriver and Jensen 2002; Paul et al. 2019).
-
-The use of only last year's win percentage to measure team performance
-is problematic because fans are more likely to respond to the more
-recent performance of the team. Thus, while a team's win percentage in
-2016 might have an appreciable impact on the team's attendance at the
-beginning of the 2017 season, as the season wears on, this impact should
-consistently diminish.
-
-Professional men's team sport leagues have demonstrated a clear
-relationship between team quality and attendance. It is reasonable to
-anticipate that as women's sports mature and are perceived increasingly
-as a normal sports league, rather than a political concession or oddity,
-they will begin to assert similar fan demand characteristics. In
-particular, fan demand will become more responsive to team quality.
-Using game attendance\footnote{Note that, as in most sports leagues,
-  there is always the possibility finagling with game attendance
-  figures. The WNBA appears to give attendance counting instructions to
-  teams that define attendance as turnstile count, plus season ticket
-  sales, plus complimentary tickets and promotions. There is
-  considerable for these factors to be manipulated, rendering the
-  possibility of noise in the attendance figures we use.} and team
-performance data from 1997 through 2025, we test these hypotheses.
-
-\subsection{Andrew other passage}\label{andrew-other-passage}
 
 The relationship between attendance and winning percentage has been
 examined, but such studies often look at winning percentage as causation
@@ -474,16 +471,16 @@ Clark played in the game, are recorded.
 \toprule
 Game Date & Home & Away & Arena & Attendance & Plus Minus & Clark \\ 
 \midrule\addlinespace[2.5pt]
-19872 & NYL & PHO & Barclays Center & 9,182 & 3 & 0 \\ 
-19212 & DAL & NYL & College Park Center & 3,036 & 9 & 0 \\ 
-19159 & NYL & WAS & Barclays Center & 4,168 & 12 & 0 \\ 
-10075 & UTA & HOU & EnergySolutions Arena & 8,561 & 11 & 0 \\ 
-19166 & DAL & IND & College Park Center & 2,791 & 26 & 0 \\ 
-14791 & ATL & MIN & Philips Arena & 4,020 & 18 & 0 \\ 
-19600 & LVA & WAS & Michelob ULTRA Arena & 8,619 & 9 & 0 \\ 
-10415 & LAS & SAC & Great Western Forum & 4,851 & -5 & 0 \\ 
-18858 & CON & MIN & Mohegan Sun Arena & 3,536 & 11 & 0 \\ 
-14757 & SAN & NYL & AT\&T Center & 5,293 & -6 & 0 \\ 
+19582 & LVA & ATL & Michelob ULTRA Arena & 8,564 & 21 & 0 \\ 
+19897 & ATL & NYL & Gateway Center Arena @ College Park & 3,260 & -21 & 0 \\ 
+18481 & MIN & IND & NA & NA & 7 & 0 \\ 
+19969 & CON & SEA & Mohegan Sun Arena & 7,454 & -7 & 0 \\ 
+11901 & NYL & MIA & Madison Square Garden & 15,344 & 12 & 0 \\ 
+14433 & PHO & CHI & US Airways Center & 5,597 & 20 & 0 \\ 
+12574 & SAN & NYL & AT\&T Center & 7,913 & -5 & 0 \\ 
+20336 & SEA & NYL & Climate Pledge Arena & 12,500 & -8 & 0 \\ 
+19545 & MIN & PHO & Target Center & 7,714 & 11 & 0 \\ 
+14479 & ATL & LAS & Philips Arena & 11,304 & -4 & 0 \\ 
 \bottomrule
 \end{tabular*}
 
@@ -1368,12 +1365,6 @@ Across the Timeline. n.d. \emph{{WNBA Attendance --- Across the
 Timeline}}. Across the Timeline;
 \url{https://www.acrossthetimeline.com/wnba/attendance.html}.
 \url{https://www.acrossthetimeline.com/wnba/attendance.html}.
-
-\bibitem[\citeproctext]{ref-AghaBerri2023}
-Agha, Nola, and David Berri. 2023. {``Demand for Basketball: A
-Comparison of the WNBA and NBA.''} \emph{International Journal of Sport
-Finance} 18 (1): 35--44.
-\url{https://doi.org/10.32731/IJSF/181.022023.03}.
 
 \bibitem[\citeproctext]{ref-baade1990analysis}
 Baade, Robert A, and Laura J Tiehen. 1990. {``An Analysis of Major
