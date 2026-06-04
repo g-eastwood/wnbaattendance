@@ -207,39 +207,32 @@ Percentage},
 
 \title{Winning and Attendance in the WNBA}
 \author{Gabriela Eastwood \and Benjamin S. Baumer \and Andrew Zimbalist}
-\date{2026-06-03}
+\date{2026-06-04}
 \begin{document}
 \maketitle
 \begin{abstract}
-A central question in the intersection between sports economics and
-sports analytics is how to quantify the effects of what happens on the
-court or field on a team's revenue. In general, the literature expects
-that stronger teams will see higher live game attendance, but previous
-research has not found a statistically significant relationship between
-winning percentage and attendance in the WNBA (Agha and Berri 2023). Our
-study improves upon theirs by using a rolling win count from the past 44
-games played rather than a seasonal winning-percentage to predict per
-game attendance. This avoids look-ahead bias, as fans cannot be expected
-to know a team's future performance when deciding to attend a game.
-Using game-level data for all WNBA regular-season games from 2018--2024,
-we estimated an ordinary least squares model of per-game attendance with
-team and season fixed effects and a dummy variable for whether Caitlin
-Clark played. We then translated player win shares into expected
-attendance impacts by mapping individual contributions to team wins onto
-the estimated attendance--winning relationship. We chose to focus on
-attendance as a proxy for revenue following the research framework from
-Scully (1974), due to concerns about revenue data availability. We used
-attendance data from the ``Across the Timeline: WNBA League Attendance
-Dashboard'', which records game-level attendance data for all WNBA
-games. We find a significant relationship between rolling win count and
-game attendance, with game attendance expected to increase by 112 people
-for each additional win in the 44 game window. This means that a player
-like Allisha Gray, for example, who we estimate contributed 10 wins to
-the Atlanta Dream in 2024, boosted attendance by approximately 1,100
-attendees per game. These results highlight the importance of short-run
-performance in shaping fan demand and provide a framework for linking
-individual player performance to team-level revenue outcomes in women's
-professional sports.
+This paper examines how the relationship between team quality, game
+quality, and attendance has changed over the history of the WNBA. In
+general, the literature expects that stronger teams will see higher live
+game attendance in professional sports. However, previous research and
+analyst commentary has cast doubt on the strength of the relationship
+between team strength and game attendance in the WNBA. Our study
+improves upon previous research by studying attendance in the broader
+context of the league's growth from 1997-2025, finding that the factors
+that drive fan demand have evolved as the league has matured. We test
+whether three leading theories of fan behavior- quality of play, loss
+aversion, and outcome uncertainty- have become more important drivers of
+attendance as the league has grown. We use game-level attendance data
+reported directly by the WNBA from the ``Across the Timeline: WNBA
+League Attendance Dashboard'' as well as team ELO ratings and
+game-by-game home win probabilities and find that in recent years fans
+are increasingly likely to attend games in response to these factors.
+ELO ratings and win probabilities offer a significant advantage to other
+measures of team strength or outcome likelihood because they are dynamic
+and incorporate information available up to the date of each game. Our
+results suggest that the WNBA is entering a new era in which fans are
+choosing to attend games to watch good basketball rather than
+novelty-driven interest or broader support for women's sports.
 \end{abstract}
 
 
@@ -481,16 +474,16 @@ Clark played in the game, are recorded.
 \toprule
 Game Date & Home & Away & Arena & Attendance & Plus Minus & Clark \\ 
 \midrule\addlinespace[2.5pt]
-19596 & SEA & CHI & Climate Pledge Arena & 9,893 & -5 & 0 \\ 
-15492 & SAN & PHO & AT\&T Center & 6,534 & 19 & 0 \\ 
-18068 & CHI & IND & Wintrust Arena & 4,945 & -7 & 0 \\ 
-13291 & SEA & HOU & KeyArena & 7,541 & -25 & 0 \\ 
-13732 & LAS & PHO & Staples Center & 10,079 & -3 & 0 \\ 
-19868 & PHO & DAL & Footprint Center & 8,339 & -15 & 0 \\ 
-11895 & PHO & SAC & US Airways Center & 9,344 & -15 & 0 \\ 
-12258 & SEA & PHO & KeyArena & 6,753 & 29 & 0 \\ 
-16591 & CHI & IND & Allstate Arena & 8,123 & 23 & 0 \\ 
-18042 & LVA & LAS & Mandalay Bay Events Center & 7,249 & 13 & 0 \\ 
+19872 & NYL & PHO & Barclays Center & 9,182 & 3 & 0 \\ 
+19212 & DAL & NYL & College Park Center & 3,036 & 9 & 0 \\ 
+19159 & NYL & WAS & Barclays Center & 4,168 & 12 & 0 \\ 
+10075 & UTA & HOU & EnergySolutions Arena & 8,561 & 11 & 0 \\ 
+19166 & DAL & IND & College Park Center & 2,791 & 26 & 0 \\ 
+14791 & ATL & MIN & Philips Arena & 4,020 & 18 & 0 \\ 
+19600 & LVA & WAS & Michelob ULTRA Arena & 8,619 & 9 & 0 \\ 
+10415 & LAS & SAC & Great Western Forum & 4,851 & -5 & 0 \\ 
+18858 & CON & MIN & Mohegan Sun Arena & 3,536 & 11 & 0 \\ 
+14757 & SAN & NYL & AT\&T Center & 5,293 & -6 & 0 \\ 
 \bottomrule
 \end{tabular*}
 
@@ -752,7 +745,7 @@ of the teams (\(f_k(\hat{\theta}_i(t), \hat{\theta}_i(t))\)).
   function above
   (\(f_2(\hat{\theta}_i(t), \hat{\theta}_i(t)) = \hat{p}_{ij}(t)\))
 \item
-  Uncertainty outcome hypothesis: fans may wish to attend a game for
+  Uncertainty of outcome hypothesis: fans may wish to attend a game for
   which the outcome is unclear. We model this as
   (\(f_3(\hat{\theta}_i(t), \hat{\theta}_i(t)) = |\hat{\theta}_i(t) - \hat{\theta}_j(t)|\))
 \end{itemize}
