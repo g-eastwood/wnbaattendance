@@ -435,12 +435,20 @@ beginning in 1997 and continuing through the end of the 2025 season. Our
 final data set contains observations from 6,164 games.
 
 First, we collected game-level attendance data from (Across the
-Timeline, n.d.). We supplemented these data with arena capacities that
-we collected manually\footnote{We were only able to collect an estimate
-  for the \emph{current} arena capacity, which is not necessarily the
-  same as the arena capacity on the day of the game.}. Attendance data
-was unavailable for only 152 games, while (due to the COVID-19 pandemic)
-2 games (accurately) recorded attendance of 0.
+Timeline, n.d.), an online repository for women's basketball data. The
+site collects attendance numbers directly from the league's records.
+Attendance data was unavailable for only 152 games, while (due to the
+COVID-19 pandemic) 2 games (accurately) recorded attendance of 0.
+Because the arenas WNBA teams play in vary widely in size- the New York
+Liberty alone have called both the Barclays Center (17,732 seat
+capacity) and the Westchester County Center (2,300 seat capacity) home
+in recent years- we contextualize raw attendance numbers with manually
+collected arena capacities.\footnote{We were only able to collect an
+  estimate for the \emph{current} arena capacity, which is not
+  necessarily the same as the arena capacity on the day of the game.}
+While team have many reasons they might choose to play for a sold-out
+crowd in a smaller arena, smaller venue size will also by nature
+constrain attendance, making its consideration in our model important.
 
 Second, we collected game-level performance data from the
 \textbf{wehoop} R package (Gilani and Hutchinson 2021), which uses the
@@ -468,16 +476,16 @@ Clark played in the game, are recorded.
 \toprule
 Game Date & Home & Away & Arena & Attendance & Plus Minus & Clark \\ 
 \midrule\addlinespace[2.5pt]
-17753 & PHO & IND & Talking Stick Resort Arena & 8,860 & 20 & 0 \\ 
-19953 & LVA & LAS & Michelob ULTRA Arena & 10,311 & 16 & 0 \\ 
-14744 & SAN & ATL & AT\&T Center & 9,409 & -5 & 0 \\ 
-14457 & ATL & NYL & Philips Arena & 6,103 & 6 & 0 \\ 
-13665 & WAS & CHI & Verizon Center & 6,391 & -5 & 0 \\ 
-11158 & SAC & MIN & ARCO Arena & 6,675 & 17 & 0 \\ 
-15514 & MIN & CHI & Target Center & 9,267 & 12 & 0 \\ 
-16968 & DAL & SEA & College Park Center & 4,622 & 9 & 0 \\ 
-14483 & LAS & PHO & Staples Center & 9,586 & -8 & 0 \\ 
-15512 & MIN & NYL & Target Center & 9,050 & 32 & 0 \\ 
+14470 & LAS & SAC & Staples Center & 10,122 & -6 & 0 \\ 
+15875 & PHO & MIN & US Airways Center & 8,464 & -11 & 0 \\ 
+11473 & SEA & PHO & KeyArena & 7,567 & 13 & 0 \\ 
+15930 & LAS & CHI & Staples Center & 10,553 & 4 & 0 \\ 
+14460 & DET & NYL & Palace of Auburn Hills & 7,014 & 12 & 0 \\ 
+14124 & HOU & NYL & Reliant Arena & 5,166 & -3 & 0 \\ 
+18788 & WAS & LAS & Entertainment and Sports Arena & 2,100 & 18 & 0 \\ 
+14051 & MIN & HOU & Target Center & 5,865 & -7 & 0 \\ 
+11475 & DET & HOU & Palace of Auburn Hills & 9,401 & -1 & 0 \\ 
+14841 & SAN & IND & AT\&T Center & 10,807 & 14 & 0 \\ 
 \bottomrule
 \end{tabular*}
 

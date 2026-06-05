@@ -108,9 +108,7 @@ This is an important finding, because @vrooman2012theory identified .550 as a be
 Our analysis is based on game-level data that spans WNBA history, beginning in 1997 and continuing through the end of the 2025 season. 
 Our final data set contains observations from `r format(nrow(wnba_gl), big.mark = ",")` games.
 
-First, we collected game-level attendance data from [@AcrossTheTimeline_WNBA_Attendance]. 
-We supplemented these data with arena capacities that we collected manually[^arenas]. 
-Attendance data was unavailable for only `r nrow(filter(wnba_gl, is.na(attendance)))` games, while (due to the COVID-19 pandemic) `r nrow(filter(wnba_gl, attendance == 0))` games (accurately) recorded attendance of 0. 
+First, we collected game-level attendance data from [@AcrossTheTimeline_WNBA_Attendance], an online repository for women's basketball data. The site collects attendance numbers directly from the league's records. Attendance data was unavailable for only `r nrow(filter(wnba_gl, is.na(attendance)))` games, while (due to the COVID-19 pandemic) `r nrow(filter(wnba_gl, attendance == 0))` games (accurately) recorded attendance of 0. Because the arenas WNBA teams play in vary widely in size- the New York Liberty alone have called both the Barclays Center (17,732 seat capacity) and the Westchester County Center (2,300 seat capacity) home in recent years- we contextualize raw attendance numbers with manually collected arena capacities.[^arenas] While team have many reasons they might choose to play for a sold-out crowd in a smaller arena, smaller venue size will also by nature constrain attendance, making its consideration in our model important.
 
 [^arenas]: We were only able to collect an estimate for the *current* arena capacity, which is not necessarily the same as the arena capacity on the day of the game. 
 

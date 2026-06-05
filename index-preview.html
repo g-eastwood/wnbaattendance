@@ -426,7 +426,7 @@
 <section id="game-logs-and-attendance" class="level3" data-number="2.1">
 <h3 data-number="2.1" class="anchored" data-anchor-id="game-logs-and-attendance"><span class="header-section-number">2.1</span> Game logs and attendance</h3>
 <p>Our analysis is based on game-level data that spans WNBA history, beginning in 1997 and continuing through the end of the 2025 season. Our final data set contains observations from 6,164 games.</p>
-<p>First, we collected game-level attendance data from <span class="citation" data-cites="AcrossTheTimeline_WNBA_Attendance">(<a href="#ref-AcrossTheTimeline_WNBA_Attendance" role="doc-biblioref">Across the Timeline, n.d.</a>)</span>. We supplemented these data with arena capacities that we collected manually<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. Attendance data was unavailable for only 152 games, while (due to the COVID-19 pandemic) 2 games (accurately) recorded attendance of 0.</p>
+<p>First, we collected game-level attendance data from <span class="citation" data-cites="AcrossTheTimeline_WNBA_Attendance">(<a href="#ref-AcrossTheTimeline_WNBA_Attendance" role="doc-biblioref">Across the Timeline, n.d.</a>)</span>, an online repository for women’s basketball data. The site collects attendance numbers directly from the league’s records. Attendance data was unavailable for only 152 games, while (due to the COVID-19 pandemic) 2 games (accurately) recorded attendance of 0. Because the arenas WNBA teams play in vary widely in size- the New York Liberty alone have called both the Barclays Center (17,732 seat capacity) and the Westchester County Center (2,300 seat capacity) home in recent years- we contextualize raw attendance numbers with manually collected arena capacities.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> While team have many reasons they might choose to play for a sold-out crowd in a smaller arena, smaller venue size will also by nature constrain attendance, making its consideration in our model important.</p>
 <p>Second, we collected game-level performance data from the <strong>wehoop</strong> R package <span class="citation" data-cites="hutchinson_gilani_2021_wehoop">(<a href="#ref-hutchinson_gilani_2021_wehoop" role="doc-biblioref">Gilani and Hutchinson 2021</a>)</span>, which uses the official WNBA API. These data include the final score of the game. We also used the <strong>wehoop</strong> package to identify whether Caitlin Clark played more than 0 minutes in the game.</p>
 <p><a href="#tbl-attendance" class="quarto-xref">Table&nbsp;1</a> shows a sample of the data. While many other variables are omitted from the table, we note that the attendance, the teams playing in the game, the outcome, the arena, and whether Caitlin Clark played in the game, are recorded.</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [3]:</pre></div><div class="cell">
@@ -462,23 +462,23 @@ Table&nbsp;1
 </figcaption>
 <div aria-describedby="tbl-attendance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="dvtimpkijv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#dvtimpkijv table {
+<div id="svdnfxyjyo" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#svdnfxyjyo table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#dvtimpkijv thead, #dvtimpkijv tbody, #dvtimpkijv tfoot, #dvtimpkijv tr, #dvtimpkijv td, #dvtimpkijv th {
+#svdnfxyjyo thead, #svdnfxyjyo tbody, #svdnfxyjyo tfoot, #svdnfxyjyo tr, #svdnfxyjyo td, #svdnfxyjyo th {
   border-style: none;
 }
 
-#dvtimpkijv p {
+#svdnfxyjyo p {
   margin: 0;
   padding: 0;
 }
 
-#dvtimpkijv .gt_table {
+#svdnfxyjyo .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -504,12 +504,12 @@ Table&nbsp;1
   border-left-color: #D3D3D3;
 }
 
-#dvtimpkijv .gt_caption {
+#svdnfxyjyo .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#dvtimpkijv .gt_title {
+#svdnfxyjyo .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -521,7 +521,7 @@ Table&nbsp;1
   border-bottom-width: 0;
 }
 
-#dvtimpkijv .gt_subtitle {
+#svdnfxyjyo .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -533,7 +533,7 @@ Table&nbsp;1
   border-top-width: 0;
 }
 
-#dvtimpkijv .gt_heading {
+#svdnfxyjyo .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -545,13 +545,13 @@ Table&nbsp;1
   border-right-color: #D3D3D3;
 }
 
-#dvtimpkijv .gt_bottom_border {
+#svdnfxyjyo .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#dvtimpkijv .gt_col_headings {
+#svdnfxyjyo .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -566,7 +566,7 @@ Table&nbsp;1
   border-right-color: #D3D3D3;
 }
 
-#dvtimpkijv .gt_col_heading {
+#svdnfxyjyo .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -586,7 +586,7 @@ Table&nbsp;1
   overflow-x: hidden;
 }
 
-#dvtimpkijv .gt_column_spanner_outer {
+#svdnfxyjyo .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -598,15 +598,15 @@ Table&nbsp;1
   padding-right: 4px;
 }
 
-#dvtimpkijv .gt_column_spanner_outer:first-child {
+#svdnfxyjyo .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#dvtimpkijv .gt_column_spanner_outer:last-child {
+#svdnfxyjyo .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#dvtimpkijv .gt_column_spanner {
+#svdnfxyjyo .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -618,11 +618,11 @@ Table&nbsp;1
   width: 100%;
 }
 
-#dvtimpkijv .gt_spanner_row {
+#svdnfxyjyo .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#dvtimpkijv .gt_group_heading {
+#svdnfxyjyo .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -648,7 +648,7 @@ Table&nbsp;1
   text-align: left;
 }
 
-#dvtimpkijv .gt_empty_group_heading {
+#svdnfxyjyo .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -663,15 +663,15 @@ Table&nbsp;1
   vertical-align: middle;
 }
 
-#dvtimpkijv .gt_from_md > :first-child {
+#svdnfxyjyo .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#dvtimpkijv .gt_from_md > :last-child {
+#svdnfxyjyo .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#dvtimpkijv .gt_row {
+#svdnfxyjyo .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -690,7 +690,7 @@ Table&nbsp;1
   overflow-x: hidden;
 }
 
-#dvtimpkijv .gt_stub {
+#svdnfxyjyo .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -703,7 +703,7 @@ Table&nbsp;1
   padding-right: 5px;
 }
 
-#dvtimpkijv .gt_stub_row_group {
+#svdnfxyjyo .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -717,15 +717,15 @@ Table&nbsp;1
   vertical-align: top;
 }
 
-#dvtimpkijv .gt_row_group_first td {
+#svdnfxyjyo .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#dvtimpkijv .gt_row_group_first th {
+#svdnfxyjyo .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#dvtimpkijv .gt_summary_row {
+#svdnfxyjyo .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -735,16 +735,16 @@ Table&nbsp;1
   padding-right: 5px;
 }
 
-#dvtimpkijv .gt_first_summary_row {
+#svdnfxyjyo .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#dvtimpkijv .gt_first_summary_row.thick {
+#svdnfxyjyo .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#dvtimpkijv .gt_last_summary_row {
+#svdnfxyjyo .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -754,7 +754,7 @@ Table&nbsp;1
   border-bottom-color: #D3D3D3;
 }
 
-#dvtimpkijv .gt_grand_summary_row {
+#svdnfxyjyo .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -764,7 +764,7 @@ Table&nbsp;1
   padding-right: 5px;
 }
 
-#dvtimpkijv .gt_first_grand_summary_row {
+#svdnfxyjyo .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -774,7 +774,7 @@ Table&nbsp;1
   border-top-color: #D3D3D3;
 }
 
-#dvtimpkijv .gt_last_grand_summary_row_top {
+#svdnfxyjyo .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -784,11 +784,11 @@ Table&nbsp;1
   border-bottom-color: #D3D3D3;
 }
 
-#dvtimpkijv .gt_striped {
+#svdnfxyjyo .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#dvtimpkijv .gt_table_body {
+#svdnfxyjyo .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -797,7 +797,7 @@ Table&nbsp;1
   border-bottom-color: #D3D3D3;
 }
 
-#dvtimpkijv .gt_footnotes {
+#svdnfxyjyo .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -811,7 +811,7 @@ Table&nbsp;1
   border-right-color: #D3D3D3;
 }
 
-#dvtimpkijv .gt_footnote {
+#svdnfxyjyo .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -820,7 +820,7 @@ Table&nbsp;1
   padding-right: 5px;
 }
 
-#dvtimpkijv .gt_sourcenotes {
+#svdnfxyjyo .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -834,7 +834,7 @@ Table&nbsp;1
   border-right-color: #D3D3D3;
 }
 
-#dvtimpkijv .gt_sourcenote {
+#svdnfxyjyo .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -842,72 +842,72 @@ Table&nbsp;1
   padding-right: 5px;
 }
 
-#dvtimpkijv .gt_left {
+#svdnfxyjyo .gt_left {
   text-align: left;
 }
 
-#dvtimpkijv .gt_center {
+#svdnfxyjyo .gt_center {
   text-align: center;
 }
 
-#dvtimpkijv .gt_right {
+#svdnfxyjyo .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#dvtimpkijv .gt_font_normal {
+#svdnfxyjyo .gt_font_normal {
   font-weight: normal;
 }
 
-#dvtimpkijv .gt_font_bold {
+#svdnfxyjyo .gt_font_bold {
   font-weight: bold;
 }
 
-#dvtimpkijv .gt_font_italic {
+#svdnfxyjyo .gt_font_italic {
   font-style: italic;
 }
 
-#dvtimpkijv .gt_super {
+#svdnfxyjyo .gt_super {
   font-size: 65%;
 }
 
-#dvtimpkijv .gt_footnote_marks {
+#svdnfxyjyo .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#dvtimpkijv .gt_asterisk {
+#svdnfxyjyo .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#dvtimpkijv .gt_indent_1 {
+#svdnfxyjyo .gt_indent_1 {
   text-indent: 5px;
 }
 
-#dvtimpkijv .gt_indent_2 {
+#svdnfxyjyo .gt_indent_2 {
   text-indent: 10px;
 }
 
-#dvtimpkijv .gt_indent_3 {
+#svdnfxyjyo .gt_indent_3 {
   text-indent: 15px;
 }
 
-#dvtimpkijv .gt_indent_4 {
+#svdnfxyjyo .gt_indent_4 {
   text-indent: 20px;
 }
 
-#dvtimpkijv .gt_indent_5 {
+#svdnfxyjyo .gt_indent_5 {
   text-indent: 25px;
 }
 
-#dvtimpkijv .katex-display {
+#svdnfxyjyo .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#dvtimpkijv div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#svdnfxyjyo div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -932,93 +932,93 @@ Table&nbsp;1
 </thead>
 <tbody class="gt_table_body">
 <tr class="odd">
-<td class="gt_row gt_right" headers="Game Date">2021-08-26</td>
-<td class="gt_row gt_left" headers="Home">ATL</td>
-<td class="gt_row gt_left" headers="Away">LVA</td>
-<td class="gt_row gt_left" headers="Arena">Gateway Center Arena @ College Park</td>
-<td class="gt_row gt_right" headers="Attendance">2,182</td>
-<td class="gt_row gt_right" headers="Plus Minus">-7</td>
-<td class="gt_row gt_right" headers="Clark">0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Game Date">2002-06-19</td>
-<td class="gt_row gt_left" headers="Home">CLE</td>
-<td class="gt_row gt_left" headers="Away">ORL</td>
-<td class="gt_row gt_left" headers="Arena">Quicken Loans Arena</td>
-<td class="gt_row gt_right" headers="Attendance">5,210</td>
-<td class="gt_row gt_right" headers="Plus Minus">-4</td>
-<td class="gt_row gt_right" headers="Clark">0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Game Date">2007-06-08</td>
+<td class="gt_row gt_right" headers="Game Date">2012-09-18</td>
 <td class="gt_row gt_left" headers="Home">LAS</td>
-<td class="gt_row gt_left" headers="Away">MIN</td>
-<td class="gt_row gt_left" headers="Arena">Staples Center</td>
-<td class="gt_row gt_right" headers="Attendance">8,962</td>
-<td class="gt_row gt_right" headers="Plus Minus">3</td>
-<td class="gt_row gt_right" headers="Clark">0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Game Date">2001-08-11</td>
-<td class="gt_row gt_left" headers="Home">PHO</td>
-<td class="gt_row gt_left" headers="Away">POR</td>
-<td class="gt_row gt_left" headers="Arena">US Airways Center</td>
-<td class="gt_row gt_right" headers="Attendance">10,823</td>
-<td class="gt_row gt_right" headers="Plus Minus">11</td>
-<td class="gt_row gt_right" headers="Clark">0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Game Date">2013-08-18</td>
-<td class="gt_row gt_left" headers="Home">MIN</td>
-<td class="gt_row gt_left" headers="Away">NYL</td>
-<td class="gt_row gt_left" headers="Arena">Target Center</td>
-<td class="gt_row gt_right" headers="Attendance">9,004</td>
-<td class="gt_row gt_right" headers="Plus Minus">31</td>
-<td class="gt_row gt_right" headers="Clark">0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Game Date">2024-05-31</td>
-<td class="gt_row gt_left" headers="Home">MIN</td>
 <td class="gt_row gt_left" headers="Away">PHO</td>
-<td class="gt_row gt_left" headers="Arena">Target Center</td>
-<td class="gt_row gt_right" headers="Attendance">7,035</td>
-<td class="gt_row gt_right" headers="Plus Minus">24</td>
-<td class="gt_row gt_right" headers="Clark">0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Game Date">2017-09-03</td>
-<td class="gt_row gt_left" headers="Home">MIN</td>
-<td class="gt_row gt_left" headers="Away">WAS</td>
-<td class="gt_row gt_left" headers="Arena">Xcel Energy Center</td>
-<td class="gt_row gt_right" headers="Attendance">10,321</td>
-<td class="gt_row gt_right" headers="Plus Minus">14</td>
+<td class="gt_row gt_left" headers="Arena">Staples Center</td>
+<td class="gt_row gt_right" headers="Attendance">8,579</td>
+<td class="gt_row gt_right" headers="Plus Minus">25</td>
 <td class="gt_row gt_right" headers="Clark">0</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_right" headers="Game Date">2022-07-15</td>
-<td class="gt_row gt_left" headers="Home">IND</td>
-<td class="gt_row gt_left" headers="Away">MIN</td>
-<td class="gt_row gt_left" headers="Arena">Indiana Farmers Coliseum</td>
-<td class="gt_row gt_right" headers="Attendance">1,530</td>
+<td class="gt_row gt_right" headers="Game Date">2022-05-15</td>
+<td class="gt_row gt_left" headers="Home">NYL</td>
+<td class="gt_row gt_left" headers="Away">DAL</td>
+<td class="gt_row gt_left" headers="Arena">Barclays Center</td>
+<td class="gt_row gt_right" headers="Attendance">3,095</td>
 <td class="gt_row gt_right" headers="Plus Minus">-10</td>
 <td class="gt_row gt_right" headers="Clark">0</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_right" headers="Game Date">2009-06-14</td>
-<td class="gt_row gt_left" headers="Home">CHI</td>
-<td class="gt_row gt_left" headers="Away">SEA</td>
-<td class="gt_row gt_left" headers="Arena">UIC Pavilion</td>
-<td class="gt_row gt_right" headers="Attendance">2,681</td>
-<td class="gt_row gt_right" headers="Plus Minus">7</td>
+<td class="gt_row gt_right" headers="Game Date">2010-06-13</td>
+<td class="gt_row gt_left" headers="Home">LAS</td>
+<td class="gt_row gt_left" headers="Away">MIN</td>
+<td class="gt_row gt_left" headers="Arena">Staples Center</td>
+<td class="gt_row gt_right" headers="Attendance">7,005</td>
+<td class="gt_row gt_right" headers="Plus Minus">4</td>
 <td class="gt_row gt_right" headers="Clark">0</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_right" headers="Game Date">2024-07-02</td>
+<td class="gt_row gt_right" headers="Game Date">2012-06-10</td>
+<td class="gt_row gt_left" headers="Home">CON</td>
+<td class="gt_row gt_left" headers="Away">ATL</td>
+<td class="gt_row gt_left" headers="Arena">Mohegan Sun Arena</td>
+<td class="gt_row gt_right" headers="Attendance">6,526</td>
+<td class="gt_row gt_right" headers="Plus Minus">19</td>
+<td class="gt_row gt_right" headers="Clark">0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Game Date">2015-09-04</td>
+<td class="gt_row gt_left" headers="Home">MIN</td>
+<td class="gt_row gt_left" headers="Away">IND</td>
+<td class="gt_row gt_left" headers="Arena">Target Center</td>
+<td class="gt_row gt_right" headers="Attendance">9,034</td>
+<td class="gt_row gt_right" headers="Plus Minus">16</td>
+<td class="gt_row gt_right" headers="Clark">0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Game Date">2016-05-14</td>
+<td class="gt_row gt_left" headers="Home">CHI</td>
+<td class="gt_row gt_left" headers="Away">CON</td>
+<td class="gt_row gt_left" headers="Arena">Allstate Arena</td>
+<td class="gt_row gt_right" headers="Attendance">6,719</td>
+<td class="gt_row gt_right" headers="Plus Minus">23</td>
+<td class="gt_row gt_right" headers="Clark">0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Game Date">2010-07-03</td>
+<td class="gt_row gt_left" headers="Home">TUL</td>
+<td class="gt_row gt_left" headers="Away">WAS</td>
+<td class="gt_row gt_left" headers="Arena">BOK Center</td>
+<td class="gt_row gt_right" headers="Attendance">3,516</td>
+<td class="gt_row gt_right" headers="Plus Minus">-15</td>
+<td class="gt_row gt_right" headers="Clark">0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Game Date">2007-07-18</td>
+<td class="gt_row gt_left" headers="Home">IND</td>
+<td class="gt_row gt_left" headers="Away">CHI</td>
+<td class="gt_row gt_left" headers="Arena">Conseco Fieldhouse</td>
+<td class="gt_row gt_right" headers="Attendance">10,542</td>
+<td class="gt_row gt_right" headers="Plus Minus">1</td>
+<td class="gt_row gt_right" headers="Clark">0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Game Date">1999-06-14</td>
 <td class="gt_row gt_left" headers="Home">NYL</td>
-<td class="gt_row gt_left" headers="Away">MIN</td>
-<td class="gt_row gt_left" headers="Arena">Barclays Center</td>
-<td class="gt_row gt_right" headers="Attendance">10,846</td>
-<td class="gt_row gt_right" headers="Plus Minus">9</td>
+<td class="gt_row gt_left" headers="Away">WAS</td>
+<td class="gt_row gt_left" headers="Arena">Madison Square Garden</td>
+<td class="gt_row gt_right" headers="Attendance">12,563</td>
+<td class="gt_row gt_right" headers="Plus Minus">-22</td>
+<td class="gt_row gt_right" headers="Clark">0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Game Date">2000-06-10</td>
+<td class="gt_row gt_left" headers="Home">CHA</td>
+<td class="gt_row gt_left" headers="Away">ORL</td>
+<td class="gt_row gt_left" headers="Arena">Time Warner Cable Arena</td>
+<td class="gt_row gt_right" headers="Attendance">5,003</td>
+<td class="gt_row gt_right" headers="Plus Minus">-3</td>
 <td class="gt_row gt_right" headers="Clark">0</td>
 </tr>
 </tbody>
@@ -1154,23 +1154,23 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
 </figcaption>
 <div aria-describedby="tbl-calibrate-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="kwyulwctyr" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#kwyulwctyr table {
+<div id="lmkltnscab" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#lmkltnscab table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#kwyulwctyr thead, #kwyulwctyr tbody, #kwyulwctyr tfoot, #kwyulwctyr tr, #kwyulwctyr td, #kwyulwctyr th {
+#lmkltnscab thead, #lmkltnscab tbody, #lmkltnscab tfoot, #lmkltnscab tr, #lmkltnscab td, #lmkltnscab th {
   border-style: none;
 }
 
-#kwyulwctyr p {
+#lmkltnscab p {
   margin: 0;
   padding: 0;
 }
 
-#kwyulwctyr .gt_table {
+#lmkltnscab .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1196,12 +1196,12 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   border-left-color: #D3D3D3;
 }
 
-#kwyulwctyr .gt_caption {
+#lmkltnscab .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#kwyulwctyr .gt_title {
+#lmkltnscab .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1213,7 +1213,7 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   border-bottom-width: 0;
 }
 
-#kwyulwctyr .gt_subtitle {
+#lmkltnscab .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1225,7 +1225,7 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   border-top-width: 0;
 }
 
-#kwyulwctyr .gt_heading {
+#lmkltnscab .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1237,13 +1237,13 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   border-right-color: #D3D3D3;
 }
 
-#kwyulwctyr .gt_bottom_border {
+#lmkltnscab .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#kwyulwctyr .gt_col_headings {
+#lmkltnscab .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1258,7 +1258,7 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   border-right-color: #D3D3D3;
 }
 
-#kwyulwctyr .gt_col_heading {
+#lmkltnscab .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1278,7 +1278,7 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   overflow-x: hidden;
 }
 
-#kwyulwctyr .gt_column_spanner_outer {
+#lmkltnscab .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1290,15 +1290,15 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   padding-right: 4px;
 }
 
-#kwyulwctyr .gt_column_spanner_outer:first-child {
+#lmkltnscab .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#kwyulwctyr .gt_column_spanner_outer:last-child {
+#lmkltnscab .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#kwyulwctyr .gt_column_spanner {
+#lmkltnscab .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1310,11 +1310,11 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   width: 100%;
 }
 
-#kwyulwctyr .gt_spanner_row {
+#lmkltnscab .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#kwyulwctyr .gt_group_heading {
+#lmkltnscab .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1340,7 +1340,7 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   text-align: left;
 }
 
-#kwyulwctyr .gt_empty_group_heading {
+#lmkltnscab .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1355,15 +1355,15 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   vertical-align: middle;
 }
 
-#kwyulwctyr .gt_from_md > :first-child {
+#lmkltnscab .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#kwyulwctyr .gt_from_md > :last-child {
+#lmkltnscab .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#kwyulwctyr .gt_row {
+#lmkltnscab .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1382,7 +1382,7 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   overflow-x: hidden;
 }
 
-#kwyulwctyr .gt_stub {
+#lmkltnscab .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1395,7 +1395,7 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   padding-right: 5px;
 }
 
-#kwyulwctyr .gt_stub_row_group {
+#lmkltnscab .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1409,15 +1409,15 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   vertical-align: top;
 }
 
-#kwyulwctyr .gt_row_group_first td {
+#lmkltnscab .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#kwyulwctyr .gt_row_group_first th {
+#lmkltnscab .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#kwyulwctyr .gt_summary_row {
+#lmkltnscab .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1427,16 +1427,16 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   padding-right: 5px;
 }
 
-#kwyulwctyr .gt_first_summary_row {
+#lmkltnscab .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#kwyulwctyr .gt_first_summary_row.thick {
+#lmkltnscab .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#kwyulwctyr .gt_last_summary_row {
+#lmkltnscab .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1446,7 +1446,7 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   border-bottom-color: #D3D3D3;
 }
 
-#kwyulwctyr .gt_grand_summary_row {
+#lmkltnscab .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1456,7 +1456,7 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   padding-right: 5px;
 }
 
-#kwyulwctyr .gt_first_grand_summary_row {
+#lmkltnscab .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1466,7 +1466,7 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   border-top-color: #D3D3D3;
 }
 
-#kwyulwctyr .gt_last_grand_summary_row_top {
+#lmkltnscab .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1476,11 +1476,11 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   border-bottom-color: #D3D3D3;
 }
 
-#kwyulwctyr .gt_striped {
+#lmkltnscab .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#kwyulwctyr .gt_table_body {
+#lmkltnscab .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1489,7 +1489,7 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   border-bottom-color: #D3D3D3;
 }
 
-#kwyulwctyr .gt_footnotes {
+#lmkltnscab .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1503,7 +1503,7 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   border-right-color: #D3D3D3;
 }
 
-#kwyulwctyr .gt_footnote {
+#lmkltnscab .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1512,7 +1512,7 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   padding-right: 5px;
 }
 
-#kwyulwctyr .gt_sourcenotes {
+#lmkltnscab .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1526,7 +1526,7 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   border-right-color: #D3D3D3;
 }
 
-#kwyulwctyr .gt_sourcenote {
+#lmkltnscab .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1534,72 +1534,72 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   padding-right: 5px;
 }
 
-#kwyulwctyr .gt_left {
+#lmkltnscab .gt_left {
   text-align: left;
 }
 
-#kwyulwctyr .gt_center {
+#lmkltnscab .gt_center {
   text-align: center;
 }
 
-#kwyulwctyr .gt_right {
+#lmkltnscab .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#kwyulwctyr .gt_font_normal {
+#lmkltnscab .gt_font_normal {
   font-weight: normal;
 }
 
-#kwyulwctyr .gt_font_bold {
+#lmkltnscab .gt_font_bold {
   font-weight: bold;
 }
 
-#kwyulwctyr .gt_font_italic {
+#lmkltnscab .gt_font_italic {
   font-style: italic;
 }
 
-#kwyulwctyr .gt_super {
+#lmkltnscab .gt_super {
   font-size: 65%;
 }
 
-#kwyulwctyr .gt_footnote_marks {
+#lmkltnscab .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#kwyulwctyr .gt_asterisk {
+#lmkltnscab .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#kwyulwctyr .gt_indent_1 {
+#lmkltnscab .gt_indent_1 {
   text-indent: 5px;
 }
 
-#kwyulwctyr .gt_indent_2 {
+#lmkltnscab .gt_indent_2 {
   text-indent: 10px;
 }
 
-#kwyulwctyr .gt_indent_3 {
+#lmkltnscab .gt_indent_3 {
   text-indent: 15px;
 }
 
-#kwyulwctyr .gt_indent_4 {
+#lmkltnscab .gt_indent_4 {
   text-indent: 20px;
 }
 
-#kwyulwctyr .gt_indent_5 {
+#lmkltnscab .gt_indent_5 {
   text-indent: 25px;
 }
 
-#kwyulwctyr .katex-display {
+#lmkltnscab .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#kwyulwctyr div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#lmkltnscab div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
