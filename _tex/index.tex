@@ -206,7 +206,7 @@
 
 \title{Winning and Attendance in the WNBA}
 \author{Gabriela Eastwood \and Benjamin S. Baumer \and Andrew Zimbalist}
-\date{2026-06-05}
+\date{2026-06-08}
 \begin{document}
 \maketitle
 \begin{abstract}
@@ -476,16 +476,16 @@ Clark played in the game, are recorded.
 \toprule
 Game Date & Home & Away & Arena & Attendance & Plus Minus & Clark \\ 
 \midrule\addlinespace[2.5pt]
-14470 & LAS & SAC & Staples Center & 10,122 & -6 & 0 \\ 
-15875 & PHO & MIN & US Airways Center & 8,464 & -11 & 0 \\ 
-11473 & SEA & PHO & KeyArena & 7,567 & 13 & 0 \\ 
-15930 & LAS & CHI & Staples Center & 10,553 & 4 & 0 \\ 
-14460 & DET & NYL & Palace of Auburn Hills & 7,014 & 12 & 0 \\ 
-14124 & HOU & NYL & Reliant Arena & 5,166 & -3 & 0 \\ 
-18788 & WAS & LAS & Entertainment and Sports Arena & 2,100 & 18 & 0 \\ 
-14051 & MIN & HOU & Target Center & 5,865 & -7 & 0 \\ 
-11475 & DET & HOU & Palace of Auburn Hills & 9,401 & -1 & 0 \\ 
-14841 & SAN & IND & AT\&T Center & 10,807 & 14 & 0 \\ 
+13330 & CHA & SAC & Time Warner Cable Arena & 5,493 & -8 & 0 \\ 
+11538 & LAS & SEA & Staples Center & 9,493 & 19 & 0 \\ 
+13679 & IND & PHO & Conseco Fieldhouse & 6,579 & -11 & 0 \\ 
+12988 & SAC & DET & ARCO Arena & 7,297 & 40 & 0 \\ 
+13295 & CON & DET & Mohegan Sun Arena & 6,738 & -4 & 0 \\ 
+14423 & LAS & SEA & Staples Center & 10,797 & 27 & 0 \\ 
+10457 & DET & NYL & Palace of Auburn Hills & 16,246 & 14 & 0 \\ 
+11903 & LAS & UTA & Staples Center & 12,306 & 4 & 0 \\ 
+12623 & NYL & DET & Radio City Musical Hall & 5,945 & 9 & 0 \\ 
+18517 & LAS & LVA & NA & NA & -14 & 0 \\ 
 \bottomrule
 \end{tabular*}
 
@@ -732,7 +732,8 @@ strengths).
 As noted in Section~\ref{sec-intro}, there are multiple notions of what
 drives fan engagement relevant to the WNBA. Each of these notions can be
 captured by a simple bivariate function of the corresponding strengths
-of the teams (\(f_k(\hat{\theta}_i(t), \hat{\theta}_i(t))\)).
+of the teams \(f_k(\hat{\theta}_i(t), \hat{\theta}_i(t))\). The first
+and third have been rescaled so that they will have means close to 0.
 
 \begin{itemize}
 \tightlist
@@ -742,15 +743,89 @@ of the teams (\(f_k(\hat{\theta}_i(t), \hat{\theta}_i(t))\)).
   the two teams
   (\(f_1(\hat{\theta}_i(t), \hat{\theta}_i(t)) = \hat{\theta}_i(t) + \hat{\theta}_j(t)\))
 \item
+  Uncertainty of outcome hypothesis: fans may wish to attend a game for
+  which the outcome is unclear. We model this as
+  (\(f_2(\hat{\theta}_i(t), \hat{\theta}_i(t)) = |\hat{\theta}_i(t) - \hat{\theta}_j(t)|\))
+\item
   Loss aversion: fans may wish to attend a game to see their team (the
   home team) win. We model this using the estimated home win probability
   function above
-  (\(f_2(\hat{\theta}_i(t), \hat{\theta}_i(t)) = \hat{p}_{ij}(t)\))
-\item
-  Uncertainty of outcome hypothesis: fans may wish to attend a game for
-  which the outcome is unclear. We model this as
-  (\(f_3(\hat{\theta}_i(t), \hat{\theta}_i(t)) = |\hat{\theta}_i(t) - \hat{\theta}_j(t)|\))
+  (\(f_3(\hat{\theta}_i(t), \hat{\theta}_i(t)) = \hat{p}_{ij}(t)\))
 \end{itemize}
+
+The distribution of attendance with respect to \(f_1\) and \(f_2\) are
+shown in Figure~\ref{fig-attend-f1} and Figure~\ref{fig-attend-f2},
+respectively, with the corresponding plots for percentage of arena
+capacity shown in Figure~\ref{fig-capacity-f1} and
+Figure~\ref{fig-capacity-f2}.
+
+\protect\phantomsection\label{cell-fig-attend-f1}
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-attend-f1-1.pdf}}
+
+}
+
+\caption{\label{fig-attend-f1}asd}
+
+\end{figure}%
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+\protect\phantomsection\label{cell-fig-attend-f2}
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-attend-f2-1.pdf}}
+
+}
+
+\caption{\label{fig-attend-f2}asd}
+
+\end{figure}%
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+\protect\phantomsection\label{cell-fig-capacity-f1}
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-capacity-f1-1.pdf}}
+
+}
+
+\caption{\label{fig-capacity-f1}asd}
+
+\end{figure}%
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+\protect\phantomsection\label{cell-fig-capacity-f2}
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-capacity-f2-1.pdf}}
+
+}
+
+\caption{\label{fig-capacity-f2}asd}
+
+\end{figure}%
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
 
 \subsection{Control variables}\label{sec-control}
 
@@ -759,16 +834,18 @@ As time-related control variables, we include the the season
 (\(\tau_3\)) as fixed effects. To control for city-related effects, we
 also include the team name (\(\phi_1\)), as well as the median income
 (\(\phi_2\), in thousands of USD) and population (\(\phi_3\), in
-millions) of the home city\footnote{Because the population and median
-  income statistics were available at irregular time periods (due to the
-  COVID-19 pandemic and other factors), we chose to use the median of
-  the population and median income across all of the available years of
-  data as a constant value. While this does mean that the growth in
-  cities like Phoenix or Las Vegas is ignored, we doubt this will
-  meaningfully affect our results, especially since the team fixed
-  effect should capture some of that variability.}. Finally, we include
-an indicator based on whether Caitlin Clark played more than 0 minutes
-in the game (\(\chi\)).
+millions) of the home city\footnote{The data for the population and the
+  median income of cities comes from the American Community Survey,
+  access to which was provided in R by the \textbf{tidycensus} package.
+  Because the population and median income statistics were available at
+  irregular time periods (due to the COVID-19 pandemic and other
+  factors), we chose to use the median of the population and median
+  income across all of the available years of data as a constant value.
+  While this does mean that the population growth in cities like Phoenix
+  or Las Vegas is ignored, we doubt this will meaningfully affect our
+  results, especially since the team fixed effect should capture some of
+  that variability.}. Finally, we include an indicator based on whether
+Caitlin Clark played more than 0 minutes in the game (\(\chi\)).
 
 \subsection{Interaction}\label{interaction}
 
@@ -781,24 +858,37 @@ engagement (\(f_k\)) and season (\(\tau_1\)).
 
 Like Coates et al. (2014), we model the natural logarithm of attendance.
 
-Our general regression model for attendance is: \[
-  \ln{y} = \beta_0^{(k)} + \beta_1^{(k)} f_k + \underbrace{\beta_2^{(k)} \tau_1 + \beta_3^{(k)} \tau_2 + \beta_4^{(k)} \tau_3}_{\text{time-related}} + \underbrace{\beta_5^{(k)} \phi_1 + \beta_6^{(k)} \phi_2 + \beta_7^{(k)} \phi_3}_{\text{ city-related }} + \beta_8^{(k)} \chi + \underbrace{\beta_9^{(k)} f_k \tau_1}_{\text{interaction}} + \epsilon \,,
-\] where \(k \in \{1, 2, 3\}\), and \(\beta_j^{(k)} \in \mathbb{R}\) for
-\(j = \{0, 1, 6, 7, 8\}\), while the other \(\beta_j^{(k)}\)
-coefficients are vectors of length equal to the number of factor levels
-in their corresponding categorical explanatory variable. Most notably
-\(\beta_2^{(k)}\) and \(\beta_9^{(k)}\) have 29 values (corresponding to
-each season after 1997) and \(\beta_5^{(k)}\) has 19 values
-(corresponding to each team). Only current WNBA franchises are included
-in the regression model. We also excluded all data from the 2020 and
-2021 seasons, since there were no fans allowed in all or parts of both
-seasons.
+Our general regression model for attendance is: \begin{align*}
+  \ln{y} &= \beta_0^{(k)} + \underbrace{\beta_1^{(k)} f_k}_{\text{fan engagement}} \\
+    &+ \underbrace{\beta_2^{(k)} \tau_1 + \beta_3^{(k)} \tau_2 + \beta_4^{(k)} \tau_3}_{\text{time-related}} + \underbrace{\beta_5^{(k)} \phi_1 + \beta_6^{(k)} \phi_2 + \beta_7^{(k)} \phi_3}_{\text{ city-related }} \\
+    &+ \underbrace{\beta_8^{(k)} \chi}_{\text{Caitlin Clark}} + \underbrace{\beta_9^{(k)} f_k \tau_1}_{\text{interaction}} + \epsilon \\
+    &= \mathbf{X} \mathbf{\beta}^{(k)} + \epsilon \,,
+\end{align*} where \(k \in \{1, 2, 3\}\), and
+\(\beta_j^{(k)} \in \mathbb{R}\) for \(j = \{0, 1, 6, 7, 8\}\), while
+the other \(\beta_j^{(k)}\) coefficients are vectors of length equal to
+the number of factor levels in their corresponding categorical
+explanatory variable. Most notably \(\beta_2^{(k)}\) and
+\(\beta_9^{(k)}\) have 29 values (corresponding to each season after
+1997) and \(\beta_5^{(k)}\) has 19 values (corresponding to each team).
+Only current WNBA franchises are included in the regression model. We
+also excluded all data from the 2020 and 2021 seasons, since there were
+no fans allowed in all or parts of both seasons.
 
 \subsection{Model formulation for percentage of arena
 capacity}\label{sec-mod-cap}
 
-We fit the same set of models with \(\gamma\) as the response, but the
-in Tobit framework.
+We fit the same set of models with \(\gamma\) as the response, but
+because our response variable \(\gamma\) is constrained between 0 and 1
+and has significant mass at 1 exactly, we use the Papke-Wooldridge
+fractional response model (Papke and Wooldridge 1996). This is
+equivalent to fitting a generalized linear model with a logit link
+function and applying HC1 sandwich estimators (MacKinnon and White 1985)
+for the covariance matrix, which we accomplish using the
+\textbf{sandwich} package in R. \[
+  \mathbb{E}{(\gamma | \mathbf{X})} = G(\mathbf{X} \mathbf{\eta}^{(k)}) \,,
+\] where \(G(z) = \frac{e^z}{1 + e^z}\) is the (vectorized) logistic
+function, \(\mathbf{X}\) is as above, and \(\mathbf{\eta^{(k)}}\) has
+the same structure as \(\mathbf{\beta}^{(k)}\) defined above.
 
 \section{Results}\label{results}
 
@@ -819,13 +909,7 @@ the attendance models are shown in Section~\ref{sec-resid-attend}.
 
 {
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.0896}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.3582}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1343}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1493}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1493}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1194}}@{}}
+\begin{longtable}[]{@{}llrrrr@{}}
 
 \caption{\label{tbl-coefs}Fitted coefficients for scalar terms in models
 for the natural logarithm of attendance.}
@@ -833,19 +917,7 @@ for the natural logarithm of attendance.}
 \tabularnewline
 
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Model
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Term
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Estimate
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Std Error
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Statistic
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-P Value
-\end{minipage} \\
+Model & Term & Estimate & Std Error & Statistic & P Value \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
@@ -853,18 +925,18 @@ P Value
 f1 & (Intercept) & 9.027 & 0.129 & 69.908 & 0.000 \\
 f2 & (Intercept) & 8.968 & 0.155 & 58.003 & 0.000 \\
 f3 & (Intercept) & 9.078 & 0.132 & 68.750 & 0.000 \\
-f2 & I(abs(elo.A - elo.B)) & 0.001 & 0.001 & 0.524 & 0.600 \\
-f1 & I(elo.A + elo.B - 3000) & 0.002 & 0.001 & 3.320 & 0.001 \\
-f3 & I(home\_win\_prob - 0.5) & 0.422 & 0.402 & 1.050 & 0.294 \\
-f1 & is\_cc & 0.705 & 0.049 & 14.514 & 0.000 \\
-f2 & is\_cc & 0.699 & 0.050 & 14.089 & 0.000 \\
-f3 & is\_cc & 0.653 & 0.048 & 13.627 & 0.000 \\
-f1 & median\_income & -0.007 & 0.002 & -3.687 & 0.000 \\
-f2 & median\_income & -0.006 & 0.002 & -3.144 & 0.002 \\
-f3 & median\_income & -0.008 & 0.002 & -4.003 & 0.000 \\
-f1 & median\_pop & 0.021 & 0.007 & 2.967 & 0.003 \\
-f2 & median\_pop & 0.014 & 0.007 & 1.888 & 0.059 \\
-f3 & median\_pop & 0.017 & 0.007 & 2.382 & 0.017 \\
+f1 & Caitlin Clark & 0.705 & 0.049 & 14.514 & 0.000 \\
+f2 & Caitlin Clark & 0.699 & 0.050 & 14.089 & 0.000 \\
+f3 & Caitlin Clark & 0.653 & 0.048 & 13.627 & 0.000 \\
+f1 & F1: Fan Engagment & 0.002 & 0.001 & 3.320 & 0.001 \\
+f2 & F2: Fan Engagment & 0.001 & 0.001 & 0.524 & 0.600 \\
+f3 & F3: Fan Engagment & 0.422 & 0.402 & 1.050 & 0.294 \\
+f1 & Median Income & -0.007 & 0.002 & -3.687 & 0.000 \\
+f2 & Median Income & -0.006 & 0.002 & -3.144 & 0.002 \\
+f3 & Median Income & -0.008 & 0.002 & -4.003 & 0.000 \\
+f1 & Median Pop & 0.021 & 0.007 & 2.967 & 0.003 \\
+f2 & Median Pop & 0.014 & 0.007 & 1.888 & 0.059 \\
+f3 & Median Pop & 0.017 & 0.007 & 2.382 & 0.017 \\
 
 \end{longtable}
 
@@ -881,86 +953,12 @@ attendance nearly doubles (i.e., is multiplied by \(\exp(0.653)\) =
 for the Indiana Fever team effect, the level of fan engagement, and the
 season effects!
 
-Conversely, the evidence for the quality of play and uncertainty of
-outcome hypotheses is weak, with those coefficients barely moving the
-needle. A 10 percentage point increase in the probability of the home
-team winning is associated with a modest 4.31\% increase in the expected
+Conversely, the evidence for the quality of play (\(f_1\)) and
+uncertainty of outcome (\(f_2\)) hypotheses is weak, with those
+coefficients barely moving the needle. For the loss aversion hypothesis,
+a 10 percentage point increase in the probability of the home team
+winning is associated with a modest 4.31\% increase in the expected
 attendance, after controlling for our other factors.
-
-{
-
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0714}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.5000}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0357}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0952}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0833}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1190}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0952}}@{}}
-
-\caption{\label{tbl-anova}Analysis of variance for terms in models for
-the natural logarithm of attendance.}
-
-\tabularnewline
-
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Model
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Term
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Df
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Sumsq
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Meansq
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Statistic
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-P Value
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-f2 & I(abs(elo.A - elo.B)) & 1 & 10.851 & 10.851 & 99.987 & 0.000 \\
-f1 & I(elo.A + elo.B - 3000) & 1 & 40.473 & 40.473 & 401.255 & 0.000 \\
-f3 & I(home\_win\_prob - 0.5) & 1 & 39.923 & 39.923 & 395.845 & 0.000 \\
-f1 & is\_cc & 1 & 22.763 & 22.763 & 225.675 & 0.000 \\
-f2 & is\_cc & 1 & 21.472 & 21.472 & 197.854 & 0.000 \\
-f3 & is\_cc & 1 & 19.936 & 19.936 & 197.668 & 0.000 \\
-f1 & median\_income & 1 & 1.502 & 1.502 & 14.890 & 0.000 \\
-f2 & median\_income & 1 & 1.307 & 1.307 & 12.039 & 0.001 \\
-f3 & median\_income & 1 & 1.629 & 1.629 & 16.153 & 0.000 \\
-f1 & median\_pop & 1 & 0.278 & 0.278 & 2.759 & 0.097 \\
-f2 & median\_pop & 1 & 0.322 & 0.322 & 2.964 & 0.085 \\
-f3 & median\_pop & 1 & 0.154 & 0.154 & 1.528 & 0.216 \\
-f1 & factor(month(game\_date)) & 4 & 12.644 & 3.161 & 31.339 & 0.000 \\
-f2 & factor(month(game\_date)) & 4 & 12.434 & 3.109 & 28.645 & 0.000 \\
-f3 & factor(month(game\_date)) & 4 & 11.842 & 2.960 & 29.354 & 0.000 \\
-f1 & factor(wday(game\_date)) & 6 & 14.323 & 2.387 & 23.667 & 0.000 \\
-f2 & factor(wday(game\_date)) & 6 & 15.293 & 2.549 & 23.487 & 0.000 \\
-f3 & factor(wday(game\_date)) & 6 & 14.704 & 2.451 & 24.300 & 0.000 \\
-f1 & name\_current & 12 & 117.498 & 9.791 & 97.074 & 0.000 \\
-f2 & name\_current & 12 & 132.317 & 11.026 & 101.605 & 0.000 \\
-f3 & name\_current & 12 & 122.443 & 10.204 & 101.171 & 0.000 \\
-f2 & I(abs(elo.A - elo.B)):factor(season\_id) & 26 & 6.526 & 0.251 &
-2.313 & 0.000 \\
-f1 & I(elo.A + elo.B - 3000):factor(season\_id) & 26 & 27.457 & 1.056 &
-10.470 & 0.000 \\
-f3 & I(home\_win\_prob - 0.5):factor(season\_id) & 26 & 31.440 & 1.209 &
-11.990 & 0.000 \\
-f1 & factor(season\_id) & 26 & 152.181 & 5.853 & 58.029 & 0.000 \\
-f2 & factor(season\_id) & 26 & 150.433 & 5.786 & 53.315 & 0.000 \\
-f3 & factor(season\_id) & 26 & 147.101 & 5.658 & 56.098 & 0.000 \\
-
-\end{longtable}
-
-}
-
-\textsubscript{Source:
-\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
-Notebook}}
 
 Table~\ref{tbl-glance} characterizes the model fits. We can see that
 while all models achieve a similar fit, models \(f_1\) (corresponding to
@@ -1109,13 +1107,7 @@ arena capacity models.
 
 {
 
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.0833}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.3333}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1528}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1389}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1528}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1389}}@{}}
+\begin{longtable}[]{@{}llrrrr@{}}
 
 \caption{\label{tbl-coefs2}Table of coefficients from percentage of
 arena capacity models.}
@@ -1123,41 +1115,26 @@ arena capacity models.}
 \tabularnewline
 
 \toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-model
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-term
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-estimate
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-std.error
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-statistic
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-p.value
-\end{minipage} \\
+Model & Term & Estimate & Std Error & Statistic & P Value \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-f1 & (Intercept) & 0.0420351 & 0.3060837 & 0.1373320 & 0.8907684 \\
-f1 & I(elo.A + elo.B - 3000) & 0.0053038 & 0.0012483 & 4.2489239 &
-0.0000215 \\
-f1 & median\_income & 0.0192855 & 0.0046684 & 4.1310605 & 0.0000361 \\
-f1 & median\_pop & -0.0975090 & 0.0147117 & -6.6279729 & 0.0000000 \\
-f1 & is\_cc & 2.8268291 & 0.2623045 & 10.7768979 & 0.0000000 \\
-f2 & (Intercept) & 0.3066991 & 0.3737256 & 0.8206531 & 0.4118439 \\
-f2 & I(abs(elo.A - elo.B)) & -0.0012487 & 0.0029263 & -0.4267265 &
-0.6695786 \\
-f2 & median\_income & 0.0164644 & 0.0046623 & 3.5314191 & 0.0004133 \\
-f2 & median\_pop & -0.0948250 & 0.0144747 & -6.5511069 & 0.0000000 \\
-f2 & is\_cc & 2.9022797 & 0.2595776 & 11.1807804 & 0.0000000 \\
-f3 & (Intercept) & 0.0502670 & 0.3202932 & 0.1569407 & 0.8752916 \\
-f3 & I(home\_win\_prob - 0.5) & 2.3584200 & 0.8986874 & 2.6242941 &
-0.0086829 \\
-f3 & median\_income & 0.0179402 & 0.0047330 & 3.7904230 & 0.0001504 \\
-f3 & median\_pop & -0.1017634 & 0.0149716 & -6.7970886 & 0.0000000 \\
-f3 & is\_cc & 2.8717453 & 0.2611669 & 10.9958230 & 0.0000000 \\
+f1 & (Intercept) & 0.042 & 0.306 & 0.137 & 0.891 \\
+f2 & (Intercept) & 0.307 & 0.374 & 0.821 & 0.412 \\
+f3 & (Intercept) & 0.050 & 0.320 & 0.157 & 0.875 \\
+f1 & Caitlin Clark & 2.827 & 0.262 & 10.777 & 0.000 \\
+f2 & Caitlin Clark & 2.902 & 0.260 & 11.181 & 0.000 \\
+f3 & Caitlin Clark & 2.872 & 0.261 & 10.996 & 0.000 \\
+f1 & F1: Fan Engagment & 0.005 & 0.001 & 4.249 & 0.000 \\
+f2 & F2: Fan Engagment & -0.001 & 0.003 & -0.427 & 0.670 \\
+f3 & F3: Fan Engagment & 2.358 & 0.899 & 2.624 & 0.009 \\
+f1 & Median Income & 0.019 & 0.005 & 4.131 & 0.000 \\
+f2 & Median Income & 0.016 & 0.005 & 3.531 & 0.000 \\
+f3 & Median Income & 0.018 & 0.005 & 3.790 & 0.000 \\
+f1 & Median Pop & -0.098 & 0.015 & -6.628 & 0.000 \\
+f2 & Median Pop & -0.095 & 0.014 & -6.551 & 0.000 \\
+f3 & Median Pop & -0.102 & 0.015 & -6.797 & 0.000 \\
 
 \end{longtable}
 
@@ -1229,81 +1206,6 @@ Notebook}}
 
 Table~\ref{tbl-anova2} shows the analysis of variance for the percentage
 of arena capacity models.
-
-{
-
-\begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0612}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.4286}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0306}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0918}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1224}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1837}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0816}}@{}}
-
-\caption{\label{tbl-anova2}Analysis of variance for terms in models for
-percentage of arena capacity.}
-
-\tabularnewline
-
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Model
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Term
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Df
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Deviance
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Df Residual
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Residual Deviance
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-P Value
-\end{minipage} \\
-\midrule\noalign{}
-\endhead
-\bottomrule\noalign{}
-\endlastfoot
-f2 & I(abs(elo.A - elo.B)) & 1 & 0.032 & 5061 & 916.634 & 0.858 \\
-f1 & I(elo.A + elo.B - 3000) & 1 & 8.035 & 5061 & 908.631 & 0.005 \\
-f3 & I(home\_win\_prob - 0.5) & 1 & 0.906 & 5061 & 915.760 & 0.341 \\
-f1 & is\_cc & 1 & 24.002 & 5010 & 573.411 & 0.000 \\
-f2 & is\_cc & 1 & 23.389 & 5010 & 581.441 & 0.000 \\
-f3 & is\_cc & 1 & 22.520 & 5010 & 579.403 & 0.000 \\
-f1 & median\_income & 1 & 0.977 & 5012 & 601.451 & 0.323 \\
-f2 & median\_income & 1 & 1.038 & 5012 & 608.706 & 0.308 \\
-f3 & median\_income & 1 & 0.972 & 5012 & 606.342 & 0.324 \\
-f1 & median\_pop & 1 & 4.038 & 5011 & 597.414 & 0.044 \\
-f2 & median\_pop & 1 & 3.876 & 5011 & 604.830 & 0.049 \\
-f3 & median\_pop & 1 & 4.419 & 5011 & 601.923 & 0.036 \\
-f1 & factor(month(game\_date)) & 4 & 13.370 & 5025 & 696.118 & 0.010 \\
-f2 & factor(month(game\_date)) & 4 & 13.218 & 5025 & 706.988 & 0.010 \\
-f3 & factor(month(game\_date)) & 4 & 12.953 & 5025 & 701.429 & 0.012 \\
-f1 & factor(wday(game\_date)) & 6 & 18.624 & 5029 & 709.487 & 0.005 \\
-f2 & factor(wday(game\_date)) & 6 & 18.719 & 5029 & 720.205 & 0.005 \\
-f3 & factor(wday(game\_date)) & 6 & 19.034 & 5029 & 714.381 & 0.004 \\
-f1 & name\_current & 12 & 93.689 & 5013 & 602.429 & 0.000 \\
-f2 & name\_current & 12 & 97.243 & 5013 & 609.745 & 0.000 \\
-f3 & name\_current & 12 & 94.115 & 5013 & 607.314 & 0.000 \\
-f2 & I(abs(elo.A - elo.B)):factor(season\_id) & 26 & 7.299 & 4984 &
-574.142 & 1.000 \\
-f1 & I(elo.A + elo.B - 3000):factor(season\_id) & 26 & 13.894 & 4984 &
-559.518 & 0.974 \\
-f3 & I(home\_win\_prob - 0.5):factor(season\_id) & 26 & 15.042 & 4984 &
-564.361 & 0.957 \\
-f1 & factor(season\_id) & 26 & 180.519 & 5035 & 728.112 & 0.000 \\
-f2 & factor(season\_id) & 26 & 177.710 & 5035 & 738.924 & 0.000 \\
-f3 & factor(season\_id) & 26 & 182.345 & 5035 & 733.416 & 0.000 \\
-
-\end{longtable}
-
-}
-
-\textsubscript{Source:
-\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
-Notebook}}
 
 Figure~\ref{fig-season-coefs2} shows that\ldots{}
 
@@ -1466,6 +1368,12 @@ Engagement and the Importance of Supporter Clubs.''} \emph{Soccer \&
 Society} 23 (3): 314--27.
 \url{https://doi.org/10.1080/14660970.2022.2037218}.
 
+\bibitem[\citeproctext]{ref-mackinnon1985some}
+MacKinnon, James G, and Halbert White. 1985. {``Some
+Heteroskedasticity-Consistent Covariance Matrix Estimators with Improved
+Finite Sample Properties.''} \emph{Journal of Econometrics} 29 (3):
+305--25. \url{https://doi.org/10.1016/0304-4076(85)90158-7}.
+
 \bibitem[\citeproctext]{ref-mcdonald1980uses}
 McDonald, John F, and Robert A Moffitt. 1980. {``The Uses of {Tobit}
 Analysis.''} \emph{The Review of Economics and Statistics}, 318--21.
@@ -1527,6 +1435,158 @@ The Relationship with Winning Percentage.''} \emph{The Sport Journal}.
 \end{CSLReferences}
 
 \section{Appendix}\label{appendix}
+
+\subsection{ANOVA tables}\label{anova-tables}
+
+{
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0714}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.5000}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0357}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0952}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0833}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1190}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0952}}@{}}
+
+\caption{\label{tbl-anova}Analysis of variance for terms in models for
+the natural logarithm of attendance.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Model
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Term
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Df
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Sumsq
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Meansq
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Statistic
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+P Value
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+f2 & I(abs(elo.A - elo.B)) & 1 & 10.851 & 10.851 & 99.987 & 0.000 \\
+f1 & I(elo.A + elo.B - 3000) & 1 & 40.473 & 40.473 & 401.255 & 0.000 \\
+f3 & I(home\_win\_prob - 0.5) & 1 & 39.923 & 39.923 & 395.845 & 0.000 \\
+f1 & is\_cc & 1 & 22.763 & 22.763 & 225.675 & 0.000 \\
+f2 & is\_cc & 1 & 21.472 & 21.472 & 197.854 & 0.000 \\
+f3 & is\_cc & 1 & 19.936 & 19.936 & 197.668 & 0.000 \\
+f1 & median\_income & 1 & 1.502 & 1.502 & 14.890 & 0.000 \\
+f2 & median\_income & 1 & 1.307 & 1.307 & 12.039 & 0.001 \\
+f3 & median\_income & 1 & 1.629 & 1.629 & 16.153 & 0.000 \\
+f1 & median\_pop & 1 & 0.278 & 0.278 & 2.759 & 0.097 \\
+f2 & median\_pop & 1 & 0.322 & 0.322 & 2.964 & 0.085 \\
+f3 & median\_pop & 1 & 0.154 & 0.154 & 1.528 & 0.216 \\
+f1 & factor(month(game\_date)) & 4 & 12.644 & 3.161 & 31.339 & 0.000 \\
+f2 & factor(month(game\_date)) & 4 & 12.434 & 3.109 & 28.645 & 0.000 \\
+f3 & factor(month(game\_date)) & 4 & 11.842 & 2.960 & 29.354 & 0.000 \\
+f1 & factor(wday(game\_date)) & 6 & 14.323 & 2.387 & 23.667 & 0.000 \\
+f2 & factor(wday(game\_date)) & 6 & 15.293 & 2.549 & 23.487 & 0.000 \\
+f3 & factor(wday(game\_date)) & 6 & 14.704 & 2.451 & 24.300 & 0.000 \\
+f1 & name\_current & 12 & 117.498 & 9.791 & 97.074 & 0.000 \\
+f2 & name\_current & 12 & 132.317 & 11.026 & 101.605 & 0.000 \\
+f3 & name\_current & 12 & 122.443 & 10.204 & 101.171 & 0.000 \\
+f2 & I(abs(elo.A - elo.B)):factor(season\_id) & 26 & 6.526 & 0.251 &
+2.313 & 0.000 \\
+f1 & I(elo.A + elo.B - 3000):factor(season\_id) & 26 & 27.457 & 1.056 &
+10.470 & 0.000 \\
+f3 & I(home\_win\_prob - 0.5):factor(season\_id) & 26 & 31.440 & 1.209 &
+11.990 & 0.000 \\
+f1 & factor(season\_id) & 26 & 152.181 & 5.853 & 58.029 & 0.000 \\
+f2 & factor(season\_id) & 26 & 150.433 & 5.786 & 53.315 & 0.000 \\
+f3 & factor(season\_id) & 26 & 147.101 & 5.658 & 56.098 & 0.000 \\
+
+\end{longtable}
+
+}
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+{
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0612}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.4286}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0306}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0918}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1224}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1837}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0816}}@{}}
+
+\caption{\label{tbl-anova2}Analysis of variance for terms in models for
+percentage of arena capacity.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Model
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Term
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Df
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Deviance
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Df Residual
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Residual Deviance
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+P Value
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+f2 & I(abs(elo.A - elo.B)) & 1 & 0.032 & 5061 & 916.634 & 0.858 \\
+f1 & I(elo.A + elo.B - 3000) & 1 & 8.035 & 5061 & 908.631 & 0.005 \\
+f3 & I(home\_win\_prob - 0.5) & 1 & 0.906 & 5061 & 915.760 & 0.341 \\
+f1 & is\_cc & 1 & 24.002 & 5010 & 573.411 & 0.000 \\
+f2 & is\_cc & 1 & 23.389 & 5010 & 581.441 & 0.000 \\
+f3 & is\_cc & 1 & 22.520 & 5010 & 579.403 & 0.000 \\
+f1 & median\_income & 1 & 0.977 & 5012 & 601.451 & 0.323 \\
+f2 & median\_income & 1 & 1.038 & 5012 & 608.706 & 0.308 \\
+f3 & median\_income & 1 & 0.972 & 5012 & 606.342 & 0.324 \\
+f1 & median\_pop & 1 & 4.038 & 5011 & 597.414 & 0.044 \\
+f2 & median\_pop & 1 & 3.876 & 5011 & 604.830 & 0.049 \\
+f3 & median\_pop & 1 & 4.419 & 5011 & 601.923 & 0.036 \\
+f1 & factor(month(game\_date)) & 4 & 13.370 & 5025 & 696.118 & 0.010 \\
+f2 & factor(month(game\_date)) & 4 & 13.218 & 5025 & 706.988 & 0.010 \\
+f3 & factor(month(game\_date)) & 4 & 12.953 & 5025 & 701.429 & 0.012 \\
+f1 & factor(wday(game\_date)) & 6 & 18.624 & 5029 & 709.487 & 0.005 \\
+f2 & factor(wday(game\_date)) & 6 & 18.719 & 5029 & 720.205 & 0.005 \\
+f3 & factor(wday(game\_date)) & 6 & 19.034 & 5029 & 714.381 & 0.004 \\
+f1 & name\_current & 12 & 93.689 & 5013 & 602.429 & 0.000 \\
+f2 & name\_current & 12 & 97.243 & 5013 & 609.745 & 0.000 \\
+f3 & name\_current & 12 & 94.115 & 5013 & 607.314 & 0.000 \\
+f2 & I(abs(elo.A - elo.B)):factor(season\_id) & 26 & 7.299 & 4984 &
+574.142 & 1.000 \\
+f1 & I(elo.A + elo.B - 3000):factor(season\_id) & 26 & 13.894 & 4984 &
+559.518 & 0.974 \\
+f3 & I(home\_win\_prob - 0.5):factor(season\_id) & 26 & 15.042 & 4984 &
+564.361 & 0.957 \\
+f1 & factor(season\_id) & 26 & 180.519 & 5035 & 728.112 & 0.000 \\
+f2 & factor(season\_id) & 26 & 177.710 & 5035 & 738.924 & 0.000 \\
+f3 & factor(season\_id) & 26 & 182.345 & 5035 & 733.416 & 0.000 \\
+
+\end{longtable}
+
+}
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
 
 \subsection{Residual analysis of attendance
 models}\label{sec-resid-attend}

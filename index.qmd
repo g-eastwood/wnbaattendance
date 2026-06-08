@@ -43,7 +43,7 @@ abstract: |
 key-points:
   - winning percentage and game attendance
 date: last-modified
-bibliography: references.bib
+bibliography: [pkgs.bib, references.bib]
 number-sections: true
 ---
 ```{r}
@@ -51,7 +51,26 @@ number-sections: true
 library(tidyverse)
 library(knitr)
 library(gt)
+
+pkg <- function(x, ...) {
+  if (knitr::is_html_output()) {
+    paste0("**", x, "** [@R-", x, "]")
+  } else {
+    # isn't working:
+#    https://github.com/beanumber/datascience2/issues/7
+#    paste0(r"(\pkg{)", x, r"(\})")
+    paste0("**", x, "**")
+  }
+}
 ```
+
+```{r}
+#| include: false
+manual <- c("ggplot2", "tidycensus", "sandwich")
+pkgs <- unique(c(manual, .packages()))
+knitr::write_bib(pkgs, file = "pkgs.bib")
+```
+
 
 ```{r}
 wnba_gl <- read_rds(here::here("data/wnba_gl.rds")) |>
@@ -284,14 +303,15 @@ In most years, the slope appears to be positive.
 ```{r}
 #| label: fig-attendance-year
 #| fig-cap: "WNBA attendance by season, against estimated home win probability. We note that in most years, the slope of the association appears to be positive. "
-ggplot(wnba_gl, aes(x = home_win_prob, y = attendance, color = factor(is_cc))) +
+plot_attend <- ggplot(wnba_gl, aes(x = home_win_prob, y = attendance, color = factor(is_cc))) +
   geom_point() +
   geom_smooth(method = "lm", se = 0, color = "black") +
   facet_wrap(vars(season_id)) +
-  scale_y_log10("Attendance") +
   scale_x_continuous("Estimated Home Win Probability") +
   scale_color_discrete(name = "Clark") +
   theme_minimal(base_size = 10)
+plot_attend +
+  scale_y_log10("Attendance")
 ```
 
 In @fig-capacity-year, we note similar trends in the relationship between the percentage of the arena capacity filled and the estimated home win probability. 
@@ -301,15 +321,10 @@ Those sellouts are much more frequent in the last two years of data, and many of
 ```{r}
 #| label: fig-capacity-year
 #| fig-cap: "WNBA percentage of arena capacity filled by season, against estimated home win probability. We note the edge effects caused by sellouts, which occur much more frequently in 2024 and 2025. "
-wnba_gl |>
-  ggplot(aes(x = home_win_prob, y = pct_capacity, color = factor(is_cc))) +
-  geom_point() +
-  geom_smooth(method = "lm", se = 0, color = "black") +
-  facet_wrap(vars(season_id)) +
-  scale_y_continuous("Percentage of Arena Capacity") +
-  scale_x_continuous("Estimated Home Win Probability") +
-  scale_color_discrete(name = "Clark") +
-  theme_minimal(base_size = 10)
+plot_capacity <- plot_attend +
+  aes(y = pct_capacity) +
+  scale_y_continuous("Percentage of Arena Capacity")
+plot_capacity
 ```
 
 Because the raw attendance figures are not normally distributed, we model the logarithm of attendance. 
@@ -320,11 +335,51 @@ Similarly, because the percentage of arena capacity are bound above by 1 and bel
 In @sec-elo, we described our use of Elo rating to estimate the strength of the home team ($\hat{\theta}_i(t)$), the strength of the visiting team ($\hat{\theta}_j(t)$) and the home win probability ($\hat{p}_{ij}(t)$) (which is itself a function of the estimated team strengths). 
 
 As noted in @sec-intro, there are multiple notions of what drives fan engagement relevant to the WNBA. 
-Each of these notions can be captured by a simple bivariate function of the corresponding strengths of the teams ($f_k(\hat{\theta}_i(t), \hat{\theta}_i(t))$). 
+Each of these notions can be captured by a simple bivariate function of the corresponding strengths of the teams $f_k(\hat{\theta}_i(t), \hat{\theta}_i(t))$. 
+The first and third have been rescaled so that they will have means close to 0. 
 
 - Quality of play: fans may wish to attend a game in person if the quality of play is high. We model this as the sum of the Elo rating of the two teams ($f_1(\hat{\theta}_i(t), \hat{\theta}_i(t)) = \hat{\theta}_i(t) + \hat{\theta}_j(t)$)
-- Loss aversion: fans may wish to attend a game to see their team (the home team) win. We model this using the estimated home win probability function above ($f_2(\hat{\theta}_i(t), \hat{\theta}_i(t)) = \hat{p}_{ij}(t)$)
-- Uncertainty of outcome hypothesis: fans may wish to attend a game for which the outcome is unclear. We model this as ($f_3(\hat{\theta}_i(t), \hat{\theta}_i(t)) = |\hat{\theta}_i(t) - \hat{\theta}_j(t)|$)
+- Uncertainty of outcome hypothesis: fans may wish to attend a game for which the outcome is unclear. We model this as ($f_2(\hat{\theta}_i(t), \hat{\theta}_i(t)) = |\hat{\theta}_i(t) - \hat{\theta}_j(t)|$)
+- Loss aversion: fans may wish to attend a game to see their team (the home team) win. We model this using the estimated home win probability function above ($f_3(\hat{\theta}_i(t), \hat{\theta}_i(t)) = \hat{p}_{ij}(t)$)
+
+The distribution of attendance with respect to $f_1$ and $f_2$ are shown in @fig-attend-f1 and @fig-attend-f2, respectively, with the corresponding plots for percentage of arena capacity shown in @fig-capacity-f1 and @fig-capacity-f2.
+
+```{r}
+#| label: fig-attend-f1
+#| fig-cap: "asd"
+plot_attend +
+  aes(x = elo.A + elo.B - 3000) +
+  scale_x_continuous("Quality of Play: Sum of Elo rating - 3000") +
+  scale_y_log10("Attendance")
+```
+
+```{r}
+#| label: fig-attend-f2
+#| fig-cap: "asd"
+plot_attend +
+  aes(x = abs(elo.A - elo.B)) +
+  scale_x_continuous("UOH: Absolute Difference in Elo rating") + 
+  scale_y_log10("Attendance")
+```
+
+```{r}
+#| label: fig-capacity-f1
+#| fig-cap: "asd"
+plot_capacity +
+  aes(x = elo.A + elo.B - 3000) +
+  scale_x_continuous("Quality of Play: Sum of Elo rating - 3000")
+```
+
+```{r}
+#| label: fig-capacity-f2
+#| fig-cap: "asd"
+plot_capacity +
+  aes(x = abs(elo.A - elo.B)) +
+  scale_x_continuous("UOH: Absolute Difference in Elo rating")
+```
+
+
+
 
 ### Control variables {#sec-control}
 
@@ -332,7 +387,7 @@ As time-related control variables, we include the the season ($\tau_1$), the mon
 To control for city-related effects, we also include the team name ($\phi_1$), as well as the median income ($\phi_2$, in thousands of USD) and population ($\phi_3$, in millions) of the home city[^median].
 Finally, we include an indicator based on whether Caitlin Clark played more than 0 minutes in the game ($\chi$). 
 
-[^median]: Because the population and median income statistics were available at irregular time periods (due to the COVID-19 pandemic and other factors), we chose to use the median of the population and median income across all of the available years of data as a constant value. While this does mean that the growth in cities like Phoenix or Las Vegas is ignored, we doubt this will meaningfully affect our results, especially since the team fixed effect should capture some of that variability. 
+[^median]: The data for the population and the median income of cities comes from the American Community Survey, access to which was provided in R by the `r pkg("tidycensus")` package. Because the population and median income statistics were available at irregular time periods (due to the COVID-19 pandemic and other factors), we chose to use the median of the population and median income across all of the available years of data as a constant value. While this does mean that the population growth in cities like Phoenix or Las Vegas is ignored, we doubt this will meaningfully affect our results, especially since the team fixed effect should capture some of that variability. 
 
 ### Interaction
 
@@ -344,9 +399,12 @@ To capture this, we include an interaction term between our measures of fan enga
 Like @CoatesHumphreysZhou2014, we model the natural logarithm of attendance. 
 
 Our general regression model for attendance is:
-$$
-  \ln{y} = \beta_0^{(k)} + \beta_1^{(k)} f_k + \underbrace{\beta_2^{(k)} \tau_1 + \beta_3^{(k)} \tau_2 + \beta_4^{(k)} \tau_3}_{\text{time-related}} + \underbrace{\beta_5^{(k)} \phi_1 + \beta_6^{(k)} \phi_2 + \beta_7^{(k)} \phi_3}_{\text{ city-related }} + \beta_8^{(k)} \chi + \underbrace{\beta_9^{(k)} f_k \tau_1}_{\text{interaction}} + \epsilon \,,
-$$
+\begin{align*}
+  \ln{y} &= \beta_0^{(k)} + \underbrace{\beta_1^{(k)} f_k}_{\text{fan engagement}} \\
+    &+ \underbrace{\beta_2^{(k)} \tau_1 + \beta_3^{(k)} \tau_2 + \beta_4^{(k)} \tau_3}_{\text{time-related}} + \underbrace{\beta_5^{(k)} \phi_1 + \beta_6^{(k)} \phi_2 + \beta_7^{(k)} \phi_3}_{\text{ city-related }} \\
+    &+ \underbrace{\beta_8^{(k)} \chi}_{\text{Caitlin Clark}} + \underbrace{\beta_9^{(k)} f_k \tau_1}_{\text{interaction}} + \epsilon \\
+    &= \mathbf{X} \mathbf{\beta}^{(k)} + \epsilon \,,
+\end{align*}
 where $k \in \{1, 2, 3\}$, and $\beta_j^{(k)} \in \mathbb{R}$ for $j = \{0, 1, 6, 7, 8\}$, while the other $\beta_j^{(k)}$ coefficients are vectors of length equal to the number of factor levels in their corresponding categorical explanatory variable. 
 Most notably $\beta_2^{(k)}$ and $\beta_9^{(k)}$ have `r length(levels(factor(wnba_gl$season_id)))` values (corresponding to each season after 1997) and $\beta_5^{(k)}$ has `r length(levels(factor(wnba_gl$name_current)))` values (corresponding to each team). 
 Only current WNBA franchises are included in the regression model. 
@@ -357,7 +415,12 @@ We also excluded all data from the 2020 and 2021 seasons, since there were no fa
 
 ### Model formulation for percentage of arena capacity {#sec-mod-cap}
 
-We fit the same set of models with $\gamma$ as the response, but the in Tobit framework. 
+We fit the same set of models with $\gamma$ as the response, but because our response variable $\gamma$ is constrained between 0 and 1 and has significant mass at 1 exactly, we use the Papke-Wooldridge fractional response model [@papke1996econometric].
+This is equivalent to fitting a generalized linear model with a logit link function and applying HC1 sandwich estimators [@mackinnon1985some] for the covariance matrix, which we accomplish using the `r pkg("sandwich")` package in R. 
+$$
+  \mathbb{E}{(\gamma | \mathbf{X})} = G(\mathbf{X} \mathbf{\eta}^{(k)}) \,,
+$$
+where $G(z) = \frac{e^z}{1 + e^z}$ is the (vectorized) logistic function, $\mathbf{X}$ is as above, and $\mathbf{\eta^{(k)}}$ has the same structure as $\mathbf{\beta}^{(k)}$ defined above. 
 
 
 ## Results
@@ -398,6 +461,11 @@ mod_attend_coefs <- mod_attend |>
 
 mod_attend_coefs |>
   filter_out(str_detect(term, "factor|name_current")) |>
+  mutate(
+    term = ifelse(str_detect(term, "I\\("), paste0(model, ": fan engagment"), term),
+    term = ifelse(str_detect(term, "is_cc"), "Caitlin Clark", term),
+    term = str_to_title(str_replace_all(term, "_", " "))
+  ) |>
   arrange(term, model) |>
   janitor::clean_names(case = "title") |>
   knitr::kable(digits = 3)
@@ -406,21 +474,8 @@ mod_attend_coefs |>
 Consider first the strong evidence for the Caitlin Clark effect. 
 Even for the smallest coefficient in @tbl-coefs, the expected attendance nearly doubles (i.e., is multiplied by $\exp(0.653)$ = `r mod_attend_coefs |> filter(term == "is_cc") |> select(estimate) |> min() |> exp() |> round(2)`) when Clark plays in the game, and this is *after* controlling for the Indiana Fever team effect, the level of fan engagement, and the season effects! 
 
-Conversely, the evidence for the quality of play and uncertainty of outcome hypotheses is weak, with those coefficients barely moving the needle. 
-A 10 percentage point increase in the probability of the home team winning is associated with a modest `r round(100 * (exp(0.422/10) - 1), 2)`% increase in the expected attendance, after controlling for our other factors. 
-
-```{r}
-#| label: tbl-anova
-#| tbl-cap: "Analysis of variance for terms in models for the natural logarithm of attendance. "
-mod_attend |>
-  map(anova) |>
-  map(broom::tidy) |>
-  bind_rows(.id = "model") |>
-  filter_out(str_detect(term, "Residuals")) |>
-  arrange(df, term, model) |>
-  janitor::clean_names(case = "title") |>
-  knitr::kable(digits = 3)
-```
+Conversely, the evidence for the quality of play ($f_1$) and uncertainty of outcome ($f_2$) hypotheses is weak, with those coefficients barely moving the needle. 
+For the loss aversion hypothesis, a 10 percentage point increase in the probability of the home team winning is associated with a modest `r round(100 * (exp(0.422/10) - 1), 2)`% increase in the expected attendance, after controlling for our other factors. 
 
 @tbl-glance characterizes the model fits. 
 We can see that while all models achieve a similar fit, models $f_1$ (corresponding to the quality of play hypothesis) and $f_3$ (corresponding to the home win probability) are slightly superior by most metrics. 
@@ -520,8 +575,15 @@ mod_pct_coefs <- map2(mod_pct, vcov_pct, lmtest::coeftest) |>
   bind_rows(.id = "model") 
 
 mod_pct_coefs |>
-  filter_out(str_detect(term, "factor|name")) |>
-  knitr::kable()
+  filter_out(str_detect(term, "factor|name")) |>  
+  mutate(
+    term = ifelse(str_detect(term, "I\\("), paste0(model, ": fan engagment"), term),
+    term = ifelse(str_detect(term, "is_cc"), "Caitlin Clark", term),
+    term = str_to_title(str_replace_all(term, "_", " "))
+  ) |>
+  arrange(term, model) |>
+  janitor::clean_names(case = "title") |>
+  knitr::kable(digits = 3)
 ```
 
 @tbl-glance2 shows the model fit metrics for the percentage of arena capacity models. 
@@ -536,19 +598,6 @@ mod_pct |>
 ```
 
 @tbl-anova2 shows the analysis of variance for the percentage of arena capacity models. 
-
-```{r}
-#| label: tbl-anova2
-#| tbl-cap: "Analysis of variance for terms in models for percentage of arena capacity. "
-mod_pct |>
-  map(anova) |>
-  map(broom::tidy) |>
-  bind_rows(.id = "model") |>
-  filter_out(str_detect(term, "NULL")) |>
-  arrange(df, term, model) |>
-  janitor::clean_names(case = "title") |>
-  knitr::kable(digits = 3)
-```
 
 @fig-season-coefs2 shows that...
 
@@ -612,6 +661,37 @@ We also considered fitting a Beta regression model with a logit link function, a
 :::
 
 ## Appendix {.appendix}
+
+### ANOVA tables
+
+
+```{r}
+#| label: tbl-anova
+#| tbl-cap: "Analysis of variance for terms in models for the natural logarithm of attendance. "
+mod_attend |>
+  map(anova) |>
+  map(broom::tidy) |>
+  bind_rows(.id = "model") |>
+  filter_out(str_detect(term, "Residuals")) |>
+  arrange(df, term, model) |>
+  janitor::clean_names(case = "title") |>
+  knitr::kable(digits = 3)
+```
+
+
+```{r}
+#| label: tbl-anova2
+#| tbl-cap: "Analysis of variance for terms in models for percentage of arena capacity. "
+mod_pct |>
+  map(anova) |>
+  map(broom::tidy) |>
+  bind_rows(.id = "model") |>
+  filter_out(str_detect(term, "NULL")) |>
+  arrange(df, term, model) |>
+  janitor::clean_names(case = "title") |>
+  knitr::kable(digits = 3)
+```
+
 
 ### Residual analysis of attendance models {#sec-resid-attend}
 
