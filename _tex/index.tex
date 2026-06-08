@@ -439,14 +439,14 @@ Timeline, n.d.), an online repository for women's basketball data. The
 site collects attendance numbers directly from the league's records.
 Attendance data was unavailable for only 152 games, while (due to the
 COVID-19 pandemic) 2 games (accurately) recorded attendance of 0.
-Because the arenas WNBA teams play in vary widely in size- the New York
+Because the arenas WNBA teams play in vary widely in size-- the New York
 Liberty alone have called both the Barclays Center (17,732 seat
 capacity) and the Westchester County Center (2,300 seat capacity) home
-in recent years- we contextualize raw attendance numbers with manually
+in recent years-- we contextualize raw attendance numbers with manually
 collected arena capacities.\footnote{We were only able to collect an
   estimate for the \emph{current} arena capacity, which is not
   necessarily the same as the arena capacity on the day of the game.}
-While team have many reasons they might choose to play for a sold-out
+While teams have many reasons they might choose to play for a sold-out
 crowd in a smaller arena, smaller venue size will also by nature
 constrain attendance, making its consideration in our model important.
 
@@ -476,16 +476,16 @@ Clark played in the game, are recorded.
 \toprule
 Game Date & Home & Away & Arena & Attendance & Plus Minus & Clark \\ 
 \midrule\addlinespace[2.5pt]
-13330 & CHA & SAC & Time Warner Cable Arena & 5,493 & -8 & 0 \\ 
-11538 & LAS & SEA & Staples Center & 9,493 & 19 & 0 \\ 
-13679 & IND & PHO & Conseco Fieldhouse & 6,579 & -11 & 0 \\ 
-12988 & SAC & DET & ARCO Arena & 7,297 & 40 & 0 \\ 
-13295 & CON & DET & Mohegan Sun Arena & 6,738 & -4 & 0 \\ 
-14423 & LAS & SEA & Staples Center & 10,797 & 27 & 0 \\ 
-10457 & DET & NYL & Palace of Auburn Hills & 16,246 & 14 & 0 \\ 
-11903 & LAS & UTA & Staples Center & 12,306 & 4 & 0 \\ 
-12623 & NYL & DET & Radio City Musical Hall & 5,945 & 9 & 0 \\ 
-18517 & LAS & LVA & NA & NA & -14 & 0 \\ 
+15479 & WAS & CHI & Verizon Center & 11,415 & -12 & 0 \\ 
+10391 & PHO & LAS & US Airways Center & 13,057 & 10 & 0 \\ 
+15568 & SEA & PHO & KeyArena & 6,987 & 14 & 0 \\ 
+18472 & IND & PHO & NA & NA & 6 & 0 \\ 
+11494 & PHO & NYL & US Airways Center & 8,638 & -25 & 0 \\ 
+11516 & CLE & PHO & Quicken Loans Arena & 7,564 & 8 & 0 \\ 
+19187 & NYL & LVA & Barclays Center & 9,896 & -34 & 0 \\ 
+16689 & ATL & IND & Philips Arena & 5,823 & -8 & 0 \\ 
+12669 & PHO & LAS & US Airways Center & 6,062 & 14 & 0 \\ 
+10778 & HOU & MIN & Compaq Center & 9,808 & 26 & 0 \\ 
 \bottomrule
 \end{tabular*}
 
@@ -556,25 +556,33 @@ developed for rating chess players, Elo rating is well-understood in
 sports analytics as a measure of team strength that updates after each
 game, and---unlike winning percentage and rolling winning
 percentage---takes into account not only the outcome but also the
-estimated team strength of both teams.
+estimated team strength of both teams. This means that beating a team
+with a higher Elo rating has a greater positive effect than beating a
+team with a lower Elo rating, reflecting upsets with more nuance than
+the win-loss record.
 
 Let \(\theta_{i}(t)\) be the strength of team \(i\) at time \(t\), where
 Elo ratings are typically centered at 1500. Then if the probability that
 team \(i\) beats team \(j\) is modeled by a logistic curve with base 10
 and scale factor 400, the win probability is given by: \[
-  \Pr(i \text{ beats }j \text{ at time }t) = \frac{1}{1 + 10^{\frac{\theta_{j}(t) - \theta_{i}(t)}{400}}} \,.
-\] Each team starts the 1997 season with \(\hat{\theta}_{i}(0) = 1500\),
+\Pr(i \text{ beats }j \text{ at time }t) = \frac{1}{1 + 10^{\frac{\theta_{j}(t) -  \theta_{i}(t)  }{400}}} \,.
+\]
+
+Each team starts the 1997 season with \(\hat{\theta}_{i}(0) = 1500\),
 and following each game, team \(i\)'s rating is updated via the formula
 \[
-  \hat{\theta}_{i}(t+1) = \hat{\theta}_{i}(t) + K \cdot I(i \text{ beats } j) \,,
+  \hat{\theta}_{i}(t+1) = \hat{\theta}_{i}(t) + K \cdot \left( I(i \text{ beats } j)  - \Pr(i \text{ beats }j \text{ at time }t) \right) 
 \] where \(I(i \text{ beats } j)\) is an indicator variable that is 1 if
 \(i\) beats \(j\) and \(-1\) if \(j\) beats \(i\), and \(K = 32\) is a
-constant that controls how sensitive the ratings are to each game.
-Figure~\ref{fig-elo} shows the evolution of Elo rating
-\(\hat{\theta}_i(t)\) by franchise for the 12 teams who were active
-during the 2024 season. The recent poor performance of the Los Angeles
-Sparks, the 2010 dominance of the Seattle Storm, and the recent rise of
-the New York Liberty and Indiana Fever are easily visible.
+constant that controls how sensitive the ratings are to each game. If
+team \(i\) had a 78\% probability of beating team \(j\) and wins, their
+rating will improve by \(32\cdot(1-0.78) = 7.04\), while team \(j\)'s
+rating will decrease by the same amount. Figure~\ref{fig-elo} shows the
+evolution of Elo rating \(\hat{\theta}_i(t)\) by franchise for the 12
+teams who were active during the 2024 season. The recent poor
+performance of the Los Angeles Sparks, the 2010 dominance of the Seattle
+Storm, and the recent rise of the New York Liberty and Indiana Fever are
+easily visible.
 
 \protect\phantomsection\label{cell-fig-elo}
 \begin{figure}[H]
@@ -601,9 +609,11 @@ Notebook}}
 probability}\label{estimating-home-win-probability}
 
 The Elo ratings estimated above can then be plugged back into the win
-probability formula to estimate the home teams's chances of winning. We
-also added a 12-point home court advantage to our home win probability
-model, so that: \[
+probability formula to estimate the home team's likelihood to win. Our
+home win probability model also includes a 12-point home court
+advantage, so that:
+
+\[
   \hat{p}_{ij}(\hat{\theta}_i(t), \hat{\theta}_j(t), t) = \Pr(i \text{ beats }j \text{ at time }t \text{ at home}) = \frac{1}{1 + 10^{\frac{\hat{\theta}_{j}(t) - \left( \theta_{i}(t) + 12 \right)  }{400}}} \,.
 \] We arrived at 12 points by manually calibrating the win probabilities
 to match the observed frequencies. While the model was less accurate at

@@ -467,7 +467,7 @@
 <section id="game-logs-and-attendance" class="level3" data-number="2.1">
 <h3 data-number="2.1" class="anchored" data-anchor-id="game-logs-and-attendance"><span class="header-section-number">2.1</span> Game logs and attendance</h3>
 <p>Our analysis is based on game-level data that spans WNBA history, beginning in 1997 and continuing through the end of the 2025 season. Our final data set contains observations from 6,164 games.</p>
-<p>First, we collected game-level attendance data from <span class="citation" data-cites="AcrossTheTimeline_WNBA_Attendance">(<a href="#ref-AcrossTheTimeline_WNBA_Attendance" role="doc-biblioref">Across the Timeline, n.d.</a>)</span>, an online repository for women’s basketball data. The site collects attendance numbers directly from the league’s records. Attendance data was unavailable for only 152 games, while (due to the COVID-19 pandemic) 2 games (accurately) recorded attendance of 0. Because the arenas WNBA teams play in vary widely in size- the New York Liberty alone have called both the Barclays Center (17,732 seat capacity) and the Westchester County Center (2,300 seat capacity) home in recent years- we contextualize raw attendance numbers with manually collected arena capacities.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> While team have many reasons they might choose to play for a sold-out crowd in a smaller arena, smaller venue size will also by nature constrain attendance, making its consideration in our model important.</p>
+<p>First, we collected game-level attendance data from <span class="citation" data-cites="AcrossTheTimeline_WNBA_Attendance">(<a href="#ref-AcrossTheTimeline_WNBA_Attendance" role="doc-biblioref">Across the Timeline, n.d.</a>)</span>, an online repository for women’s basketball data. The site collects attendance numbers directly from the league’s records. Attendance data was unavailable for only 152 games, while (due to the COVID-19 pandemic) 2 games (accurately) recorded attendance of 0. Because the arenas WNBA teams play in vary widely in size– the New York Liberty alone have called both the Barclays Center (17,732 seat capacity) and the Westchester County Center (2,300 seat capacity) home in recent years– we contextualize raw attendance numbers with manually collected arena capacities.<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> While teams have many reasons they might choose to play for a sold-out crowd in a smaller arena, smaller venue size will also by nature constrain attendance, making its consideration in our model important.</p>
 <p>Second, we collected game-level performance data from the <strong>wehoop</strong> R package <span class="citation" data-cites="hutchinson_gilani_2021_wehoop">(<a href="#ref-hutchinson_gilani_2021_wehoop" role="doc-biblioref">Gilani and Hutchinson 2021</a>)</span>, which uses the official WNBA API. These data include the final score of the game. We also used the <strong>wehoop</strong> package to identify whether Caitlin Clark played more than 0 minutes in the game.</p>
 <p><a href="#tbl-attendance" class="quarto-xref">Table&nbsp;1</a> shows a sample of the data. While many other variables are omitted from the table, we note that the attendance, the teams playing in the game, the outcome, the arena, and whether Caitlin Clark played in the game, are recorded.</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [4]:</pre></div><div class="cell">
@@ -503,23 +503,23 @@ Table&nbsp;1
 </figcaption>
 <div aria-describedby="tbl-attendance-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="mcaidswlmj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#mcaidswlmj table {
+<div id="pwdowtzdqh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#pwdowtzdqh table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#mcaidswlmj thead, #mcaidswlmj tbody, #mcaidswlmj tfoot, #mcaidswlmj tr, #mcaidswlmj td, #mcaidswlmj th {
+#pwdowtzdqh thead, #pwdowtzdqh tbody, #pwdowtzdqh tfoot, #pwdowtzdqh tr, #pwdowtzdqh td, #pwdowtzdqh th {
   border-style: none;
 }
 
-#mcaidswlmj p {
+#pwdowtzdqh p {
   margin: 0;
   padding: 0;
 }
 
-#mcaidswlmj .gt_table {
+#pwdowtzdqh .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -545,12 +545,12 @@ Table&nbsp;1
   border-left-color: #D3D3D3;
 }
 
-#mcaidswlmj .gt_caption {
+#pwdowtzdqh .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#mcaidswlmj .gt_title {
+#pwdowtzdqh .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -562,7 +562,7 @@ Table&nbsp;1
   border-bottom-width: 0;
 }
 
-#mcaidswlmj .gt_subtitle {
+#pwdowtzdqh .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -574,7 +574,7 @@ Table&nbsp;1
   border-top-width: 0;
 }
 
-#mcaidswlmj .gt_heading {
+#pwdowtzdqh .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -586,13 +586,13 @@ Table&nbsp;1
   border-right-color: #D3D3D3;
 }
 
-#mcaidswlmj .gt_bottom_border {
+#pwdowtzdqh .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#mcaidswlmj .gt_col_headings {
+#pwdowtzdqh .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -607,7 +607,7 @@ Table&nbsp;1
   border-right-color: #D3D3D3;
 }
 
-#mcaidswlmj .gt_col_heading {
+#pwdowtzdqh .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -627,7 +627,7 @@ Table&nbsp;1
   overflow-x: hidden;
 }
 
-#mcaidswlmj .gt_column_spanner_outer {
+#pwdowtzdqh .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -639,15 +639,15 @@ Table&nbsp;1
   padding-right: 4px;
 }
 
-#mcaidswlmj .gt_column_spanner_outer:first-child {
+#pwdowtzdqh .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#mcaidswlmj .gt_column_spanner_outer:last-child {
+#pwdowtzdqh .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#mcaidswlmj .gt_column_spanner {
+#pwdowtzdqh .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -659,11 +659,11 @@ Table&nbsp;1
   width: 100%;
 }
 
-#mcaidswlmj .gt_spanner_row {
+#pwdowtzdqh .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#mcaidswlmj .gt_group_heading {
+#pwdowtzdqh .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -689,7 +689,7 @@ Table&nbsp;1
   text-align: left;
 }
 
-#mcaidswlmj .gt_empty_group_heading {
+#pwdowtzdqh .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -704,15 +704,15 @@ Table&nbsp;1
   vertical-align: middle;
 }
 
-#mcaidswlmj .gt_from_md > :first-child {
+#pwdowtzdqh .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#mcaidswlmj .gt_from_md > :last-child {
+#pwdowtzdqh .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#mcaidswlmj .gt_row {
+#pwdowtzdqh .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -731,7 +731,7 @@ Table&nbsp;1
   overflow-x: hidden;
 }
 
-#mcaidswlmj .gt_stub {
+#pwdowtzdqh .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -744,7 +744,7 @@ Table&nbsp;1
   padding-right: 5px;
 }
 
-#mcaidswlmj .gt_stub_row_group {
+#pwdowtzdqh .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -758,15 +758,15 @@ Table&nbsp;1
   vertical-align: top;
 }
 
-#mcaidswlmj .gt_row_group_first td {
+#pwdowtzdqh .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#mcaidswlmj .gt_row_group_first th {
+#pwdowtzdqh .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#mcaidswlmj .gt_summary_row {
+#pwdowtzdqh .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -776,16 +776,16 @@ Table&nbsp;1
   padding-right: 5px;
 }
 
-#mcaidswlmj .gt_first_summary_row {
+#pwdowtzdqh .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#mcaidswlmj .gt_first_summary_row.thick {
+#pwdowtzdqh .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#mcaidswlmj .gt_last_summary_row {
+#pwdowtzdqh .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -795,7 +795,7 @@ Table&nbsp;1
   border-bottom-color: #D3D3D3;
 }
 
-#mcaidswlmj .gt_grand_summary_row {
+#pwdowtzdqh .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -805,7 +805,7 @@ Table&nbsp;1
   padding-right: 5px;
 }
 
-#mcaidswlmj .gt_first_grand_summary_row {
+#pwdowtzdqh .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -815,7 +815,7 @@ Table&nbsp;1
   border-top-color: #D3D3D3;
 }
 
-#mcaidswlmj .gt_last_grand_summary_row_top {
+#pwdowtzdqh .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -825,11 +825,11 @@ Table&nbsp;1
   border-bottom-color: #D3D3D3;
 }
 
-#mcaidswlmj .gt_striped {
+#pwdowtzdqh .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#mcaidswlmj .gt_table_body {
+#pwdowtzdqh .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -838,7 +838,7 @@ Table&nbsp;1
   border-bottom-color: #D3D3D3;
 }
 
-#mcaidswlmj .gt_footnotes {
+#pwdowtzdqh .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -852,7 +852,7 @@ Table&nbsp;1
   border-right-color: #D3D3D3;
 }
 
-#mcaidswlmj .gt_footnote {
+#pwdowtzdqh .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -861,7 +861,7 @@ Table&nbsp;1
   padding-right: 5px;
 }
 
-#mcaidswlmj .gt_sourcenotes {
+#pwdowtzdqh .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -875,7 +875,7 @@ Table&nbsp;1
   border-right-color: #D3D3D3;
 }
 
-#mcaidswlmj .gt_sourcenote {
+#pwdowtzdqh .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -883,72 +883,72 @@ Table&nbsp;1
   padding-right: 5px;
 }
 
-#mcaidswlmj .gt_left {
+#pwdowtzdqh .gt_left {
   text-align: left;
 }
 
-#mcaidswlmj .gt_center {
+#pwdowtzdqh .gt_center {
   text-align: center;
 }
 
-#mcaidswlmj .gt_right {
+#pwdowtzdqh .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#mcaidswlmj .gt_font_normal {
+#pwdowtzdqh .gt_font_normal {
   font-weight: normal;
 }
 
-#mcaidswlmj .gt_font_bold {
+#pwdowtzdqh .gt_font_bold {
   font-weight: bold;
 }
 
-#mcaidswlmj .gt_font_italic {
+#pwdowtzdqh .gt_font_italic {
   font-style: italic;
 }
 
-#mcaidswlmj .gt_super {
+#pwdowtzdqh .gt_super {
   font-size: 65%;
 }
 
-#mcaidswlmj .gt_footnote_marks {
+#pwdowtzdqh .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#mcaidswlmj .gt_asterisk {
+#pwdowtzdqh .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#mcaidswlmj .gt_indent_1 {
+#pwdowtzdqh .gt_indent_1 {
   text-indent: 5px;
 }
 
-#mcaidswlmj .gt_indent_2 {
+#pwdowtzdqh .gt_indent_2 {
   text-indent: 10px;
 }
 
-#mcaidswlmj .gt_indent_3 {
+#pwdowtzdqh .gt_indent_3 {
   text-indent: 15px;
 }
 
-#mcaidswlmj .gt_indent_4 {
+#pwdowtzdqh .gt_indent_4 {
   text-indent: 20px;
 }
 
-#mcaidswlmj .gt_indent_5 {
+#pwdowtzdqh .gt_indent_5 {
   text-indent: 25px;
 }
 
-#mcaidswlmj .katex-display {
+#pwdowtzdqh .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#mcaidswlmj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#pwdowtzdqh div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -973,92 +973,92 @@ Table&nbsp;1
 </thead>
 <tbody class="gt_table_body">
 <tr class="odd">
-<td class="gt_row gt_right" headers="Game Date">2019-06-20</td>
-<td class="gt_row gt_left" headers="Home">LVA</td>
-<td class="gt_row gt_left" headers="Away">WAS</td>
-<td class="gt_row gt_left" headers="Arena">Mandalay Bay Events Center</td>
-<td class="gt_row gt_right" headers="Attendance">4,416</td>
-<td class="gt_row gt_right" headers="Plus Minus">-23</td>
-<td class="gt_row gt_right" headers="Clark">0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Game Date">1997-06-28</td>
-<td class="gt_row gt_left" headers="Home">UTA</td>
-<td class="gt_row gt_left" headers="Away">HOU</td>
-<td class="gt_row gt_left" headers="Arena">EnergySolutions Arena</td>
-<td class="gt_row gt_right" headers="Attendance">6,529</td>
-<td class="gt_row gt_right" headers="Plus Minus">-18</td>
-<td class="gt_row gt_right" headers="Clark">0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Game Date">2022-06-28</td>
-<td class="gt_row gt_left" headers="Home">MIN</td>
-<td class="gt_row gt_left" headers="Away">DAL</td>
-<td class="gt_row gt_left" headers="Arena">Target Center</td>
-<td class="gt_row gt_right" headers="Attendance">5,603</td>
-<td class="gt_row gt_right" headers="Plus Minus">28</td>
-<td class="gt_row gt_right" headers="Clark">0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Game Date">2010-07-07</td>
-<td class="gt_row gt_left" headers="Home">ATL</td>
-<td class="gt_row gt_left" headers="Away">CON</td>
-<td class="gt_row gt_left" headers="Arena">Philips Arena</td>
-<td class="gt_row gt_right" headers="Attendance">5,305</td>
+<td class="gt_row gt_right" headers="Game Date">2011-08-09</td>
+<td class="gt_row gt_left" headers="Home">LAS</td>
+<td class="gt_row gt_left" headers="Away">TUL</td>
+<td class="gt_row gt_left" headers="Arena">Staples Center</td>
+<td class="gt_row gt_right" headers="Attendance">8,255</td>
 <td class="gt_row gt_right" headers="Plus Minus">5</td>
 <td class="gt_row gt_right" headers="Clark">0</td>
 </tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Game Date">2015-07-05</td>
+<td class="gt_row gt_left" headers="Home">ATL</td>
+<td class="gt_row gt_left" headers="Away">SEA</td>
+<td class="gt_row gt_left" headers="Arena">Philips Arena</td>
+<td class="gt_row gt_right" headers="Attendance">5,385</td>
+<td class="gt_row gt_right" headers="Plus Minus">8</td>
+<td class="gt_row gt_right" headers="Clark">0</td>
+</tr>
 <tr class="odd">
-<td class="gt_row gt_right" headers="Game Date">2009-06-19</td>
-<td class="gt_row gt_left" headers="Home">DET</td>
-<td class="gt_row gt_left" headers="Away">IND</td>
-<td class="gt_row gt_left" headers="Arena">Palace of Auburn Hills</td>
-<td class="gt_row gt_right" headers="Attendance">7,725</td>
-<td class="gt_row gt_right" headers="Plus Minus">-12</td>
+<td class="gt_row gt_right" headers="Game Date">2017-05-31</td>
+<td class="gt_row gt_left" headers="Home">WAS</td>
+<td class="gt_row gt_left" headers="Away">CON</td>
+<td class="gt_row gt_left" headers="Arena">Capital One Arena</td>
+<td class="gt_row gt_right" headers="Attendance">5,393</td>
+<td class="gt_row gt_right" headers="Plus Minus">2</td>
 <td class="gt_row gt_right" headers="Clark">0</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_right" headers="Game Date">2009-08-16</td>
-<td class="gt_row gt_left" headers="Home">WAS</td>
-<td class="gt_row gt_left" headers="Away">NYL</td>
-<td class="gt_row gt_left" headers="Arena">Verizon Center</td>
-<td class="gt_row gt_right" headers="Attendance">10,580</td>
-<td class="gt_row gt_right" headers="Plus Minus">-1</td>
+<td class="gt_row gt_right" headers="Game Date">2025-06-11</td>
+<td class="gt_row gt_left" headers="Home">LVA</td>
+<td class="gt_row gt_left" headers="Away">LAS</td>
+<td class="gt_row gt_left" headers="Arena">Michelob ULTRA Arena</td>
+<td class="gt_row gt_right" headers="Attendance">10,417</td>
+<td class="gt_row gt_right" headers="Plus Minus">-8</td>
 <td class="gt_row gt_right" headers="Clark">0</td>
 </tr>
 <tr class="odd">
-<td class="gt_row gt_right" headers="Game Date">2015-08-28</td>
-<td class="gt_row gt_left" headers="Home">SEA</td>
-<td class="gt_row gt_left" headers="Away">SAN</td>
-<td class="gt_row gt_left" headers="Arena">KeyArena</td>
-<td class="gt_row gt_right" headers="Attendance">5,676</td>
+<td class="gt_row gt_right" headers="Game Date">1997-07-16</td>
+<td class="gt_row gt_left" headers="Home">CHA</td>
+<td class="gt_row gt_left" headers="Away">UTA</td>
+<td class="gt_row gt_left" headers="Arena">Time Warner Cable Arena</td>
+<td class="gt_row gt_right" headers="Attendance">6,110</td>
+<td class="gt_row gt_right" headers="Plus Minus">12</td>
+<td class="gt_row gt_right" headers="Clark">0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Game Date">1998-06-18</td>
+<td class="gt_row gt_left" headers="Home">CHA</td>
+<td class="gt_row gt_left" headers="Away">DET</td>
+<td class="gt_row gt_left" headers="Arena">Spectrum Center</td>
+<td class="gt_row gt_right" headers="Attendance">5,093</td>
+<td class="gt_row gt_right" headers="Plus Minus">4</td>
+<td class="gt_row gt_right" headers="Clark">0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Game Date">2006-08-13</td>
+<td class="gt_row gt_left" headers="Home">PHO</td>
+<td class="gt_row gt_left" headers="Away">SAC</td>
+<td class="gt_row gt_left" headers="Arena">US Airways Center</td>
+<td class="gt_row gt_right" headers="Attendance">8,150</td>
+<td class="gt_row gt_right" headers="Plus Minus">10</td>
+<td class="gt_row gt_right" headers="Clark">0</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_right" headers="Game Date">1998-08-05</td>
+<td class="gt_row gt_left" headers="Home">DET</td>
+<td class="gt_row gt_left" headers="Away">LAS</td>
+<td class="gt_row gt_left" headers="Arena">Palace of Auburn Hills</td>
+<td class="gt_row gt_right" headers="Attendance">9,872</td>
+<td class="gt_row gt_right" headers="Plus Minus">12</td>
+<td class="gt_row gt_right" headers="Clark">0</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_right" headers="Game Date">2025-09-07</td>
+<td class="gt_row gt_left" headers="Home">LVA</td>
+<td class="gt_row gt_left" headers="Away">CHI</td>
+<td class="gt_row gt_left" headers="Arena">T-Mobile Arena</td>
+<td class="gt_row gt_right" headers="Attendance">17,306</td>
 <td class="gt_row gt_right" headers="Plus Minus">14</td>
 <td class="gt_row gt_right" headers="Clark">0</td>
 </tr>
 <tr class="even">
-<td class="gt_row gt_right" headers="Game Date">2019-07-12</td>
-<td class="gt_row gt_left" headers="Home">ATL</td>
-<td class="gt_row gt_left" headers="Away">MIN</td>
-<td class="gt_row gt_left" headers="Arena">State Farm Arena</td>
-<td class="gt_row gt_right" headers="Attendance">4,001</td>
-<td class="gt_row gt_right" headers="Plus Minus">7</td>
-<td class="gt_row gt_right" headers="Clark">0</td>
-</tr>
-<tr class="odd">
-<td class="gt_row gt_right" headers="Game Date">1999-06-18</td>
-<td class="gt_row gt_left" headers="Home">WAS</td>
-<td class="gt_row gt_left" headers="Away">DET</td>
-<td class="gt_row gt_left" headers="Arena">Verizon Center</td>
-<td class="gt_row gt_right" headers="Attendance">13,423</td>
-<td class="gt_row gt_right" headers="Plus Minus">-7</td>
-<td class="gt_row gt_right" headers="Clark">0</td>
-</tr>
-<tr class="even">
-<td class="gt_row gt_right" headers="Game Date">2001-08-14</td>
-<td class="gt_row gt_left" headers="Home">MIA</td>
-<td class="gt_row gt_left" headers="Away">CHA</td>
-<td class="gt_row gt_left" headers="Arena">AmericanAirlines Arena</td>
-<td class="gt_row gt_right" headers="Attendance">11,123</td>
+<td class="gt_row gt_right" headers="Game Date">2011-07-30</td>
+<td class="gt_row gt_left" headers="Home">NYL</td>
+<td class="gt_row gt_left" headers="Away">PHO</td>
+<td class="gt_row gt_left" headers="Arena">Prudential Center</td>
+<td class="gt_row gt_right" headers="Attendance">7,214</td>
 <td class="gt_row gt_right" headers="Plus Minus">-7</td>
 <td class="gt_row gt_right" headers="Clark">0</td>
 </tr>
@@ -1129,12 +1129,13 @@ Figure&nbsp;1: Distribution of WNBA game attendance by season. Note that the ver
 </section>
 <section id="sec-elo" class="level3" data-number="2.2">
 <h3 data-number="2.2" class="anchored" data-anchor-id="sec-elo"><span class="header-section-number">2.2</span> Estimating team strength</h3>
-<p>We used the game-level results data to model the strength of each WNBA team as a time series. Measuring team strength is necessary to test our hypothesis that attendance is in part driven by the desire of fans to see quality basketball. We considered season-to-date winning percentage and a rolling 44-game (the length of a typical WNBA season) winning percentage before settling on Elo rating <span class="citation" data-cites="Elo1978">(<a href="#ref-Elo1978" role="doc-biblioref">Elo 1978</a>)</span>. Originally developed for rating chess players, Elo rating is well-understood in sports analytics as a measure of team strength that updates after each game, and—unlike winning percentage and rolling winning percentage—takes into account not only the outcome but also the estimated team strength of both teams.</p>
+<p>We used the game-level results data to model the strength of each WNBA team as a time series. Measuring team strength is necessary to test our hypothesis that attendance is in part driven by the desire of fans to see quality basketball. We considered season-to-date winning percentage and a rolling 44-game (the length of a typical WNBA season) winning percentage before settling on Elo rating <span class="citation" data-cites="Elo1978">(<a href="#ref-Elo1978" role="doc-biblioref">Elo 1978</a>)</span>. Originally developed for rating chess players, Elo rating is well-understood in sports analytics as a measure of team strength that updates after each game, and—unlike winning percentage and rolling winning percentage—takes into account not only the outcome but also the estimated team strength of both teams. This means that beating a team with a higher Elo rating has a greater positive effect than beating a team with a lower Elo rating, reflecting upsets with more nuance than the win-loss record.</p>
 <p>Let <span class="math inline">\(\theta_{i}(t)\)</span> be the strength of team <span class="math inline">\(i\)</span> at time <span class="math inline">\(t\)</span>, where Elo ratings are typically centered at 1500. Then if the probability that team <span class="math inline">\(i\)</span> beats team <span class="math inline">\(j\)</span> is modeled by a logistic curve with base 10 and scale factor 400, the win probability is given by: <span class="math display">\[
-  \Pr(i \text{ beats }j \text{ at time }t) = \frac{1}{1 + 10^{\frac{\theta_{j}(t) - \theta_{i}(t)}{400}}} \,.
-\]</span> Each team starts the 1997 season with <span class="math inline">\(\hat{\theta}_{i}(0) = 1500\)</span>, and following each game, team <span class="math inline">\(i\)</span>’s rating is updated via the formula <span class="math display">\[
-  \hat{\theta}_{i}(t+1) = \hat{\theta}_{i}(t) + K \cdot I(i \text{ beats } j) \,,
-\]</span> where <span class="math inline">\(I(i \text{ beats } j)\)</span> is an indicator variable that is 1 if <span class="math inline">\(i\)</span> beats <span class="math inline">\(j\)</span> and <span class="math inline">\(-1\)</span> if <span class="math inline">\(j\)</span> beats <span class="math inline">\(i\)</span>, and <span class="math inline">\(K = 32\)</span> is a constant that controls how sensitive the ratings are to each game. <a href="#fig-elo" class="quarto-xref">Figure&nbsp;2</a> shows the evolution of Elo rating <span class="math inline">\(\hat{\theta}_i(t)\)</span> by franchise for the 12 teams who were active during the 2024 season. The recent poor performance of the Los Angeles Sparks, the 2010 dominance of the Seattle Storm, and the recent rise of the New York Liberty and Indiana Fever are easily visible.</p>
+\Pr(i \text{ beats }j \text{ at time }t) = \frac{1}{1 + 10^{\frac{\theta_{j}(t) -  \theta_{i}(t)  }{400}}} \,.
+\]</span></p>
+<p>Each team starts the 1997 season with <span class="math inline">\(\hat{\theta}_{i}(0) = 1500\)</span>, and following each game, team <span class="math inline">\(i\)</span>’s rating is updated via the formula <span class="math display">\[
+  \hat{\theta}_{i}(t+1) = \hat{\theta}_{i}(t) + K \cdot \left( I(i \text{ beats } j)  - \Pr(i \text{ beats }j \text{ at time }t) \right)
+\]</span> where <span class="math inline">\(I(i \text{ beats } j)\)</span> is an indicator variable that is 1 if <span class="math inline">\(i\)</span> beats <span class="math inline">\(j\)</span> and <span class="math inline">\(-1\)</span> if <span class="math inline">\(j\)</span> beats <span class="math inline">\(i\)</span>, and <span class="math inline">\(K = 32\)</span> is a constant that controls how sensitive the ratings are to each game. If team <span class="math inline">\(i\)</span> had a 78% probability of beating team <span class="math inline">\(j\)</span> and wins, their rating will improve by <span class="math inline">\(32\cdot(1-0.78) = 7.04\)</span>, while team <span class="math inline">\(j\)</span>’s rating will decrease by the same amount. <a href="#fig-elo" class="quarto-xref">Figure&nbsp;2</a> shows the evolution of Elo rating <span class="math inline">\(\hat{\theta}_i(t)\)</span> by franchise for the 12 teams who were active during the 2024 season. The recent poor performance of the Los Angeles Sparks, the 2010 dominance of the Seattle Storm, and the recent rise of the New York Liberty and Indiana Fever are easily visible.</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [8]:</pre></div><div id="cell-fig-elo" class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>wnba_gl <span class="sc">|&gt;</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(is_active, team_abbreviation <span class="sc">!=</span> <span class="st">"GSV"</span>) <span class="sc">|&gt;</span></span>
@@ -1162,7 +1163,8 @@ Figure&nbsp;2: Evolution of team Elo ratings in the WNBA (1997-2025). Only franc
 </section>
 <section id="estimating-home-win-probability" class="level3" data-number="2.3">
 <h3 data-number="2.3" class="anchored" data-anchor-id="estimating-home-win-probability"><span class="header-section-number">2.3</span> Estimating home win probability</h3>
-<p>The Elo ratings estimated above can then be plugged back into the win probability formula to estimate the home teams’s chances of winning. We also added a 12-point home court advantage to our home win probability model, so that: <span class="math display">\[
+<p>The Elo ratings estimated above can then be plugged back into the win probability formula to estimate the home team’s likelihood to win. Our home win probability model also includes a 12-point home court advantage, so that:</p>
+<p><span class="math display">\[
   \hat{p}_{ij}(\hat{\theta}_i(t), \hat{\theta}_j(t), t) = \Pr(i \text{ beats }j \text{ at time }t \text{ at home}) = \frac{1}{1 + 10^{\frac{\hat{\theta}_{j}(t) - \left( \theta_{i}(t) + 12 \right)  }{400}}} \,.
 \]</span> We arrived at 12 points by manually calibrating the win probabilities to match the observed frequencies. While the model was less accurate at the extremes (it was consistently reluctant to predict nearly certain home wins and losses), it fit very well in the middle where most of the games occur (see <a href="#tbl-calibrate" class="quarto-xref">Table&nbsp;2</a>).</p>
 <div class="cell-container"><div class="cell-decorator"><pre>In [9]:</pre></div><div class="cell">
@@ -1195,23 +1197,23 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
 </figcaption>
 <div aria-describedby="tbl-calibrate-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="cell-output-display">
-<div id="nukudznbkh" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#nukudznbkh table {
+<div id="askiwbncuw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#askiwbncuw table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#nukudznbkh thead, #nukudznbkh tbody, #nukudznbkh tfoot, #nukudznbkh tr, #nukudznbkh td, #nukudznbkh th {
+#askiwbncuw thead, #askiwbncuw tbody, #askiwbncuw tfoot, #askiwbncuw tr, #askiwbncuw td, #askiwbncuw th {
   border-style: none;
 }
 
-#nukudznbkh p {
+#askiwbncuw p {
   margin: 0;
   padding: 0;
 }
 
-#nukudznbkh .gt_table {
+#askiwbncuw .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -1237,12 +1239,12 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   border-left-color: #D3D3D3;
 }
 
-#nukudznbkh .gt_caption {
+#askiwbncuw .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#nukudznbkh .gt_title {
+#askiwbncuw .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -1254,7 +1256,7 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   border-bottom-width: 0;
 }
 
-#nukudznbkh .gt_subtitle {
+#askiwbncuw .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -1266,7 +1268,7 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   border-top-width: 0;
 }
 
-#nukudznbkh .gt_heading {
+#askiwbncuw .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -1278,13 +1280,13 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   border-right-color: #D3D3D3;
 }
 
-#nukudznbkh .gt_bottom_border {
+#askiwbncuw .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#nukudznbkh .gt_col_headings {
+#askiwbncuw .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1299,7 +1301,7 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   border-right-color: #D3D3D3;
 }
 
-#nukudznbkh .gt_col_heading {
+#askiwbncuw .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1319,7 +1321,7 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   overflow-x: hidden;
 }
 
-#nukudznbkh .gt_column_spanner_outer {
+#askiwbncuw .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1331,15 +1333,15 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   padding-right: 4px;
 }
 
-#nukudznbkh .gt_column_spanner_outer:first-child {
+#askiwbncuw .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#nukudznbkh .gt_column_spanner_outer:last-child {
+#askiwbncuw .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#nukudznbkh .gt_column_spanner {
+#askiwbncuw .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -1351,11 +1353,11 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   width: 100%;
 }
 
-#nukudznbkh .gt_spanner_row {
+#askiwbncuw .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#nukudznbkh .gt_group_heading {
+#askiwbncuw .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1381,7 +1383,7 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   text-align: left;
 }
 
-#nukudznbkh .gt_empty_group_heading {
+#askiwbncuw .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -1396,15 +1398,15 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   vertical-align: middle;
 }
 
-#nukudznbkh .gt_from_md > :first-child {
+#askiwbncuw .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#nukudznbkh .gt_from_md > :last-child {
+#askiwbncuw .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#nukudznbkh .gt_row {
+#askiwbncuw .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1423,7 +1425,7 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   overflow-x: hidden;
 }
 
-#nukudznbkh .gt_stub {
+#askiwbncuw .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1436,7 +1438,7 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   padding-right: 5px;
 }
 
-#nukudznbkh .gt_stub_row_group {
+#askiwbncuw .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -1450,15 +1452,15 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   vertical-align: top;
 }
 
-#nukudznbkh .gt_row_group_first td {
+#askiwbncuw .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#nukudznbkh .gt_row_group_first th {
+#askiwbncuw .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#nukudznbkh .gt_summary_row {
+#askiwbncuw .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1468,16 +1470,16 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   padding-right: 5px;
 }
 
-#nukudznbkh .gt_first_summary_row {
+#askiwbncuw .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#nukudznbkh .gt_first_summary_row.thick {
+#askiwbncuw .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#nukudznbkh .gt_last_summary_row {
+#askiwbncuw .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1487,7 +1489,7 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   border-bottom-color: #D3D3D3;
 }
 
-#nukudznbkh .gt_grand_summary_row {
+#askiwbncuw .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -1497,7 +1499,7 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   padding-right: 5px;
 }
 
-#nukudznbkh .gt_first_grand_summary_row {
+#askiwbncuw .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1507,7 +1509,7 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   border-top-color: #D3D3D3;
 }
 
-#nukudznbkh .gt_last_grand_summary_row_top {
+#askiwbncuw .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -1517,11 +1519,11 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   border-bottom-color: #D3D3D3;
 }
 
-#nukudznbkh .gt_striped {
+#askiwbncuw .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#nukudznbkh .gt_table_body {
+#askiwbncuw .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -1530,7 +1532,7 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   border-bottom-color: #D3D3D3;
 }
 
-#nukudznbkh .gt_footnotes {
+#askiwbncuw .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1544,7 +1546,7 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   border-right-color: #D3D3D3;
 }
 
-#nukudznbkh .gt_footnote {
+#askiwbncuw .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -1553,7 +1555,7 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   padding-right: 5px;
 }
 
-#nukudznbkh .gt_sourcenotes {
+#askiwbncuw .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -1567,7 +1569,7 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   border-right-color: #D3D3D3;
 }
 
-#nukudznbkh .gt_sourcenote {
+#askiwbncuw .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -1575,72 +1577,72 @@ Table&nbsp;2: Calibration of home win probability model, based on Elo ratings. W
   padding-right: 5px;
 }
 
-#nukudznbkh .gt_left {
+#askiwbncuw .gt_left {
   text-align: left;
 }
 
-#nukudznbkh .gt_center {
+#askiwbncuw .gt_center {
   text-align: center;
 }
 
-#nukudznbkh .gt_right {
+#askiwbncuw .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#nukudznbkh .gt_font_normal {
+#askiwbncuw .gt_font_normal {
   font-weight: normal;
 }
 
-#nukudznbkh .gt_font_bold {
+#askiwbncuw .gt_font_bold {
   font-weight: bold;
 }
 
-#nukudznbkh .gt_font_italic {
+#askiwbncuw .gt_font_italic {
   font-style: italic;
 }
 
-#nukudznbkh .gt_super {
+#askiwbncuw .gt_super {
   font-size: 65%;
 }
 
-#nukudznbkh .gt_footnote_marks {
+#askiwbncuw .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#nukudznbkh .gt_asterisk {
+#askiwbncuw .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#nukudznbkh .gt_indent_1 {
+#askiwbncuw .gt_indent_1 {
   text-indent: 5px;
 }
 
-#nukudznbkh .gt_indent_2 {
+#askiwbncuw .gt_indent_2 {
   text-indent: 10px;
 }
 
-#nukudznbkh .gt_indent_3 {
+#askiwbncuw .gt_indent_3 {
   text-indent: 15px;
 }
 
-#nukudznbkh .gt_indent_4 {
+#askiwbncuw .gt_indent_4 {
   text-indent: 20px;
 }
 
-#nukudznbkh .gt_indent_5 {
+#askiwbncuw .gt_indent_5 {
   text-indent: 25px;
 }
 
-#nukudznbkh .katex-display {
+#askiwbncuw .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#nukudznbkh div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#askiwbncuw div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
