@@ -66,7 +66,7 @@ pkg <- function(x, ...) {
 
 ```{r}
 #| include: false
-manual <- c("ggplot2", "tidycensus", "sandwich")
+manual <- c("ggplot2", "tidycensus", "sandwich", "elo")
 pkgs <- unique(c(manual, .packages()))
 knitr::write_bib(pkgs, file = "pkgs.bib")
 ```
@@ -230,7 +230,11 @@ Each team starts the 1997 season with $\hat{\theta}_{i}(0) = 1500$, and followin
 $$
   \hat{\theta}_{i}(t+1) = \hat{\theta}_{i}(t) + K \cdot \left( I(i \text{ beats } j)  - \Pr(i \text{ beats }j \text{ at time }t) \right) 
 $$
-where $I(i \text{ beats } j)$ is an indicator variable that is 1 if $i$ beats $j$ and $-1$ if $j$ beats $i$, and $K = 32$ is a constant that controls how sensitive the ratings are to each game. If team $i$ had a 78% probability of beating team $j$ and wins, their rating will improve by $32\cdot(1-0.78) = 7.04$, while team $j$'s rating will decrease by the same amount. @fig-elo shows the evolution of Elo rating $\hat{\theta}_i(t)$ by franchise for the 12 teams who were active during the 2024 season. 
+where $I(i \text{ beats } j)$ is an indicator variable that is 1 if $i$ beats $j$ and $-1$ if $j$ beats $i$, and $K = 32$ is a constant that controls how sensitive the ratings are to each game. 
+If team $i$ had a 78% probability of beating team $j$ and wins, their rating will improve by $32\cdot(1-0.78) = 7.04$, while team $j$'s rating will decrease by the same amount. 
+
+We fit Elo ratings using the `r pkg("elo")` package for R. 
+@fig-elo shows the evolution of Elo rating $\hat{\theta}_i(t)$ by franchise for the 12 teams who were active during the 2024 season. 
 The recent poor performance of the Los Angeles Sparks, the 2010 dominance of the Seattle Storm, and the recent rise of the New York Liberty and Indiana Fever are easily visible.
 
 ```{r}
@@ -238,7 +242,7 @@ The recent poor performance of the Los Angeles Sparks, the 2010 dominance of the
 #| fig-cap: "Evolution of team Elo ratings in the WNBA (1997-2025). Only franchises active in 2024 are shown. The recent poor performance of the Los Angeles Sparks, the 2010 dominance of the Seattle Storm, and the recent rise of the New York Liberty and Indiana Fever are easily visible. Note that all franchises begin with a 1500 rating. "
 wnba_gl |>
   filter(is_active, team_abbreviation != "GSV") |>
-  ggplot(aes(x = game_date, y = elo.A)) +
+  ggplot(aes(x = game_date, y = elo_home_pregame)) +
   geom_hline(aes(yintercept = 1500), linetype = 3) +
   geom_line() +
   facet_wrap(vars(name_current)) +
@@ -250,22 +254,22 @@ wnba_gl |>
 
 ### Estimating home win probability
 
-The Elo ratings estimated above can then be plugged back into the win probability formula to estimate the home team's likelihood to win. Our home win probability model also includes a 12-point home court advantage, so that:
-
+The pregame Elo ratings estimated above can then be plugged back into the win probability formula to estimate the home teams's likelihood of winning. 
+We also added a home court advantage equivalent to 60 points (of Elo rating) to our home win probability model, so that:
 $$
-  \hat{p}_{ij}(\hat{\theta}_i(t), \hat{\theta}_j(t), t) = \Pr(i \text{ beats }j \text{ at time }t \text{ at home}) = \frac{1}{1 + 10^{\frac{\hat{\theta}_{j}(t) - \left( \theta_{i}(t) + 12 \right)  }{400}}} \,.
+  \hat{p}_{ij}(\hat{\theta}_i(t), \hat{\theta}_j(t), t) = \Pr(i \text{ beats }j \text{ at time }t \text{ at home}) = \frac{1}{1 + 10^{\frac{\hat{\theta}_{j}(t) - \left( \theta_{i}(t) + 60 \right)  }{400}}} \,.
 $$
-We arrived at 12 points by manually calibrating the win probabilities to match the observed frequencies. 
-While the model was less accurate at the extremes (it was consistently reluctant to predict nearly certain home wins and losses), it fit very well in the middle where most of the games occur (see @tbl-calibrate). 
+We arrived at 60 points by iteratively calibrating the win probabilities to match the observed frequencies by minimizing the Brier score. 
+While the model was slightly less accurate at the extremes, it fit very well in the middle where most of the games occur (see @tbl-calibrate). 
 
 ```{r}
 #| label: tbl-calibrate
-#| tbl-cap: "Calibration of home win probability model, based on Elo ratings. We note that in the most frequent situations, where the home team was a slight favorite, the observed home win probability is within 3 percentage points of the predicted home probability. However, in those rarer occasions where a home win was extremely likely or unlikely, the model was less accurate. "
+#| tbl-cap: "Calibration of home win probability model, based on Elo ratings. We note that in the most frequent situations, where the home team was a slight favorite, the observed home win probability is within 3 percentage points of the predicted home probability. However, in those rarer occasions where a home win was extremely likely or unlikely, the model was slightly less accurate. "
 wnba_gl |>
-  group_by(wpct_bin = cut(home_win_prob, breaks = 10)) |>
+  group_by(wpct_bin = cut(elo_home_win_prob, breaks = 10)) |>
   summarize(
     games = n(),
-    bin_midpoint = median(home_win_prob),
+    bin_midpoint = median(elo_home_win_prob),
     obs_home_wpct = mean(win_flag, na.rm = TRUE)
   ) |>
   mutate(diff = obs_home_wpct - bin_midpoint) |>
@@ -294,6 +298,17 @@ We also include several control variables to account for time and city-related e
 
 Since we know the arena in which the game took place and the capacity of that arena, we developed an alternative response variable- percentage of arena capacity filled ($\gamma$). 
 
+```{r}
+wnba_gl <- wnba_gl |>
+  mutate(
+    quality_of_play = elo_home_pregame + elo_away_pregame - 3000,
+    uncertain_outcome = abs(elo_home_pregame - elo_away_pregame),
+    loss_aversion = elo_home_win_prob - 0.5
+  )
+```
+
+
+
 ### Response variables
 
 In @fig-attendance-year, we observe the relationship between attendance and estimated home win probability. 
@@ -302,7 +317,7 @@ In most years, the slope appears to be positive.
 ```{r}
 #| label: fig-attendance-year
 #| fig-cap: "WNBA attendance by season, against estimated home win probability. We note that in most years, the slope of the association appears to be positive. "
-plot_attend <- ggplot(wnba_gl, aes(x = home_win_prob, y = attendance, color = factor(is_cc))) +
+plot_attend <- ggplot(wnba_gl, aes(x = elo_home_win_prob, y = attendance, color = factor(is_cc))) +
   geom_point() +
   geom_smooth(method = "lm", se = 0, color = "black") +
   facet_wrap(vars(season_id)) +
@@ -347,7 +362,7 @@ The distribution of attendance with respect to $f_1$ and $f_2$ are shown in @fig
 #| label: fig-attend-f1
 #| fig-cap: "asd"
 plot_attend +
-  aes(x = elo.A + elo.B - 3000) +
+  aes(x = quality_of_play) +
   scale_x_continuous("Quality of Play: Sum of Elo rating - 3000") +
   scale_y_log10("Attendance")
 ```
@@ -356,7 +371,7 @@ plot_attend +
 #| label: fig-attend-f2
 #| fig-cap: "asd"
 plot_attend +
-  aes(x = abs(elo.A - elo.B)) +
+  aes(x = uncertain_outcome) +
   scale_x_continuous("UOH: Absolute Difference in Elo rating") + 
   scale_y_log10("Attendance")
 ```
@@ -365,7 +380,7 @@ plot_attend +
 #| label: fig-capacity-f1
 #| fig-cap: "asd"
 plot_capacity +
-  aes(x = elo.A + elo.B - 3000) +
+  aes(x = quality_of_play) +
   scale_x_continuous("Quality of Play: Sum of Elo rating - 3000")
 ```
 
@@ -373,7 +388,7 @@ plot_capacity +
 #| label: fig-capacity-f2
 #| fig-cap: "asd"
 plot_capacity +
-  aes(x = abs(elo.A - elo.B)) +
+  aes(x = uncertain_outcome) +
   scale_x_continuous("UOH: Absolute Difference in Elo rating")
 ```
 
@@ -427,7 +442,7 @@ where $G(z) = \frac{e^z}{1 + e^z}$ is the (vectorized) logistic function, $\math
 
 ```{r}
 f_control <- "factor(season_id) + factor(wday(game_date)) + factor(month(game_date)) + name_current + median_income + median_pop + is_cc"
-f_exp <- c("I(elo.A + elo.B - 3000)", "I(abs(elo.A - elo.B))", "I(home_win_prob - 0.5)")
+f_exp <- c("I(quality_of_play)", "I(uncertain_outcome)", "I(loss_aversion)")
 
 mod_attend <- f_exp |>
   map_chr(~paste("log(attendance + 1) ~ ", .x, "* factor(season_id) +", f_control)) |>
@@ -461,7 +476,7 @@ mod_attend_coefs <- mod_attend |>
 mod_attend_coefs |>
   filter_out(str_detect(term, "factor|name_current")) |>
   mutate(
-    term = ifelse(str_detect(term, "I\\("), paste0(model, ": fan engagment"), term),
+#    term = ifelse(str_detect(term, "I\\("), paste0(model, ": fan engagment"), term),
     term = ifelse(str_detect(term, "is_cc"), "Caitlin Clark", term),
     term = str_to_title(str_replace_all(term, "_", " "))
   ) |>
@@ -524,9 +539,9 @@ mod_attend_coefs |>
     season_id = parse_number(str_sub(term, -4)),
     type = ifelse(str_detect(term, ":"), "interaction", "linear"),
     scaled_estimate = case_when(
-      model == "f1" ~ estimate * (mean(wnba_gl$elo.A + wnba_gl$elo.B - 3000)),
-      model == "f2" ~ estimate * (mean(abs(wnba_gl$elo.A - wnba_gl$elo.B))),
-      model == "f3" ~ estimate * (mean(wnba_gl$home_win_prob - 0.5))
+      model == "f1" ~ estimate * (mean(wnba_gl$quality_of_play)),
+      model == "f2" ~ estimate * (mean(wnba_gl$uncertain_outcome)),
+      model == "f3" ~ estimate * (mean(wnba_gl$loss_aversion))
     )
   ) |>
   ggplot(aes(x = season_id, y = scaled_estimate, color = model)) +
@@ -576,7 +591,7 @@ mod_pct_coefs <- map2(mod_pct, vcov_pct, lmtest::coeftest) |>
 mod_pct_coefs |>
   filter_out(str_detect(term, "factor|name")) |>  
   mutate(
-    term = ifelse(str_detect(term, "I\\("), paste0(model, ": fan engagment"), term),
+#    term = ifelse(str_detect(term, "I\\("), paste0(model, ": fan engagment"), term),
     term = ifelse(str_detect(term, "is_cc"), "Caitlin Clark", term),
     term = str_to_title(str_replace_all(term, "_", " "))
   ) |>
@@ -626,9 +641,9 @@ mod_pct_coefs |>
     season_id = parse_number(str_sub(term, -4)),
     type = ifelse(str_detect(term, ":"), "interaction", "linear"),
     scaled_estimate = case_when(
-      model == "f1" ~ estimate * (mean(wnba_gl$elo.A + wnba_gl$elo.B - 3000)),
-      model == "f2" ~ estimate * (mean(abs(wnba_gl$elo.A - wnba_gl$elo.B))),
-      model == "f3" ~ estimate * (mean(wnba_gl$home_win_prob - 0.5))
+      model == "f1" ~ estimate * (mean(wnba_gl$quality_of_play)),
+      model == "f2" ~ estimate * (mean(wnba_gl$uncertain_outcome)),
+      model == "f3" ~ estimate * (mean(wnba_gl$loss_aversion))
     )
   ) |>
   ggplot(aes(x = season_id, y = scaled_estimate, color = model)) +
