@@ -206,7 +206,7 @@
 
 \title{Winning and Attendance in the WNBA}
 \author{Gabriela Eastwood \and Benjamin S. Baumer \and Andrew Zimbalist}
-\date{2026-06-11}
+\date{2026-06-15}
 \begin{document}
 \maketitle
 \begin{abstract}
@@ -268,7 +268,13 @@ sports, but women's leagues and the WNBA in particular are still largely
 underresearched. As a relatively young league with rapid growth in
 viewership (WNBA 2024) but limited publicly available financial data,
 game attendance remains the most readily available proxy variable for
-public interest in the WNBA.
+public interest in the WNBA. In this paper we set out to determine how
+the underlying causes shaping game attendance work to explain these more
+recent trends, and specifically whether on-court factors are becoming
+more important to WNBA game attendance in recent years.
+
+\subsection{Existing scholarship on team performance and game
+attendance}\label{existing-scholarship-on-team-performance-and-game-attendance}
 
 A key line of research in sports economics links fan demand to
 expectations about game outcomes. Early work such as the
@@ -293,13 +299,26 @@ Association) for the 1969-70 and 1970-71 seasons and found that demand
 was a function of population, interactions of income with star players,
 team win percentage, and per capita income. Multiple subsequent studies
 on men's professional team sports continued to find a statistically
-significant correlation between team quality and attendance. In these
-studies, a debate emerged about the direction of causality: did strong
-team performance engender higher attendance or vice versa (Baade and
-Tiehen 1990; Clapp and Hakes 2005; Davis 2008, 2009; Horowitz 2007;
-Lemke et al. 2010)? While no Granger causality tests were run, the
-predominant view has been causality running from team performance to
-attendance (Hall et al. 2002).
+significant correlation between team quality and attendance.\\
+Differences in the literature over how to measure team quality (wins,
+wins lagged, number of championships in past years, win probability,
+star power), attendance (logs, lags, linear regression or censored), the
+inclusion of control variables and non-linear forms also emerged
+(Wiseman and Chatterjee 2003; {Woltring et al.} 2018; Kim and Chang
+2023; DeSchriver and Jensen 2002; Paul et al. 2019).
+
+The relationship between attendance and winning percentage has been
+examined, but such studies often look at winning percentage as causation
+for attendance. Davis (2008) and Horowitz (2007) both found that
+attendance and winning percentage were related. Horowitz concluded a
+bidirectional relationship between the two, while Davis suggested that
+causation runs from winning percentage to attendance. In a following
+study, Davis (2009) found winning percentage as a significant
+determinant of attendance for 12 National League teams; though the study
+did not establish causation both ways. Lemke et al. (2010) found
+attendance increases as home team win probability increases. There is
+evidence that causation may run from attendance to winning percentage,
+but the bulk of the literature has been researched the other way.
 
 Finally, situating these revenue models within the broader league
 structure, sports economists have written extensively about the
@@ -316,6 +335,8 @@ range of winning percentages for teams in the women's Division I
 (Perline et al. 2018). They hypothesize that the difference in the
 competitive balance of the men's and women's games could be one cause of
 lower revenue generation and attendance in the women's game.
+
+\subsection{Why is the WNBA different?}\label{why-is-the-wnba-different}
 
 In their study of attendance determinants in the WNBA, Agha and Berri
 argue that a major reason why attendance is considerably lower at WNBA
@@ -391,41 +412,6 @@ the strength of both teams, and the likelihood of a home team win, on
 game attendance has increased, paralleling documented trends in men's
 leagues.
 
-\subsection{still to be incorporated in
-intro:}\label{still-to-be-incorporated-in-intro}
-
-Differences in the literature over how to measure team quality (wins,
-wins lagged, number of championships in past years, win probability,
-star power), attendance (logs, lags, linear regression or censored), the
-inclusion of control variables and non-linear forms also emerged
-(Wiseman and Chatterjee 2003; {Woltring et al.} 2018; Kim and Chang
-2023; DeSchriver and Jensen 2002; Paul et al. 2019).
-
-The relationship between attendance and winning percentage has been
-examined, but such studies often look at winning percentage as causation
-for attendance. Davis (2008) and Horowitz (2007) both found that
-attendance and winning percentage were related. Horowitz concluded a
-bidirectional relationship between the two, while Davis suggested that
-causation runs from winning percentage to attendance. In a following
-study, Davis (2009) found winning percentage as a significant
-determinant of attendance for 12 National League teams; though the study
-did not establish causation both ways. Lemke et al. (2010) found
-attendance increases as home team win probability increases. There is
-evidence that causation may run from attendance to winning percentage,
-but the bulk of the literature has been researched the other way.
-
-The present study controls for payroll and stadium capacity as both have
-been shown to affect attendance. Wiseman and Chatterjee (2003) found
-team payroll was positively correlated to team winning percentage (9).
-Additionally, they found that this relationship has grown stronger since
-the late 1990's. Hall et al. (2002) did not find causality evidence from
-payroll to team winning percentage in their entire dataset, but they did
-note an increased correlation in the 1990's. Additionally, they stated
-that an MLB team with a payroll of at least 150\% of the league average
-could expect a winning percentage of at least .550. This is an important
-finding, because Vrooman (2012) identified .550 as a benchmark winning
-percentage for qualifying as a playoff team.
-
 \section{Data}\label{sec-data}
 
 \subsection{Game logs and attendance}\label{game-logs-and-attendance}
@@ -442,19 +428,22 @@ COVID-19 pandemic) 2 games (accurately) recorded attendance of 0.
 Because the arenas WNBA teams play in vary widely in size-- the New York
 Liberty alone have called both the Barclays Center (17,732 seat
 capacity) and the Westchester County Center (2,300 seat capacity) home
-in recent years-- we contextualize raw attendance numbers with manually
-collected arena capacities.\footnote{We were only able to collect an
-  estimate for the \emph{current} arena capacity, which is not
-  necessarily the same as the arena capacity on the day of the game.}
-While teams have many reasons they might choose to play for a sold-out
-crowd in a smaller arena, smaller venue size will also by nature
-constrain attendance, making its consideration in our model important.
+in recent years-- we contextualize raw attendance numbers by
+approximating the capacity of each game venue. Because accurate records
+of arena configurations and capacities were difficult to obtain
+(particularly for venues not still in use) we approximated the practical
+capacity of each space by pulling the maximally attended game for each
+venue. While teams have many reasons they might choose to play for a
+sold-out crowd in a smaller arena, smaller venue size will also by
+nature constrain attendance, making its consideration in our model
+important.
 
 Second, we collected game-level performance data from the
 \textbf{wehoop} R package (Gilani and Hutchinson 2021), which uses the
-official WNBA API. These data include the final score of the game. We
-also used the \textbf{wehoop} package to identify whether Caitlin Clark
-played more than 0 minutes in the game.
+official WNBA API. The game-level performance data include These data
+include the final score of the game. We also used the \textbf{wehoop}
+package to identify whether Caitlin Clark played more than 0 minutes in
+the game.
 
 Table~\ref{tbl-attendance} shows a sample of the data. While many other
 variables are omitted from the table, we note that the attendance, the
@@ -476,16 +465,16 @@ Clark played in the game, are recorded.
 \toprule
 Game Date & Home & Away & Arena & Attendance & Plus Minus & Clark \\ 
 \midrule\addlinespace[2.5pt]
-12617 & DET & SAN & Palace of Auburn Hills & 7,232 & 6 & 0 \\ 
-20323 & WAS & LVA & CareFirst Arena & 4,200 & -10 & 0 \\ 
-11859 & SEA & IND & KeyArena & 5,232 & 12 & 0 \\ 
-16990 & CHI & NYL & Allstate Arena & 5,633 & -3 & 0 \\ 
-16628 & ATL & NYL & Philips Arena & 6,028 & 8 & 0 \\ 
-17041 & PHO & LAS & Talking Stick Resort Arena & 11,905 & 4 & 0 \\ 
-19596 & CON & LAS & Mohegan Sun Arena & 6,783 & 15 & 0 \\ 
-11152 & LAS & HOU & Great Western Forum & 11,378 & 5 & 0 \\ 
-12224 & SAC & SEA & ARCO Arena & 9,269 & 5 & 0 \\ 
-16939 & WAS & DAL & Verizon Center & 5,618 & -10 & 0 \\ 
+17059 & ATL & WAS & Philips Arena & 4,404 & 3 & 0 \\ 
+15522 & CON & SEA & Mohegan Sun Arena & 9,201 & -6 & 0 \\ 
+16292 & CON & WAS & Mohegan Sun Arena & 7,348 & 8 & 0 \\ 
+10414 & LAS & CHA & Great Western Forum & 5,927 & 7 & 0 \\ 
+16597 & MIN & SEA & Target Center & 8,132 & 24 & 0 \\ 
+17300 & PHO & DAL & Talking Stick Resort Arena & 9,640 & -10 & 0 \\ 
+19979 & IND & LVA & Gainbridge Fieldhouse & 17,274 & -4 & 1 \\ 
+12210 & SAN & DET & AT\&T Center & 8,584 & -19 & 0 \\ 
+19193 & CHI & SEA & Wintrust Arena & 8,893 & 4 & 0 \\ 
+18142 & PHO & SEA & Talking Stick Resort Arena & 8,724 & -12 & 0 \\ 
 \bottomrule
 \end{tabular*}
 
@@ -752,13 +741,14 @@ and third have been rescaled so that they will have means close to 0.
 \begin{itemize}
 \tightlist
 \item
-  Quality of play: fans may wish to attend a game in person if the
-  quality of play is high. We model this as the sum of the Elo rating of
-  the two teams
+  Quality of play: fans may wish to attend a game in person if they
+  expect the quality of play to be high. We model this as the sum of the
+  Elo rating of the two teams
   (\(f_1(\hat{\theta}_i(t), \hat{\theta}_i(t)) = \hat{\theta}_i(t) + \hat{\theta}_j(t)\))
 \item
   Uncertainty of outcome hypothesis: fans may wish to attend a game for
-  which the outcome is unclear. We model this as
+  which the outcome is uncertain. We model this as the absolute
+  difference in the two teams' Elo ratings:
   (\(f_2(\hat{\theta}_i(t), \hat{\theta}_i(t)) = |\hat{\theta}_i(t) - \hat{\theta}_j(t)|\))
 \item
   Loss aversion: fans may wish to attend a game to see their team (the
@@ -865,8 +855,13 @@ Caitlin Clark played more than 0 minutes in the game (\(\chi\)).
 
 Testing our primary hypotheses requires analyzing how the relationship
 between attendance and fan engagement has changed over time. To capture
-this, we include an interaction term between our measures of fan
-engagement (\(f_k\)) and season (\(\tau_1\)).
+these changes, we include an interaction term between our measures of
+fan engagement (\(f_k\)) and season (\(\tau_1\)). We also considered
+fitting a period-based model but ultimately decided against this
+approach. Defining periods by hand would require subjective decisions
+about the timing of structural breaks and would risk introducing
+researcher bias into the analysis. Instead, we allow the relationship
+between attendance and fan engagement to evolve season-by-season.
 
 \subsection{Model formulation for attendance}\label{sec-mod-attend}
 
@@ -1221,7 +1216,13 @@ Notebook}}
 Table~\ref{tbl-anova2} shows the analysis of variance for the percentage
 of arena capacity models.
 
-Figure~\ref{fig-season-coefs2} shows that\ldots{}
+Figure~\ref{fig-season-coefs2} displays the estimated effects of our fan
+engagement measures on attendance relative to the 1997 reference season.
+Similar to the overall attendance trends, these effects generally
+remained below their 1997 levels for much of the league's history and
+only returned to comparable levels recently. In the most recent years of
+measurement, however, we see the league exceeding previously
+record-holding levels.
 
 \protect\phantomsection\label{cell-fig-season-coefs2}
 \begin{figure}[H]
@@ -1241,7 +1242,7 @@ for percentage of arena capacity models.}
 \href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
 Notebook}}
 
-Figure~\ref{fig-season-slopes2} shows that\ldots{}
+Figure~\ref{fig-season-slopes2} shows that\ldots??
 
 \protect\phantomsection\label{cell-fig-season-slopes2}
 \begin{figure}[H]
@@ -1260,6 +1261,9 @@ slopes for percentage of arena capacity models.}
 \textsubscript{Source:
 \href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
 Notebook}}
+
+\subsection{Fan engagement and attendance over
+time}\label{fan-engagement-and-attendance-over-time}
 
 \section{Conclusion}\label{conclusion}
 
@@ -1286,18 +1290,6 @@ Across the Timeline. n.d. \emph{{WNBA Attendance --- Across the
 Timeline}}. Across the Timeline;
 \url{https://www.acrossthetimeline.com/wnba/attendance.html}.
 \url{https://www.acrossthetimeline.com/wnba/attendance.html}.
-
-\bibitem[\citeproctext]{ref-baade1990analysis}
-Baade, Robert A, and Laura J Tiehen. 1990. {``An Analysis of Major
-League Baseball Attendance, 1969-1987.''} \emph{Journal of Sport and
-Social Issues} 14 (1): 14--32.
-\url{https://doi.org/10.1177/019372359001400102}.
-
-\bibitem[\citeproctext]{ref-clapp2005long}
-Clapp, Christopher M, and Jahn K Hakes. 2005. {``How Long a Honeymoon?
-The Effect of New Stadiums on Attendance in Major League Baseball.''}
-\emph{Journal of Sports Economics} 6 (3): 237--63.
-\url{https://doi.org/10.1177/1527002504265957}.
 
 \bibitem[\citeproctext]{ref-CoatesHumphreysZhou2014}
 Coates, Dennis, Brad R. Humphreys, and Li Zhou. 2014.
@@ -1349,13 +1341,6 @@ in the Context of Successful Women's Professional Team Sports: A
 Mixed-Methods Case Study of Portland Thorns Fandom.''} \emph{Sport in
 Society} 21 (7): 1013--30.
 \url{https://doi.org/10.1080/17430437.2017.1346620}.
-
-\bibitem[\citeproctext]{ref-hall2002testing}
-Hall, Stephen, Stefan Szymanski, and Andrew S Zimbalist. 2002.
-{``Testing Causality Between Team Performance and Payroll: The Cases of
-Major League Baseball and English Soccer.''} \emph{Journal of Sports
-Economics} 3 (2): 149--68.
-\url{https://doi.org/10.1177/152700250200300204}.
 
 \bibitem[\citeproctext]{ref-horowitz2007if}
 Horowitz, Ira. 2007. {``If You Play Well They Will Come-and Vice Versa:
@@ -1415,10 +1400,6 @@ of Outcome, and Weather on Junior Hockey Attendance.''}
 Perline, Martin M., Jeffrey S. Noble, and G. Clayton Stoldt. 2018.
 {``Competitive Balance in NCAA {`Power Conferences:'} The Case of Men's
 and Women's Basketball.''} \emph{The Sport Journal} 21.
-
-\bibitem[\citeproctext]{ref-vrooman2012theory}
-Vrooman, John. 2012. \emph{Theory of the Big Dance: The Playoff Pay-Off
-in Pro Sports Leagues}. New York, NY: Oxford University Press.
 
 \bibitem[\citeproctext]{ref-wasserstein2016asa}
 Wasserstein, Ronald L, and Nicole A Lazar. 2016. {``The ASA Statement on
