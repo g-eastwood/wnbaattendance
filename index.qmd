@@ -81,7 +81,7 @@ wnba_gl <- read_rds(here::here("data/wnba_gl.rds")) |>
     pct_capacity = attendance / pmax(max(attendance), arena_capacity),
     pct_capacity_safe = (pct_capacity * (2 * (n() - 1)) + 0.5) / (2 * n()),
     is_sellout = pct_capacity > 0.95,
-    quality_of_play = elo_home_pregame * elo_away_pregame,
+    quality_of_play = elo_home_pregame + elo_away_pregame - 3000,
     uncertain_outcome = abs(elo_home_pregame - elo_away_pregame),
     loss_aversion = elo_home_win_prob^2,
     z_quality_of_play = (quality_of_play - mean(quality_of_play)) / sd(quality_of_play), 
@@ -343,7 +343,8 @@ plot_attend <- ggplot(wnba_gl, aes(x = elo_home_win_prob, y = attendance)) +
   facet_wrap(vars(season_id)) +
   scale_x_continuous("Estimated Home Win Probability", limits = c(0, 1)) +
   scale_color_discrete(name = "Clark/Wilson") +
-  theme_minimal(base_size = 10)
+  theme_minimal(base_size = 10)+
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 plot_attend +
   scale_y_log10("Attendance")
 ```
@@ -376,11 +377,11 @@ The first and third have been rescaled so that they will have means close to 0.
 - Uncertainty of outcome hypothesis: fans may wish to attend a game for which the outcome is uncertain. We model this as the absolute difference in the two teams' Elo ratings: ($f_2(\hat{\theta}_i(t), \hat{\theta}_i(t)) = |\hat{\theta}_i(t) - \hat{\theta}_j(t)|$)
 - Loss aversion: fans may wish to attend a game to see their team (the home team) win. We model this using the estimated home win probability function above ($f_3(\hat{\theta}_i(t), \hat{\theta}_i(t)) = \hat{p}_{ij}(t)$)
 
-The distribution of attendance with respect to $f_1$ and $f_2$ are shown in @fig-attend-f1 and @fig-attend-f2, respectively, with the corresponding plots for percentage of arena capacity shown in @fig-capacity-f1 and @fig-capacity-f2.
+The distribution of attendance with respect to $f_1$ and $f_2$ are shown in @fig-attend-f1 and @fig-attend-f2, respectively, with the corresponding plots for percentage of arena capacity shown in @fig-capacity-f1 and @fig-capacity-f2. 
 
 ```{r}
 #| label: fig-attend-f1
-#| fig-cap: "asd"
+#| fig-cap: "WNBA game attendance by season, against the game-time sum of Elo ratings - 3000"
 plot_attend +
   aes(x = quality_of_play) +
   scale_x_continuous("Quality of Play: Sum of Elo rating - 3000") +
