@@ -206,7 +206,7 @@
 
 \title{Winning and Attendance in the WNBA}
 \author{Gabriela Eastwood \and Benjamin S. Baumer \and Andrew Zimbalist}
-\date{2026-06-15}
+\date{2026-06-18}
 \begin{document}
 \maketitle
 \begin{abstract}
@@ -442,13 +442,13 @@ Second, we collected game-level performance data from the
 \textbf{wehoop} R package (Gilani and Hutchinson 2021), which uses the
 official WNBA API. The game-level performance data include These data
 include the final score of the game. We also used the \textbf{wehoop}
-package to identify whether Caitlin Clark played more than 0 minutes in
-the game.
+package to identify whether Caitlin Clark and/or A'ja Wilson played more
+than 0 minutes in the game.
 
 Table~\ref{tbl-attendance} shows a sample of the data. While many other
 variables are omitted from the table, we note that the attendance, the
-teams playing in the game, the outcome, the arena, and whether Caitlin
-Clark played in the game, are recorded.
+teams playing in the game, the outcome, the arena, and whether Clark or
+Wilson played in the game, are recorded.
 
 \begin{table}
 
@@ -461,26 +461,26 @@ Clark played in the game, are recorded.
 {\fontsize{14}{17}\selectfont  Sample of game-level records\fontsize{8}{10}\selectfont }
 } 
 \fontsize{8.0pt}{10.0pt}\selectfont
-\begin{tabular*}{1\linewidth}{@{\extracolsep{\fill}}rlllrrr}
+\begin{tabular*}{1\linewidth}{@{\extracolsep{\fill}}rlllrrrr}
 \toprule
-Game Date & Home & Away & Arena & Attendance & Plus Minus & Clark \\ 
+Game Date & Home & Away & Arena & Attendance & Plus Minus & Clark & Wilson \\ 
 \midrule\addlinespace[2.5pt]
-17059 & ATL & WAS & Philips Arena & 4,404 & 3 & 0 \\ 
-15522 & CON & SEA & Mohegan Sun Arena & 9,201 & -6 & 0 \\ 
-16292 & CON & WAS & Mohegan Sun Arena & 7,348 & 8 & 0 \\ 
-10414 & LAS & CHA & Great Western Forum & 5,927 & 7 & 0 \\ 
-16597 & MIN & SEA & Target Center & 8,132 & 24 & 0 \\ 
-17300 & PHO & DAL & Talking Stick Resort Arena & 9,640 & -10 & 0 \\ 
-19979 & IND & LVA & Gainbridge Fieldhouse & 17,274 & -4 & 1 \\ 
-12210 & SAN & DET & AT\&T Center & 8,584 & -19 & 0 \\ 
-19193 & CHI & SEA & Wintrust Arena & 8,893 & 4 & 0 \\ 
-18142 & PHO & SEA & Talking Stick Resort Arena & 8,724 & -12 & 0 \\ 
+18091 & SEA & NYL & Alaska Airlines Arena & 6,733 & 9 & 0 & 0 \\ 
+16953 & IND & SEA & Bankers Life Fieldhouse & 6,721 & 10 & 0 & 0 \\ 
+13666 & SAC & LAS & ARCO Arena & 17,317 & 3 & 0 & 0 \\ 
+11876 & NYL & PHO & Madison Square Garden & 15,629 & 6 & 0 & 0 \\ 
+19890 & ATL & LAS & Gateway Center Arena @ College Park & 3,260 & 13 & 0 & 0 \\ 
+11132 & MIA & PHO & AmericanAirlines Arena & 8,005 & -23 & 0 & 0 \\ 
+16234 & NYL & CON & Madison Square Garden & 7,911 & -8 & 0 & 0 \\ 
+11547 & HOU & MIN & Compaq Center & 10,516 & 14 & 0 & 0 \\ 
+11115 & DET & NYL & Palace of Auburn Hills & 4,788 & -4 & 0 & 0 \\ 
+11159 & PHO & LAS & US Airways Center & 11,053 & -6 & 0 & 0 \\ 
 \bottomrule
 \end{tabular*}
 
 Sample of Game-level WNBA data. The data indicates (among other things)
 which teams were playing, who won, the arena, the attendance, and
-whether Caitlin Clark played in the game.
+whether Caitlin Clark and/or A'ja Wilson played in the game.
 
 }
 
@@ -525,7 +525,35 @@ league's overall attendance trends is one of our goals.
 
 \caption{\label{fig-boxplots}Distribution of WNBA game attendance by
 season. Note that the vertical axis has a logarithmic scale. Caitlin
-Clark's games in 2024-2025 are separated by color.}
+Clark and/or A'ja Wilson's games are separated by color.}
+
+\end{figure}%
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+Figure~\ref{fig-boxplots-capacity} shows the distribution of attendance
+as a percentage of the arena's capacity. Although we recorded reported
+arena capacities, those capacities change over time, and some games had
+attendance that exceeded the arena's reported capacity. Instead, we
+computed the percentage as a ratio of the attendance to the larger of
+the reported capacity, or the maximum recorded attendance at that arena
+in the sample.\footnote{These modifications reduced the number of 1's in
+  the sample, which was useful mathematically during modeling.}
+
+\protect\phantomsection\label{cell-fig-boxplots-capacity}
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-boxplots-capacity-1.pdf}}
+
+}
+
+\caption{\label{fig-boxplots-capacity}Distribution of WNBA game
+attendance as a percentage of arena capacity by season. Caitlin Clark's
+games in 2024-2025 are separated by color.}
 
 \end{figure}%
 
@@ -663,15 +691,13 @@ Since we know the arena in which the game took place and the capacity of
 that arena, we developed an alternative response variable- percentage of
 arena capacity filled (\(\gamma\)).
 
-\textsubscript{Source:
-\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
-Notebook}}
-
 \subsection{Response variables}\label{response-variables}
 
 In Figure~\ref{fig-attendance-year}, we observe the relationship between
-attendance and estimated home win probability. In most years, the slope
-appears to be positive.
+attendance and estimated home win probability. We add a simple quadratic
+regression line to reflect the quadratic relationship posited by Coates
+et al. (2014). In most years, the slope appears to be positive and the
+curvature concave.
 
 \protect\phantomsection\label{cell-fig-attendance-year}
 \begin{figure}[H]
@@ -684,7 +710,7 @@ appears to be positive.
 
 \caption{\label{fig-attendance-year}WNBA attendance by season, against
 estimated home win probability. We note that in most years, the slope of
-the association appears to be positive.}
+the association appears to be positive and the curvature concave.}
 
 \end{figure}%
 
@@ -831,6 +857,85 @@ Notebook}}
 \href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
 Notebook}}
 
+\subsubsection{Rescaling}\label{rescaling}
+
+Figure~\ref{fig-rescaled} shows the distribution of our fan engagement
+variables after rescaling.
+
+\protect\phantomsection\label{cell-fig-rescaled}
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-rescaled-1.pdf}}
+
+}
+
+\caption{\label{fig-rescaled}Distribution of fan engagement variables
+after rescaling.}
+
+\end{figure}%
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+We note that Table~\ref{tbl-cor} shows that our three fan engagement
+variables are largely uncorrelated.
+
+{
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2174}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1957}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.2174}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1739}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 8\tabcolsep) * \real{0.1957}}@{}}
+
+\caption{\label{tbl-cor}Correlations among fan engagment variables.}
+
+\tabularnewline
+
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+z\_quality\_of\_play
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+z\_uncertain\_outcome
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+z\_loss\_aversion
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+zzz\_sum\_all\_three
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+z\_quality\_of\_play & 1 & NA & NA & NA \\
+z\_uncertain\_outcome & NA & 1 & NA & NA \\
+z\_loss\_aversion & NA & NA & 1 & NA \\
+zzz\_sum\_all\_three & NA & NA & NA & 1 \\
+
+\end{longtable}
+
+}
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/unnamed-chunk-5-1.pdf}}
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/unnamed-chunk-6-1.pdf}}
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
 \subsection{Control variables}\label{sec-control}
 
 As time-related control variables, we include the the season
@@ -905,6 +1010,277 @@ the same structure as \(\mathbf{\beta}^{(k)}\) defined above.
 \href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
 Notebook}}
 
+\begin{verbatim}
+
+Call:
+lm(formula = log(attendance) ~ elo_home_pregame + elo_away_pregame + 
+    I(elo_home_pregame^2) * I(elo_away_pregame^2) + factor(season_id) + 
+    factor(wday(game_date)) + factor(month(game_date)) + factor(arena) + 
+    median_income + median_pop + is_cc + is_aw, data = mod_df)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-1.46647 -0.14474 -0.00642  0.13032  1.00933 
+
+Coefficients: (2 not defined because of singularities)
+                                                   Estimate Std. Error t value
+(Intercept)                                       1.110e+01  1.069e+00  10.387
+elo_home_pregame                                  2.925e-04  9.465e-04   0.309
+elo_away_pregame                                 -2.995e-03  8.508e-04  -3.520
+I(elo_home_pregame^2)                            -5.371e-08  3.181e-07  -0.169
+I(elo_away_pregame^2)                             8.646e-07  2.847e-07   3.037
+factor(season_id)1998                             3.560e-02  4.107e-02   0.867
+factor(season_id)1999                            -4.422e-02  3.915e-02  -1.130
+factor(season_id)2000                            -1.771e-01  3.823e-02  -4.633
+factor(season_id)2001                            -2.637e-01  3.917e-02  -6.734
+factor(season_id)2002                            -2.369e-01  3.915e-02  -6.051
+factor(season_id)2003                            -2.863e-01  3.920e-02  -7.303
+factor(season_id)2004                            -2.875e-01  3.959e-02  -7.264
+factor(season_id)2005                            -3.387e-01  3.922e-02  -8.636
+factor(season_id)2006                            -4.064e-01  3.902e-02 -10.416
+factor(season_id)2007                            -3.884e-01  3.900e-02  -9.959
+factor(season_id)2008                            -3.259e-01  3.879e-02  -8.402
+factor(season_id)2009                            -3.460e-01  3.866e-02  -8.951
+factor(season_id)2010                            -3.655e-01  3.878e-02  -9.423
+factor(season_id)2011                            -3.180e-01  3.905e-02  -8.144
+factor(season_id)2012                            -3.869e-01  3.933e-02  -9.838
+factor(season_id)2013                            -3.757e-01  3.912e-02  -9.602
+factor(season_id)2014                            -3.778e-01  3.885e-02  -9.723
+factor(season_id)2015                            -4.114e-01  3.920e-02 -10.495
+factor(season_id)2016                            -3.976e-01  3.942e-02 -10.088
+factor(season_id)2017                            -3.838e-01  4.013e-02  -9.564
+factor(season_id)2018                            -3.726e-01  4.063e-02  -9.170
+factor(season_id)2019                            -3.851e-01  4.141e-02  -9.301
+factor(season_id)2022                            -5.838e-01  4.233e-02 -13.791
+factor(season_id)2023                            -4.455e-01  4.184e-02 -10.648
+factor(season_id)2024                            -1.868e-01  4.222e-02  -4.426
+factor(season_id)2025                            -5.412e-02  4.202e-02  -1.288
+factor(wday(game_date))2                         -8.963e-02  2.112e-02  -4.244
+factor(wday(game_date))3                         -1.205e-01  1.100e-02 -10.959
+factor(wday(game_date))4                          1.686e-03  1.262e-02   0.134
+factor(wday(game_date))5                         -8.071e-02  1.233e-02  -6.545
+factor(wday(game_date))6                          3.524e-03  1.060e-02   0.333
+factor(wday(game_date))7                          5.300e-02  1.163e-02   4.557
+factor(month(game_date))6                        -3.901e-02  1.278e-02  -3.053
+factor(month(game_date))7                         6.601e-02  1.292e-02   5.110
+factor(month(game_date))8                         8.160e-02  1.332e-02   6.124
+factor(month(game_date))9                         6.490e-02  1.664e-02   3.899
+factor(arena)Allstate Arena                      -2.433e-01  7.525e-02  -3.233
+factor(arena)American Airlines Center             6.710e-01  1.845e-01   3.637
+factor(arena)Amway Arena                         -1.267e-01  7.925e-02  -1.599
+factor(arena)Angel of the Winds Arena            -1.223e-01  1.271e-01  -0.962
+factor(arena)Arthur Ashe Stadium                  8.105e-01  2.499e-01   3.243
+factor(arena)AT&T Center                          5.229e-02  7.433e-02   0.704
+factor(arena)Bankers Life Fieldhouse             -7.724e-03  7.446e-02  -0.104
+factor(arena)Barclays Center                      1.479e-01  7.743e-02   1.910
+factor(arena)BOK Center                          -3.011e-01  7.689e-02  -3.916
+factor(arena)Capital One Arena                    3.389e-02  8.165e-02   0.415
+factor(arena)CareFirst Arena                     -8.473e-01  9.344e-02  -9.068
+factor(arena)CFG Bank Arena                       1.356e-01  1.846e-01   0.734
+factor(arena)Chase Center                         5.175e-01  9.016e-02   5.741
+factor(arena)Climate Pledge Arena                 2.265e-01  7.761e-02   2.918
+factor(arena)College Park Center                 -4.509e-01  7.424e-02  -6.074
+factor(arena)Conseco Fieldhouse                   2.006e-02  7.450e-02   0.269
+factor(arena)Crypto.com Arena                     1.286e-01  7.812e-02   1.647
+factor(arena)Dee Event Center                    -3.346e-01  2.504e-01  -1.336
+factor(arena)EagleBank Arena                     -1.608e-02  1.845e-01  -0.087
+factor(arena)EnergySolutions Arena               -2.795e-01  7.760e-02  -3.601
+factor(arena)Entertainment and Sports Arena      -6.244e-01  7.703e-02  -8.106
+factor(arena)Footprint Center                     2.398e-01  7.965e-02   3.011
+factor(arena)Freeman Coliseum                    -3.829e-01  9.472e-02  -4.042
+factor(arena)Gainbridge Fieldhouse               -1.448e-01  8.019e-02  -1.806
+factor(arena)Galen Center                        -6.133e-01  1.844e-01  -3.325
+factor(arena)Gateway Center Arena @ College Park -9.240e-01  7.804e-02 -11.840
+factor(arena)Great Western Forum                 -3.538e-01  8.003e-02  -4.421
+factor(arena)Hartford Civic Center               -4.569e-01  2.500e-01  -1.828
+factor(arena)Hinkle Fieldhouse                   -1.261e+00  1.425e-01  -8.849
+factor(arena)Home Depot Center Tennis Stadium    -2.549e-01  2.500e-01  -1.020
+factor(arena)Indiana Farmers Coliseum            -1.094e+00  1.098e-01  -9.959
+factor(arena)KeyArena                            -1.633e-02  7.353e-02  -0.222
+factor(arena)Madison Square Garden                3.014e-01  7.373e-02   4.088
+factor(arena)Mandalay Bay Events Center          -4.830e-01  8.319e-02  -5.806
+factor(arena)McCamish Pavilion                   -5.566e-01  8.224e-02  -6.767
+factor(arena)Michelob ULTRA Arena                -4.098e-02  8.046e-02  -0.509
+factor(arena)Mohegan Sun Arena                   -1.468e-01  7.280e-02  -2.016
+factor(arena)Palace of Auburn Hills              -2.272e-02  7.458e-02  -0.305
+factor(arena)Philips Arena                       -1.566e-01  7.510e-02  -2.085
+factor(arena)PHX Arena                            6.721e-02  9.016e-02   0.745
+factor(arena)Prudential Center                   -8.486e-02  8.039e-02  -1.056
+factor(arena)Radio City Musical Hall             -3.257e-01  1.229e-01  -2.649
+factor(arena)Rogers Arena                         3.245e-01  2.498e-01   1.299
+factor(arena)Spokane Arena                       -6.156e-01  2.500e-01  -2.462
+factor(arena)Staples Center                       2.000e-01  7.324e-02   2.731
+factor(arena)State Farm Arena                    -4.736e-01  8.832e-02  -5.363
+factor(arena)T-Mobile Arena                       3.389e-01  1.187e-01   2.855
+factor(arena)Talking Stick Resort Arena           2.712e-01  7.655e-02   3.543
+factor(arena)Target Center                        3.978e-03  7.278e-02   0.055
+factor(arena)TD Garden                            4.271e-01  1.848e-01   2.311
+factor(arena)UIC Pavilion                        -6.686e-01  7.878e-02  -8.487
+factor(arena)United Center                        7.065e-01  1.846e-01   3.828
+factor(arena)US Airways Center                    8.956e-02  7.374e-02   1.215
+factor(arena)Van Andel Arena                      6.256e-03  2.500e-01   0.025
+factor(arena)Verizon Center                       3.103e-01  7.384e-02   4.203
+factor(arena)Walter Pyramid at Long Beach State  -7.658e-01  1.847e-01  -4.146
+factor(arena)Westchester County Center           -1.337e+00  8.224e-02 -16.260
+factor(arena)Wintrust Arena                      -6.420e-02  7.502e-02  -0.856
+factor(arena)Xcel Energy Center                   2.088e-01  9.463e-02   2.206
+median_income                                            NA         NA      NA
+median_pop                                               NA         NA      NA
+is_cc                                             6.252e-01  4.040e-02  15.475
+is_aw                                             6.798e-02  2.340e-02   2.905
+I(elo_home_pregame^2):I(elo_away_pregame^2)       7.647e-14  4.475e-14   1.709
+                                                 Pr(>|t|)    
+(Intercept)                                       < 2e-16 ***
+elo_home_pregame                                 0.757278    
+elo_away_pregame                                 0.000436 ***
+I(elo_home_pregame^2)                            0.865940    
+I(elo_away_pregame^2)                            0.002403 ** 
+factor(season_id)1998                            0.386085    
+factor(season_id)1999                            0.258689    
+factor(season_id)2000                            3.70e-06 ***
+factor(season_id)2001                            1.84e-11 ***
+factor(season_id)2002                            1.55e-09 ***
+factor(season_id)2003                            3.27e-13 ***
+factor(season_id)2004                            4.36e-13 ***
+factor(season_id)2005                             < 2e-16 ***
+factor(season_id)2006                             < 2e-16 ***
+factor(season_id)2007                             < 2e-16 ***
+factor(season_id)2008                             < 2e-16 ***
+factor(season_id)2009                             < 2e-16 ***
+factor(season_id)2010                             < 2e-16 ***
+factor(season_id)2011                            4.78e-16 ***
+factor(season_id)2012                             < 2e-16 ***
+factor(season_id)2013                             < 2e-16 ***
+factor(season_id)2014                             < 2e-16 ***
+factor(season_id)2015                             < 2e-16 ***
+factor(season_id)2016                             < 2e-16 ***
+factor(season_id)2017                             < 2e-16 ***
+factor(season_id)2018                             < 2e-16 ***
+factor(season_id)2019                             < 2e-16 ***
+factor(season_id)2022                             < 2e-16 ***
+factor(season_id)2023                             < 2e-16 ***
+factor(season_id)2024                            9.83e-06 ***
+factor(season_id)2025                            0.197818    
+factor(wday(game_date))2                         2.24e-05 ***
+factor(wday(game_date))3                          < 2e-16 ***
+factor(wday(game_date))4                         0.893736    
+factor(wday(game_date))5                         6.56e-11 ***
+factor(wday(game_date))6                         0.739523    
+factor(wday(game_date))7                         5.31e-06 ***
+factor(month(game_date))6                        0.002280 ** 
+factor(month(game_date))7                        3.35e-07 ***
+factor(month(game_date))8                        9.82e-10 ***
+factor(month(game_date))9                        9.77e-05 ***
+factor(arena)Allstate Arena                      0.001232 ** 
+factor(arena)American Airlines Center            0.000279 ***
+factor(arena)Amway Arena                         0.109868    
+factor(arena)Angel of the Winds Arena            0.336006    
+factor(arena)Arthur Ashe Stadium                 0.001190 ** 
+factor(arena)AT&T Center                         0.481745    
+factor(arena)Bankers Life Fieldhouse             0.917387    
+factor(arena)Barclays Center                     0.056209 .  
+factor(arena)BOK Center                          9.13e-05 ***
+factor(arena)Capital One Arena                   0.678107    
+factor(arena)CareFirst Arena                      < 2e-16 ***
+factor(arena)CFG Bank Arena                      0.462789    
+factor(arena)Chase Center                        1.00e-08 ***
+factor(arena)Climate Pledge Arena                0.003538 ** 
+factor(arena)College Park Center                 1.34e-09 ***
+factor(arena)Conseco Fieldhouse                  0.787781    
+factor(arena)Crypto.com Arena                    0.099676 .  
+factor(arena)Dee Event Center                    0.181519    
+factor(arena)EagleBank Arena                     0.930546    
+factor(arena)EnergySolutions Arena               0.000320 ***
+factor(arena)Entertainment and Sports Arena      6.56e-16 ***
+factor(arena)Footprint Center                    0.002621 ** 
+factor(arena)Freeman Coliseum                    5.38e-05 ***
+factor(arena)Gainbridge Fieldhouse               0.071019 .  
+factor(arena)Galen Center                        0.000889 ***
+factor(arena)Gateway Center Arena @ College Park  < 2e-16 ***
+factor(arena)Great Western Forum                 1.00e-05 ***
+factor(arena)Hartford Civic Center               0.067665 .  
+factor(arena)Hinkle Fieldhouse                    < 2e-16 ***
+factor(arena)Home Depot Center Tennis Stadium    0.307938    
+factor(arena)Indiana Farmers Coliseum             < 2e-16 ***
+factor(arena)KeyArena                            0.824207    
+factor(arena)Madison Square Garden               4.42e-05 ***
+factor(arena)Mandalay Bay Events Center          6.81e-09 ***
+factor(arena)McCamish Pavilion                   1.46e-11 ***
+factor(arena)Michelob ULTRA Arena                0.610520    
+factor(arena)Mohegan Sun Arena                   0.043820 *  
+factor(arena)Palace of Auburn Hills              0.760697    
+factor(arena)Philips Arena                       0.037089 *  
+factor(arena)PHX Arena                           0.456019    
+factor(arena)Prudential Center                   0.291193    
+factor(arena)Radio City Musical Hall             0.008090 ** 
+factor(arena)Rogers Arena                        0.194066    
+factor(arena)Spokane Arena                       0.013854 *  
+factor(arena)Staples Center                      0.006342 ** 
+factor(arena)State Farm Arena                    8.57e-08 ***
+factor(arena)T-Mobile Arena                      0.004327 ** 
+factor(arena)Talking Stick Resort Arena          0.000399 ***
+factor(arena)Target Center                       0.956408    
+factor(arena)TD Garden                           0.020857 *  
+factor(arena)UIC Pavilion                         < 2e-16 ***
+factor(arena)United Center                       0.000131 ***
+factor(arena)US Airways Center                   0.224613    
+factor(arena)Van Andel Arena                     0.980035    
+factor(arena)Verizon Center                      2.68e-05 ***
+factor(arena)Walter Pyramid at Long Beach State  3.44e-05 ***
+factor(arena)Westchester County Center            < 2e-16 ***
+factor(arena)Wintrust Arena                      0.392168    
+factor(arena)Xcel Energy Center                  0.027406 *  
+median_income                                          NA    
+median_pop                                             NA    
+is_cc                                             < 2e-16 ***
+is_aw                                            0.003686 ** 
+I(elo_home_pregame^2):I(elo_away_pregame^2)      0.087551 .  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.2384 on 4960 degrees of freedom
+Multiple R-squared:  0.684, Adjusted R-squared:  0.6776 
+F-statistic: 105.3 on 102 and 4960 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\begin{verbatim}
+Analysis of Variance Table
+
+Response: log(attendance)
+                                              Df Sum Sq Mean Sq  F value
+elo_home_pregame                               1  44.80  44.795 788.2517
+elo_away_pregame                               1   0.19   0.185   3.2569
+I(elo_home_pregame^2)                          1   0.00   0.000   0.0058
+I(elo_away_pregame^2)                          1   0.24   0.236   4.1484
+factor(season_id)                             26 158.66   6.102 107.3837
+factor(wday(game_date))                        6  15.04   2.507  44.1073
+factor(month(game_date))                       4  12.35   3.088  54.3374
+factor(arena)                                 59 364.85   6.184 108.8170
+is_cc                                          1  13.48  13.477 237.1570
+is_aw                                          1   0.49   0.493   8.6738
+I(elo_home_pregame^2):I(elo_away_pregame^2)    1   0.17   0.166   2.9200
+Residuals                                   4960 281.87   0.057         
+                                               Pr(>F)    
+elo_home_pregame                            < 2.2e-16 ***
+elo_away_pregame                             0.071185 .  
+I(elo_home_pregame^2)                        0.939142    
+I(elo_away_pregame^2)                        0.041728 *  
+factor(season_id)                           < 2.2e-16 ***
+factor(wday(game_date))                     < 2.2e-16 ***
+factor(month(game_date))                    < 2.2e-16 ***
+factor(arena)                               < 2.2e-16 ***
+is_cc                                       < 2.2e-16 ***
+is_aw                                        0.003243 ** 
+I(elo_home_pregame^2):I(elo_away_pregame^2)  0.087551 .  
+Residuals                                                
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
 \subsection{Attendance}\label{sec-attend}
 
 In keeping with recent guidance from Wasserstein and Lazar (2016) and
@@ -916,9 +1292,19 @@ variables except for population achieve ``statistical significance'' at
 the 5\%-level, as shown in Table~\ref{tbl-anova}). Residual analysis for
 the attendance models are shown in Section~\ref{sec-resid-attend}.
 
+\subsubsection{Main effects}\label{main-effects}
+
 {
 
-\begin{longtable}[]{@{}llrrrr@{}}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.0706}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.2706}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1059}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1176}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1176}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.0941}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1059}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1176}}@{}}
 
 \caption{\label{tbl-coefs}Fitted coefficients for scalar terms in models
 for the natural logarithm of attendance.}
@@ -926,26 +1312,40 @@ for the natural logarithm of attendance.}
 \tabularnewline
 
 \toprule\noalign{}
-Model & Term & Estimate & Std Error & Statistic & P Value \\
+\begin{minipage}[b]{\linewidth}\raggedright
+Model
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Term
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Estimate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Std Error
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Statistic
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+P Value
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Conf Low
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Conf High
+\end{minipage} \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-f1 & (Intercept) & 9.080 & 0.132 & 68.978 & 0.000 \\
-f2 & (Intercept) & 9.011 & 0.146 & 61.867 & 0.000 \\
-f3 & (Intercept) & 9.102 & 0.139 & 65.437 & 0.000 \\
-f1 & Caitlin Clark & 0.675 & 0.049 & 13.919 & 0.000 \\
-f2 & Caitlin Clark & 0.691 & 0.050 & 13.776 & 0.000 \\
-f3 & Caitlin Clark & 0.675 & 0.049 & 13.860 & 0.000 \\
-f3 & I(Loss Aversion) & 0.242 & 0.352 & 0.688 & 0.491 \\
-f1 & I(Quality Of Play) & 0.002 & 0.001 & 2.777 & 0.006 \\
-f2 & I(Uncertain Outcome) & 0.000 & 0.001 & -0.430 & 0.667 \\
-f1 & Median Income & -0.007 & 0.002 & -3.686 & 0.000 \\
-f2 & Median Income & -0.006 & 0.002 & -2.930 & 0.003 \\
-f3 & Median Income & -0.008 & 0.002 & -4.098 & 0.000 \\
-f1 & Median Pop & 0.015 & 0.007 & 2.040 & 0.041 \\
-f2 & Median Pop & 0.013 & 0.007 & 1.772 & 0.076 \\
-f3 & Median Pop & 0.015 & 0.007 & 2.080 & 0.038 \\
+f1 & (Intercept) & 9.202 & 0.081 & 113.098 & 0.000 & 9.043 & 9.362 \\
+f1 & I(Z Loss Aversion) & -0.081 & 0.048 & -1.698 & 0.090 & -0.175 &
+0.013 \\
+f1 & I(Z Quality Of Play) & 0.004 & 0.059 & 0.059 & 0.953 & -0.113 &
+0.120 \\
+f1 & I(Z Uncertain Outcome) & -0.053 & 0.022 & -2.406 & 0.016 & -0.097 &
+-0.010 \\
+f1 & Is Sellouttrue & 0.315 & 0.027 & 11.617 & 0.000 & 0.262 & 0.368 \\
+f1 & Median Income & NA & NA & NA & NA & NA & NA \\
+f1 & Median Pop & NA & NA & NA & NA & NA & NA \\
+f1 & P: A'ja Wilson & 0.061 & 0.024 & 2.572 & 0.010 & 0.014 & 0.107 \\
+f1 & P: Caitlin Clark & 0.460 & 0.042 & 10.825 & 0.000 & 0.376 &
+0.543 \\
 
 \end{longtable}
 
@@ -957,10 +1357,12 @@ Notebook}}
 
 Consider first the strong evidence for the Caitlin Clark effect. Even
 for the smallest coefficient in Table~\ref{tbl-coefs}, the expected
-attendance nearly doubles (i.e., is multiplied by \(\exp(0.653)\) =
-1.96) when Clark plays in the game, and this is \emph{after} controlling
+attendance nearly doubles (i.e., is multiplied by \(\exp(0.623)\) =
+1.58) when Clark plays in the game, and this is \emph{after} controlling
 for the Indiana Fever team effect, the level of fan engagement, and the
-season effects!
+season effects! The corresponding change in attendance for A'ja
+Wilson---by most accounts a better player than Clark---is a multiple of
+1.06.
 
 Conversely, the evidence for the quality of play (\(f_1\)) and
 uncertainty of outcome (\(f_2\)) hypotheses is weak, with those
@@ -968,6 +1370,25 @@ coefficients barely moving the needle. For the loss aversion hypothesis,
 a 10 percentage point increase in the probability of the home team
 winning is associated with a modest 4.31\% increase in the expected
 attendance, after controlling for our other factors.
+
+\protect\phantomsection\label{cell-fig-attend-coefs}
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-attend-coefs-1.pdf}}
+
+}
+
+\caption{\label{fig-attend-coefs}Relative magnitudes of coefficients in
+attendance model. Coefficients of interest are highlighted. Note the
+relatively large size of the coefficient associated with Caitlin Clark.}
+
+\end{figure}%
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
 
 Table~\ref{tbl-glance} characterizes the model fits. We can see that
 while all models achieve a similar fit, models \(f_1\) (corresponding to
@@ -977,19 +1398,19 @@ win probability) are slightly superior by most metrics.
 {
 
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0541}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0901}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.1261}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0541}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0901}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0721}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0270}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0901}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0811}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0811}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0811}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.1081}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0450}}@{}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0550}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0917}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.1284}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0550}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0917}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0734}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0367}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0734}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0826}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0734}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0826}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.1101}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0459}}@{}}
 
 \caption{\label{tbl-glance}Comparison of models.}
 
@@ -1027,12 +1448,8 @@ nobs
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-f1 & 0.420 & 0.411 & 0.322 & 46.193 & 0 & 78 & -1411.098 & 2982.197 &
-3504.574 & 517.626 & 4984 & 5063 \\
-f2 & 0.387 & 0.378 & 0.331 & 40.370 & 0 & 78 & -1548.665 & 3257.331 &
-3779.708 & 546.533 & 4984 & 5063 \\
-f3 & 0.415 & 0.406 & 0.323 & 45.365 & 0 & 78 & -1430.227 & 3020.454 &
-3542.831 & 521.552 & 4984 & 5063 \\
+f1 & 0.702 & 0.691 & 0.233 & 66.758 & 0 & 172 & 274.644 & -201.287 &
+934.642 & 265.553 & 4883 & 5056 \\
 
 \end{longtable}
 
@@ -1041,6 +1458,8 @@ f3 & 0.415 & 0.406 & 0.323 & 45.365 & 0 & 78 & -1430.227 & 3020.454 &
 \textsubscript{Source:
 \href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
 Notebook}}
+
+\subsubsection{Annual effects}\label{annual-effects}
 
 Figure~\ref{fig-season-coefs} shows that after controlling for the
 Caitlin Clark effect, expected attendance is only just returning its
@@ -1111,12 +1530,22 @@ estimators for the covariance matrix.
 \href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
 Notebook}}
 
+\subsubsection{Main effects}\label{main-effects-1}
+
 Table~\ref{tbl-coefs2} reports the coefficients from the percentage of
 arena capacity models.
 
 {
 
-\begin{longtable}[]{@{}llrrrr@{}}
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.0706}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.2706}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1059}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1176}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1176}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.0941}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1059}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1176}}@{}}
 
 \caption{\label{tbl-coefs2}Table of coefficients from percentage of
 arena capacity models.}
@@ -1124,30 +1553,62 @@ arena capacity models.}
 \tabularnewline
 
 \toprule\noalign{}
-Model & Term & Estimate & Std Error & Statistic & P Value \\
+\begin{minipage}[b]{\linewidth}\raggedright
+Model
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Term
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Estimate
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Std Error
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Statistic
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+P Value
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Conf Low
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Conf High
+\end{minipage} \\
 \midrule\noalign{}
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-f1 & (Intercept) & 0.187 & 0.300 & 0.624 & 0.533 \\
-f2 & (Intercept) & 0.386 & 0.335 & 1.155 & 0.248 \\
-f3 & (Intercept) & 0.047 & 0.329 & 0.144 & 0.886 \\
-f1 & Caitlin Clark & 2.891 & 0.261 & 11.097 & 0.000 \\
-f2 & Caitlin Clark & 2.888 & 0.261 & 11.072 & 0.000 \\
-f3 & Caitlin Clark & 2.900 & 0.261 & 11.104 & 0.000 \\
-f3 & I(Loss Aversion) & 1.750 & 0.842 & 2.078 & 0.038 \\
-f1 & I(Quality Of Play) & 0.005 & 0.001 & 3.629 & 0.000 \\
-f2 & I(Uncertain Outcome) & -0.005 & 0.002 & -3.189 & 0.001 \\
-f1 & Median Income & 0.017 & 0.005 & 3.788 & 0.000 \\
-f2 & Median Income & 0.020 & 0.005 & 4.262 & 0.000 \\
-f3 & Median Income & 0.017 & 0.005 & 3.574 & 0.000 \\
-f1 & Median Pop & -0.095 & 0.015 & -6.479 & 0.000 \\
-f2 & Median Pop & -0.088 & 0.014 & -6.056 & 0.000 \\
-f3 & Median Pop & -0.099 & 0.015 & -6.558 & 0.000 \\
+f1 & (Intercept) & 2.199 & 0.218 & 10.083 & 0.000 & 1.771 & 2.626 \\
+f1 & I(Z Loss Aversion) & -0.170 & 0.117 & -1.449 & 0.147 & -0.399 &
+0.060 \\
+f1 & I(Z Quality Of Play) & 0.115 & 0.162 & 0.707 & 0.479 & -0.203 &
+0.432 \\
+f1 & I(Z Uncertain Outcome) & -0.122 & 0.057 & -2.161 & 0.031 & -0.234 &
+-0.011 \\
+f1 & Is Sellouttrue & 2.889 & 0.119 & 24.374 & 0.000 & 2.656 & 3.121 \\
+f1 & P: A'ja Wilson & 0.175 & 0.054 & 3.259 & 0.001 & 0.070 & 0.280 \\
+f1 & P: Caitlin Clark & 1.613 & 0.212 & 7.593 & 0.000 & 1.196 & 2.029 \\
 
 \end{longtable}
 
 }
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+Figure~\ref{fig-pct-coefs} shows that\ldots{}
+
+\protect\phantomsection\label{cell-fig-pct-coefs}
+\begin{figure}[H]
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-pct-coefs-1.pdf}}
+
+}
+
+\caption{\label{fig-pct-coefs}Relative magnitudes of coefficients in
+attendance model. Coefficients of interest are highlighted. Note the
+relatively large size of the coefficient associated with Caitlin Clark.}
+
+\end{figure}%
 
 \textsubscript{Source:
 \href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
@@ -1198,12 +1659,8 @@ nobs
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-f1 & 916.6665 & 5062 & -2997.876 & 6153.752 & 6669.600 & 570.6003 & 4984
-& 5063 \\
-f2 & 916.6665 & 5062 & -3017.679 & 6193.357 & 6709.205 & 583.2877 & 4984
-& 5063 \\
-f3 & 916.6665 & 5062 & -3001.311 & 6160.622 & 6676.470 & 574.0105 & 4984
-& 5063 \\
+f1 & 860.2571 & 5055 & -2705.467 & 5756.934 & 6886.335 & 266.4351 & 4883
+& 5056 \\
 
 \end{longtable}
 
@@ -1215,6 +1672,8 @@ Notebook}}
 
 Table~\ref{tbl-anova2} shows the analysis of variance for the percentage
 of arena capacity models.
+
+\subsubsection{Annual effects}\label{annual-effects-1}
 
 Figure~\ref{fig-season-coefs2} displays the estimated effects of our fan
 engagement measures on attendance relative to the 1997 reference season.
@@ -1436,13 +1895,13 @@ The Relationship with Winning Percentage.''} \emph{The Sport Journal}.
 {
 
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0741}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.4815}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0370}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0988}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0864}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1235}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0988}}@{}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0723}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.4940}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0361}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0964}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0843}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1205}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0964}}@{}}
 
 \caption{\label{tbl-anova}Analysis of variance for terms in models for
 the natural logarithm of attendance.}
@@ -1469,36 +1928,22 @@ P Value
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-f3 & I(loss\_aversion) & 1 & 21.221 & 21.221 & 202.786 & 0.000 \\
-f1 & I(quality\_of\_play) & 1 & 23.178 & 23.178 & 223.169 & 0.000 \\
-f2 & I(uncertain\_outcome) & 1 & 0.003 & 0.003 & 0.027 & 0.868 \\
-f1 & is\_cc & 1 & 20.615 & 20.615 & 198.497 & 0.000 \\
-f2 & is\_cc & 1 & 20.969 & 20.969 & 191.220 & 0.000 \\
-f3 & is\_cc & 1 & 20.597 & 20.597 & 196.831 & 0.000 \\
-f1 & median\_income & 1 & 1.850 & 1.850 & 17.813 & 0.000 \\
-f2 & median\_income & 1 & 0.920 & 0.920 & 8.391 & 0.004 \\
-f3 & median\_income & 1 & 1.376 & 1.376 & 13.151 & 0.000 \\
-f1 & median\_pop & 1 & 0.241 & 0.241 & 2.318 & 0.128 \\
-f2 & median\_pop & 1 & 0.283 & 0.283 & 2.578 & 0.108 \\
-f3 & median\_pop & 1 & 0.157 & 0.157 & 1.503 & 0.220 \\
-f1 & factor(month(game\_date)) & 4 & 12.435 & 3.109 & 29.933 & 0.000 \\
-f2 & factor(month(game\_date)) & 4 & 12.455 & 3.114 & 28.396 & 0.000 \\
-f3 & factor(month(game\_date)) & 4 & 12.271 & 3.068 & 29.316 & 0.000 \\
-f1 & factor(wday(game\_date)) & 6 & 14.756 & 2.459 & 23.680 & 0.000 \\
-f2 & factor(wday(game\_date)) & 6 & 14.385 & 2.397 & 21.863 & 0.000 \\
-f3 & factor(wday(game\_date)) & 6 & 14.401 & 2.400 & 22.937 & 0.000 \\
-f1 & name\_current & 12 & 127.280 & 10.607 & 102.127 & 0.000 \\
-f2 & name\_current & 12 & 139.826 & 11.652 & 106.260 & 0.000 \\
-f3 & name\_current & 12 & 129.368 & 10.781 & 103.021 & 0.000 \\
-f3 & I(loss\_aversion):factor(season\_id) & 26 & 20.432 & 0.786 & 7.510
-& 0.000 \\
-f1 & I(quality\_of\_play):factor(season\_id) & 26 & 17.752 & 0.683 &
-6.574 & 0.000 \\
-f2 & I(uncertain\_outcome):factor(season\_id) & 26 & 8.443 & 0.325 &
-2.961 & 0.000 \\
-f1 & factor(season\_id) & 26 & 156.100 & 6.004 & 57.808 & 0.000 \\
-f2 & factor(season\_id) & 26 & 148.017 & 5.693 & 51.916 & 0.000 \\
-f3 & factor(season\_id) & 26 & 150.457 & 5.787 & 55.299 & 0.000 \\
+f1 & I(z\_loss\_aversion) & 1 & 2.987 & 2.987 & 54.928 & 0.000 \\
+f1 & I(z\_quality\_of\_play) & 1 & 5.729 & 5.729 & 105.345 & 0.000 \\
+f1 & I(z\_uncertain\_outcome) & 1 & 0.011 & 0.011 & 0.198 & 0.657 \\
+f1 & is\_aw & 1 & 0.509 & 0.509 & 9.366 & 0.002 \\
+f1 & is\_cc & 1 & 13.488 & 13.488 & 248.023 & 0.000 \\
+f1 & is\_sellout & 1 & 8.341 & 8.341 & 153.370 & 0.000 \\
+f1 & factor(month(game\_date)) & 4 & 12.291 & 3.073 & 56.501 & 0.000 \\
+f1 & factor(wday(game\_date)) & 6 & 14.275 & 2.379 & 43.748 & 0.000 \\
+f1 & I(z\_loss\_aversion):factor(season\_id) & 26 & 4.660 & 0.179 &
+3.295 & 0.000 \\
+f1 & I(z\_quality\_of\_play):factor(season\_id) & 26 & 2.403 & 0.092 &
+1.700 & 0.015 \\
+f1 & I(z\_uncertain\_outcome):factor(season\_id) & 26 & 2.804 & 0.108 &
+1.983 & 0.002 \\
+f1 & factor(season\_id) & 26 & 154.203 & 5.931 & 109.057 & 0.000 \\
+f1 & factor(arena) & 52 & 402.743 & 7.745 & 142.417 & 0.000 \\
 
 \end{longtable}
 
@@ -1511,13 +1956,13 @@ Notebook}}
 {
 
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0632}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.4105}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0316}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0947}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1263}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1895}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0842}}@{}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0619}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.4227}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0309}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0928}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1237}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1856}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0825}}@{}}
 
 \caption{\label{tbl-anova2}Analysis of variance for terms in models for
 percentage of arena capacity.}
@@ -1544,36 +1989,24 @@ P Value
 \endhead
 \bottomrule\noalign{}
 \endlastfoot
-f3 & I(loss\_aversion) & 1 & 2.754 & 5061 & 913.912 & 0.097 \\
-f1 & I(quality\_of\_play) & 1 & 13.447 & 5061 & 903.220 & 0.000 \\
-f2 & I(uncertain\_outcome) & 1 & 0.022 & 5061 & 916.644 & 0.882 \\
-f1 & is\_cc & 1 & 22.602 & 5010 & 577.550 & 0.000 \\
-f2 & is\_cc & 1 & 23.047 & 5010 & 587.921 & 0.000 \\
-f3 & is\_cc & 1 & 22.752 & 5010 & 584.769 & 0.000 \\
-f1 & median\_income & 1 & 0.773 & 5012 & 604.367 & 0.379 \\
-f2 & median\_income & 1 & 1.396 & 5012 & 614.730 & 0.237 \\
-f3 & median\_income & 1 & 1.148 & 5012 & 611.878 & 0.284 \\
-f1 & median\_pop & 1 & 4.216 & 5011 & 600.151 & 0.040 \\
-f2 & median\_pop & 1 & 3.762 & 5011 & 610.968 & 0.052 \\
-f3 & median\_pop & 1 & 4.357 & 5011 & 607.521 & 0.037 \\
-f1 & factor(month(game\_date)) & 4 & 13.224 & 5025 & 700.273 & 0.010 \\
-f2 & factor(month(game\_date)) & 4 & 13.216 & 5025 & 708.391 & 0.010 \\
-f3 & factor(month(game\_date)) & 4 & 13.157 & 5025 & 705.692 & 0.011 \\
-f1 & factor(wday(game\_date)) & 6 & 18.761 & 5029 & 713.497 & 0.005 \\
-f2 & factor(wday(game\_date)) & 6 & 18.436 & 5029 & 721.607 & 0.005 \\
-f3 & factor(wday(game\_date)) & 6 & 18.612 & 5029 & 718.849 & 0.005 \\
-f1 & name\_current & 12 & 95.133 & 5013 & 605.140 & 0.000 \\
-f2 & name\_current & 12 & 92.266 & 5013 & 616.125 & 0.000 \\
-f3 & name\_current & 12 & 92.666 & 5013 & 613.026 & 0.000 \\
-f3 & I(loss\_aversion):factor(season\_id) & 26 & 10.759 & 4984 & 574.011
-& 0.996 \\
-f1 & I(quality\_of\_play):factor(season\_id) & 26 & 6.950 & 4984 &
-570.600 & 1.000 \\
-f2 & I(uncertain\_outcome):factor(season\_id) & 26 & 4.633 & 4984 &
-583.288 & 1.000 \\
-f1 & factor(season\_id) & 26 & 170.961 & 5035 & 732.259 & 0.000 \\
-f2 & factor(season\_id) & 26 & 176.601 & 5035 & 740.043 & 0.000 \\
-f3 & factor(season\_id) & 26 & 176.451 & 5035 & 737.461 & 0.000 \\
+f1 & median\_income & 0 & 0.000 & 4964 & 340.997 & NA \\
+f1 & median\_pop & 0 & 0.000 & 4964 & 340.997 & NA \\
+f1 & I(z\_loss\_aversion) & 1 & 2.826 & 5052 & 852.037 & 0.093 \\
+f1 & I(z\_quality\_of\_play) & 1 & 5.388 & 5054 & 854.869 & 0.020 \\
+f1 & I(z\_uncertain\_outcome) & 1 & 0.007 & 5053 & 854.862 & 0.934 \\
+f1 & is\_aw & 1 & 0.833 & 4962 & 317.690 & 0.361 \\
+f1 & is\_cc & 1 & 22.474 & 4963 & 318.522 & 0.000 \\
+f1 & is\_sellout & 1 & 41.688 & 4961 & 276.002 & 0.000 \\
+f1 & factor(month(game\_date)) & 4 & 11.657 & 5016 & 611.058 & 0.020 \\
+f1 & factor(wday(game\_date)) & 6 & 15.032 & 5020 & 622.715 & 0.020 \\
+f1 & I(z\_loss\_aversion):factor(season\_id) & 26 & 4.318 & 4883 &
+266.435 & 1.000 \\
+f1 & I(z\_quality\_of\_play):factor(season\_id) & 26 & 2.558 & 4935 &
+273.443 & 1.000 \\
+f1 & I(z\_uncertain\_outcome):factor(season\_id) & 26 & 2.690 & 4909 &
+270.754 & 1.000 \\
+f1 & factor(season\_id) & 26 & 214.289 & 5026 & 637.748 & 0.000 \\
+f1 & factor(arena) & 52 & 270.061 & 4964 & 340.997 & 0.000 \\
 
 \end{longtable}
 
@@ -1592,12 +2025,6 @@ models}\label{sec-resid-attend}
 
 \begin{verbatim}
 $f1
-NULL
-
-$f2
-NULL
-
-$f3
 NULL
 \end{verbatim}
 
@@ -1669,134 +2096,6 @@ NULL
 %
 \begin{minipage}[t]{0.50\linewidth}
 
-\begin{figure}[H]
-
-\centering{
-
-\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-resids-5.pdf}}
-
-}
-
-\caption{\label{fig-resids-5}Residual plots for models.}
-
-\end{figure}%
-
-\end{minipage}%
-\newline
-\begin{minipage}[t]{0.50\linewidth}
-
-\begin{figure}[H]
-
-\centering{
-
-\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-resids-6.pdf}}
-
-}
-
-\caption{\label{fig-resids-6}Residual plots for models.}
-
-\end{figure}%
-
-\end{minipage}%
-%
-\begin{minipage}[t]{0.50\linewidth}
-
-\begin{figure}[H]
-
-\centering{
-
-\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-resids-7.pdf}}
-
-}
-
-\caption{\label{fig-resids-7}Residual plots for models.}
-
-\end{figure}%
-
-\end{minipage}%
-\newline
-\begin{minipage}[t]{0.50\linewidth}
-
-\begin{figure}[H]
-
-\centering{
-
-\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-resids-8.pdf}}
-
-}
-
-\caption{\label{fig-resids-8}Residual plots for models.}
-
-\end{figure}%
-
-\end{minipage}%
-%
-\begin{minipage}[t]{0.50\linewidth}
-
-\begin{figure}[H]
-
-\centering{
-
-\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-resids-9.pdf}}
-
-}
-
-\caption{\label{fig-resids-9}Residual plots for models.}
-
-\end{figure}%
-
-\end{minipage}%
-\newline
-\begin{minipage}[t]{0.50\linewidth}
-
-\begin{figure}[H]
-
-\centering{
-
-\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-resids-10.pdf}}
-
-}
-
-\caption{\label{fig-resids-10}Residual plots for models.}
-
-\end{figure}%
-
-\end{minipage}%
-%
-\begin{minipage}[t]{0.50\linewidth}
-
-\begin{figure}[H]
-
-\centering{
-
-\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-resids-11.pdf}}
-
-}
-
-\caption{\label{fig-resids-11}Residual plots for models.}
-
-\end{figure}%
-
-\end{minipage}%
-\newline
-\begin{minipage}[t]{0.50\linewidth}
-
-\begin{figure}[H]
-
-\centering{
-
-\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/fig-resids-12.pdf}}
-
-}
-
-\caption{\label{fig-resids-12}Residual plots for models.}
-
-\end{figure}%
-
-\end{minipage}%
-%
-\begin{minipage}[t]{0.50\linewidth}
-
 \textsubscript{Source:
 \href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
 Notebook}}
@@ -1804,6 +2103,16 @@ Notebook}}
 \end{minipage}%
 
 \end{figure}%
+
+\subsection{Tobit modeling}\label{tobit-modeling}
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
 
 
 

@@ -75,7 +75,26 @@ knitr::write_bib(pkgs, file = "pkgs.bib")
 ```{r}
 wnba_gl <- read_rds(here::here("data/wnba_gl.rds")) |>
   group_by(arena) |>
-  mutate(pct_capacity = attendance / max(attendance)) |>
+  mutate(
+    median_income = median_income / 1000,
+    median_pop = median_pop / 1000000,
+    pct_capacity = attendance / pmax(max(attendance), arena_capacity),
+    pct_capacity_safe = (pct_capacity * (2 * (n() - 1)) + 0.5) / (2 * n()),
+    is_sellout = pct_capacity > 0.95,
+    quality_of_play = elo_home_pregame * elo_away_pregame,
+    uncertain_outcome = abs(elo_home_pregame - elo_away_pregame),
+    loss_aversion = elo_home_win_prob^2,
+    z_quality_of_play = (quality_of_play - mean(quality_of_play)) / sd(quality_of_play), 
+    z_uncertain_outcome = log(uncertain_outcome + 1) - mean(log(uncertain_outcome + 1)),
+    z_loss_aversion = (loss_aversion - mean(loss_aversion)) / sd(loss_aversion),
+    zzz_sum_all_three = z_loss_aversion + z_quality_of_play - z_uncertain_outcome,
+    arena_size = case_when(
+      arena_capacity >= 16000 ~ "arena_large",
+      arena_capacity >= 11000 ~ "arena_medium",
+      arena_capacity >= 5500 ~ "arena_small",
+      TRUE ~ "arena_unknown"
+    )
+  ) |>
   ungroup()
 ```
 
@@ -117,18 +136,22 @@ It is reasonable to anticipate that as women’s sports mature and are perceived
 Our analysis is based on game-level data that spans WNBA history, beginning in 1997 and continuing through the end of the 2025 season. 
 Our final data set contains observations from `r format(nrow(wnba_gl), big.mark = ",")` games.
 
-First, we collected game-level attendance data from [@AcrossTheTimeline_WNBA_Attendance], an online repository for women's basketball data. The site collects attendance numbers directly from the league's records. Attendance data was unavailable for only `r nrow(filter(wnba_gl, is.na(attendance)))` games, while (due to the COVID-19 pandemic) `r nrow(filter(wnba_gl, attendance == 0))` games (accurately) recorded attendance of 0. Because the arenas WNBA teams play in vary widely in size-- the New York Liberty alone have called both the Barclays Center (17,732 seat capacity) and the Westchester County Center (2,300 seat capacity) home in recent years-- we contextualize raw attendance numbers by approximating the capacity of each game venue. Because accurate records of arena configurations and capacities were difficult to obtain (particularly for venues not still in use) we approximated the practical capacity of each space by pulling the maximally attended game for each venue. While teams have many reasons they might choose to play for a sold-out crowd in a smaller arena, smaller venue size will also by nature constrain attendance, making its consideration in our model important.
+First, we collected game-level attendance data from [@AcrossTheTimeline_WNBA_Attendance], an online repository for women's basketball data. The site collects attendance numbers directly from the league's records. 
+Attendance data was unavailable for only `r nrow(filter(wnba_gl, is.na(attendance)))` games, while (due to the COVID-19 pandemic) `r nrow(filter(wnba_gl, attendance == 0))` games (accurately) recorded attendance of 0. 
+Because the arenas WNBA teams play in vary widely in size-- the New York Liberty alone have called both the Barclays Center (17,732 seat capacity) and the Westchester County Center (2,300 seat capacity) home in recent years-- we contextualize raw attendance numbers by approximating the capacity of each game venue. 
+Because accurate records of arena configurations and capacities were difficult to obtain (particularly for venues not still in use) we approximated the practical capacity of each space by pulling the maximally attended game for each venue. 
+While teams have many reasons they might choose to play for a sold-out crowd in a smaller arena, smaller venue size will also by nature constrain attendance, making its consideration in our model important.
 
 Second, we collected game-level performance data from the **wehoop** R package [@hutchinson_gilani_2021_wehoop], which uses the official WNBA API. The game-level performance data include
 These data include the final score of the game. 
-We also used the **wehoop** package to identify whether Caitlin Clark played more than 0 minutes in the game. 
+We also used the **wehoop** package to identify whether Caitlin Clark and/or A'ja Wilson played more than 0 minutes in the game. 
 
 @tbl-attendance shows a sample of the data. 
-While many other variables are omitted from the table, we note that the attendance, the teams playing in the game, the outcome, the arena, and whether Caitlin Clark played in the game, are recorded. 
+While many other variables are omitted from the table, we note that the attendance, the teams playing in the game, the outcome, the arena, and whether Clark or Wilson played in the game, are recorded. 
 
 ```{r}
 #| label: tbl-attendance
-#| fig-cap: "Sample of Game-level WNBA data. The data indicates (among other things) which teams were playing, who won, the arena, the attendance, and whether Caitlin Clark played in the game."
+#| fig-cap: "Sample of Game-level WNBA data. The data indicates (among other things) which teams were playing, who won, the arena, the attendance, and whether Caitlin Clark and/or A'ja Wilson played in the game."
 
 wnba_gl |>
   select(
@@ -138,7 +161,8 @@ wnba_gl |>
     arena,
     attendance,
     plus_minus,
-    clark = is_cc
+    clark = is_cc,
+    wilson = is_aw
   ) |>
   slice_sample(n = 10) |>
   janitor::clean_names(case = "title") |>
@@ -186,21 +210,37 @@ Disentangling the "Caitlin Clark effect" from the league's overall attendance tr
 
 ```{r}
 #| label: fig-boxplots
-#| fig-cap: "Distribution of WNBA game attendance by season. Note that the vertical axis has a logarithmic scale. Caitlin Clark's games in 2024-2025 are separated by color. "
-ggplot(wnba_gl, aes(x = factor(season_id), y = attendance, color = factor(is_cc))) +
+#| fig-cap: "Distribution of WNBA game attendance by season. Note that the vertical axis has a logarithmic scale. Caitlin Clark and/or A'ja Wilson's games are separated by color. "
+plot_attend_eda <- ggplot(wnba_gl, aes(x = factor(season_id), y = attendance)) +
   geom_boxplot(outlier.alpha = 0.2, linewidth = 0.6, fill = "grey90") +
-  geom_jitter(alpha = 0.2, width = 0.15, size = 1) +
+  geom_jitter(alpha = 0.3, width = 0.15, size = 1, aes(color = factor(is_cc | is_aw))) +
   labs(
     title = "Distribution of WNBA Game Attendance by Season",
     subtitle = "1997-2025",
     x = "Season",
     y = "Attendance"
   ) +
-  scale_y_log10() +
-  scale_color_discrete(name = "Clark") +
+  scale_color_discrete(name = "Clark/Wilson") +
   theme_minimal(base_size = 10) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+plot_attend_eda +
+  scale_y_log10()
 ```
+
+@fig-boxplots-capacity shows the distribution of attendance as a percentage of the arena's capacity. 
+Although we recorded reported arena capacities, those capacities change over time, and some games had attendance that exceeded the arena's reported capacity. 
+Instead, we computed the percentage as a ratio of the attendance to the larger of the reported capacity, or the maximum recorded attendance at that arena in the sample.[^ones] 
+
+[^ones]: These modifications reduced the number of 1's in the sample, which was useful mathematically during modeling. 
+
+```{r}
+#| label: fig-boxplots-capacity
+#| fig-cap: "Distribution of WNBA game attendance as a percentage of arena capacity by season. Caitlin Clark's games in 2024-2025 are separated by color. "
+plot_attend_eda +
+  aes(y = pct_capacity) +
+  scale_y_continuous("Attendance as Percentage of Arena Maximum")
+```
+
 
 ### Estimating team strength {#sec-elo}
 
@@ -286,31 +326,23 @@ We also include several control variables to account for time and city-related e
 
 Since we know the arena in which the game took place and the capacity of that arena, we developed an alternative response variable- percentage of arena capacity filled ($\gamma$). 
 
-```{r}
-wnba_gl <- wnba_gl |>
-  mutate(
-    quality_of_play = elo_home_pregame + elo_away_pregame - 3000,
-    uncertain_outcome = abs(elo_home_pregame - elo_away_pregame),
-    loss_aversion = elo_home_win_prob - 0.5
-  )
-```
-
-
-
 ### Response variables
 
 In @fig-attendance-year, we observe the relationship between attendance and estimated home win probability. 
-In most years, the slope appears to be positive. 
+We add a simple quadratic regression line to reflect the quadratic relationship posited by @CoatesHumphreysZhou2014.
+In most years, the slope appears to be positive and the curvature concave. 
 
 ```{r}
 #| label: fig-attendance-year
-#| fig-cap: "WNBA attendance by season, against estimated home win probability. We note that in most years, the slope of the association appears to be positive. "
-plot_attend <- ggplot(wnba_gl, aes(x = elo_home_win_prob, y = attendance, color = factor(is_cc))) +
-  geom_point() +
-  geom_smooth(method = "lm", se = 0, color = "black") +
+#| fig-cap: "WNBA attendance by season, against estimated home win probability. We note that in most years, the slope of the association appears to be positive and the curvature concave. "
+plot_attend <- ggplot(wnba_gl, aes(x = elo_home_win_prob, y = attendance)) +
+  geom_vline(aes(xintercept = mean(elo_home_win_prob)), linetype = 3) +
+#  geom_hline(aes(yintercept = mean(attendance)), linetype = 3) +
+  geom_point(aes(color = factor(is_cc | is_aw))) +
+  geom_smooth(method = "lm", formula = y ~ I(x^2), se = 0, color = "black") +
   facet_wrap(vars(season_id)) +
-  scale_x_continuous("Estimated Home Win Probability") +
-  scale_color_discrete(name = "Clark") +
+  scale_x_continuous("Estimated Home Win Probability", limits = c(0, 1)) +
+  scale_color_discrete(name = "Clark/Wilson") +
   theme_minimal(base_size = 10)
 plot_attend +
   scale_y_log10("Attendance")
@@ -380,6 +412,58 @@ plot_capacity +
   scale_x_continuous("UOH: Absolute Difference in Elo rating")
 ```
 
+
+#### Rescaling
+
+@fig-rescaled shows the distribution of our fan engagement variables after rescaling. 
+
+```{r}
+#| label: fig-rescaled
+#| fig-cap: "Distribution of fan engagement variables after rescaling. "
+wnba_gl |>
+  select(contains("z_")) |>
+  pivot_longer(cols = everything(), values_to = "value", names_to = "fan_engagement") |>
+  ggplot(aes(x = value)) +
+  geom_histogram() +
+  facet_wrap(vars(fan_engagement), ncol = 1) + 
+  theme_minimal(base_size = 10) +
+  scale_x_continuous("Standard deviations above the mean")
+```
+
+
+We note that @tbl-cor shows that our three fan engagement variables are largely uncorrelated. 
+
+```{r}
+#| label: tbl-cor
+#| tbl-cap: "Correlations among fan engagment variables. "
+wnba_gl |>
+  select(contains("z_")) |>
+  cor() |>
+  knitr::kable(digits = 3)
+```
+
+
+
+```{r}
+wnba_gl |>
+  select(contains("pregame"), contains("z_")) |>
+  pivot_longer(cols = !contains("pregame"), names_to = "variable", values_to = "value") |>
+  ggplot(aes(x = elo_home_pregame, y = elo_away_pregame, color = value)) +
+  geom_point() +
+  facet_wrap(vars(variable)) +
+  scale_color_viridis_c()
+```
+
+
+```{r}
+plot_attend +
+  aes(x = zzz_sum_all_three) +
+  geom_smooth(method = "lm") +
+  scale_x_continuous()
+```
+
+
+
 ### Control variables {#sec-control}
 
 As time-related control variables, we include the the season ($\tau_1$), the month of the year ($\tau_2$), and day of the week ($\tau_3$) as fixed effects.
@@ -422,24 +506,31 @@ where $G(z) = \frac{e^z}{1 + e^z}$ is the (vectorized) logistic function, $\math
 ## Results
 
 ```{r}
-f_control <- "factor(season_id) + factor(wday(game_date)) + factor(month(game_date)) + name_current + median_income + median_pop + is_cc"
-f_exp <- c("I(quality_of_play)", "I(uncertain_outcome)", "I(loss_aversion)")
+f_control <- "factor(season_id) + factor(wday(game_date)) + factor(month(game_date)) + factor(arena) + median_income + median_pop + is_cc + is_aw + is_sellout"
+f_exp <- c("(I(z_quality_of_play) + I(z_uncertain_outcome) + I(z_loss_aversion))")
+
+mod_df <- wnba_gl |>
+  filter(!season_id %in% c(2021), is_active) |>
+  filter_out(is.na(attendance))
 
 mod_attend <- f_exp |>
   map_chr(~paste("log(attendance + 1) ~ ", .x, "* factor(season_id) +", f_control)) |>
   map(as.formula) |>
-  map(lm, data = wnba_gl |>
-        filter(!season_id %in% c(2021), is_active) |>
-        mutate(
-          median_income = median_income / 1000,
-          median_pop = median_pop / 1000000
-        )
-  ) |>
-  set_names(nm = paste0("f", 1:3))
+  map(lm, data = mod_df) |>
+  set_names(nm = paste0("f", 1:length(f_exp)))
 
 #mod_attend |>
 #  map(summary)
 ```
+
+
+```{r}
+#| label: coates
+mod_coates <- lm(log(attendance) ~ elo_home_pregame + elo_away_pregame + I(elo_home_pregame^2) * I(elo_away_pregame^2) + factor(season_id) + factor(wday(game_date)) + factor(month(game_date)) + factor(arena) + median_income + median_pop + is_cc + is_aw, data = mod_df)
+summary(mod_coates)
+anova(mod_coates)
+```
+
 
 ### Attendance {#sec-attend}
 
@@ -447,18 +538,26 @@ In keeping with recent guidance from @wasserstein2016asa and @wasserstein2019mov
 (All variables except for population achieve "statistical significance" at the 5\%-level, as shown in @tbl-anova). 
 Residual analysis for the attendance models are shown in @sec-resid-attend. 
 
+#### Main effects
+
 ```{r}
 #| label: tbl-coefs
 #| tbl-cap: "Fitted coefficients for scalar terms in models for the natural logarithm of attendance. "
 mod_attend_coefs <- mod_attend |>
-  map(broom::tidy) |>
+  map(broom::tidy, conf.int = TRUE) |>
   bind_rows(.id = "model") 
+
+min_cc <- mod_attend_coefs |>
+  filter(term == "is_cc") |>
+  select(estimate) |>
+  min()
 
 mod_attend_coefs |>
   filter_out(str_detect(term, "factor|name_current")) |>
   mutate(
 #    term = ifelse(str_detect(term, "I\\("), paste0(model, ": fan engagment"), term),
-    term = ifelse(str_detect(term, "is_cc"), "Caitlin Clark", term),
+    term = ifelse(str_detect(term, "is_cc"), "P: Caitlin Clark", term),
+    term = ifelse(str_detect(term, "is_aw"), "P: A'ja Wilson", term),
     term = str_to_title(str_replace_all(term, "_", " "))
   ) |>
   arrange(term, model) |>
@@ -467,10 +566,29 @@ mod_attend_coefs |>
 ```
 
 Consider first the strong evidence for the Caitlin Clark effect. 
-Even for the smallest coefficient in @tbl-coefs, the expected attendance nearly doubles (i.e., is multiplied by $\exp(0.653)$ = `r mod_attend_coefs |> filter(term == "is_cc") |> select(estimate) |> min() |> exp() |> round(2)`) when Clark plays in the game, and this is *after* controlling for the Indiana Fever team effect, the level of fan engagement, and the season effects! 
-
+Even for the smallest coefficient in @tbl-coefs, the expected attendance nearly doubles (i.e., is multiplied by $\exp(0.623)$ = `r min_cc |> exp() |> round(2)`) when Clark plays in the game, and this is *after* controlling for the Indiana Fever team effect, the level of fan engagement, and the season effects! 
+The corresponding change in attendance for A'ja Wilson---by most accounts a better player than Clark---is a multiple of `r mod_attend_coefs |> filter(term == "is_aw") |> pull(estimate) |> min() |> exp() |> round(2)`.
+  
 Conversely, the evidence for the quality of play ($f_1$) and uncertainty of outcome ($f_2$) hypotheses is weak, with those coefficients barely moving the needle. 
 For the loss aversion hypothesis, a 10 percentage point increase in the probability of the home team winning is associated with a modest `r round(100 * (exp(0.422/10) - 1), 2)`% increase in the expected attendance, after controlling for our other factors. 
+
+```{r}
+#| label: fig-attend-coefs
+#| fig-cap: "Relative magnitudes of coefficients in attendance model. Coefficients of interest are highlighted. Note the relatively large size of the coefficient associated with Caitlin Clark. "
+plot_attend_coefs <- mod_attend_coefs |>
+  filter_out(str_detect(term, "(arena)|:|Intercept|median")) |>
+  mutate(
+    hilite = str_detect(term, "is_cc|2025|uncertain")
+  ) |>
+  ggplot(aes(x = estimate, y = term, color = hilite)) +
+  geom_vline(xintercept = 0, linetype = 3) +
+  geom_point() +
+  geom_errorbar(aes(xmin = conf.low, xmax = conf.high), width = 0.1) +
+  scale_x_continuous("Coefficient in Regression Model") +
+  scale_color_discrete(guide = "none")
+plot_attend_coefs
+```
+
 
 @tbl-glance characterizes the model fits. 
 We can see that while all models achieve a similar fit, models $f_1$ (corresponding to the quality of play hypothesis) and $f_3$ (corresponding to the home win probability) are slightly superior by most metrics. 
@@ -484,6 +602,8 @@ mod_attend |>
   knitr::kable(digits = 3)
 ```
 
+#### Annual effects
+
 @fig-season-coefs shows that after controlling for the Caitlin Clark effect, expected attendance is only just returning its 1997 baseline in the most recent season. 
 This is a mixed blessing. 
 On the one hand, even after controlling for Clark, league expected attendance has fully recovered from the COVID-19 pandemic and the malaise of the early 2000s and 2010s. 
@@ -492,16 +612,18 @@ On the other hand, it seems unlikely that the league would have achieved record 
 ```{r}
 #| label: fig-season-coefs
 #| fig-cap: "Estimated season-level fixed effects for natural logarithm of attendance models. "
-mod_attend_coefs |>
+plot_attend_seasons <- mod_attend_coefs |>
   filter(str_detect(term, "season_id")) |>
   filter_out(str_detect(term, ":")) |>
   mutate(season_id = parse_number(str_sub(term, -4))) |>
   ggplot(aes(x = season_id, y = estimate, color = model)) +
   geom_hline(yintercept = 0, linetype = 3) +
   geom_line() +
+  geom_errorbar(aes(ymin = conf.low, ymax = conf.high, width = 0.2)) +
   scale_x_continuous("Season") +
   scale_y_continuous("Estimated Season Fixed Effect") +
   theme_minimal(base_size = 10)
+plot_attend_seasons
 ```
 
 @fig-season-slopes shows a general increase in the slope of the interaction terms in all three models in recent years. 
@@ -514,24 +636,21 @@ The changes in slope associated with models $f_2$ and $f_3$ are now positive, al
 ```{r}
 #| label: fig-season-slopes
 #| fig-cap: "Estimated season-level changes in slopes for natural logarithm of attendance models. "
-mod_attend_coefs |>
+plot_attend_slopes <- mod_attend_coefs |>
   filter(str_detect(term, ":")) |>
   mutate(
     season_id = parse_number(str_sub(term, -4)),
-    type = ifelse(str_detect(term, ":"), "interaction", "linear"),
-    scaled_estimate = case_when(
-      model == "f1" ~ estimate * (mean(wnba_gl$quality_of_play)),
-      model == "f2" ~ estimate * (mean(wnba_gl$uncertain_outcome)),
-      model == "f3" ~ estimate * (mean(wnba_gl$loss_aversion))
-    )
+    variable = str_extract(term, "z_.+:")
   ) |>
-  ggplot(aes(x = season_id, y = scaled_estimate, color = model)) +
+  ggplot(aes(x = season_id, y = estimate, color = variable)) +
   geom_hline(yintercept = 0, linetype = 3) +
   geom_line() +
+#  geom_errorbar(aes(ymin = conf.low, ymax = conf.high, width = 0.2)) +
   geom_smooth(se = 0) +
   scale_x_continuous("Season") +
   scale_y_continuous("Estimated Season Fixed Effect") +
   theme_minimal(base_size = 10)
+plot_attend_slopes
 ```
 
 ### Percentage of Arena Capacity
@@ -545,20 +664,14 @@ library(sandwich)
 mod_pct <- f_exp |>
   map_chr(~paste("pct_capacity ~ ", .x, "* factor(season_id) +", f_control)) |>
   map(as.formula) |>
-  map(glm, data = wnba_gl |>
-        filter(!season_id %in% c(2021), is_active) |>
-        mutate(
-          median_income = median_income / 1000,
-          median_pop = median_pop / 1000000,
-          pct_capacity_safe = (pct_capacity * (n() - 1) + 0.5) / n()
-        ),
-      family = binomial(link = "logit")
-  ) |>
-  set_names(nm = paste0("f", 1:3))
+  map(glm, data = mod_df, family = binomial(link = "logit")) |>
+  set_names(nm = paste0("f", 1:length(f_exp)))
 
 vcov_pct <- mod_pct |>
   map(vcovHC, type = "HC1")
 ```
+
+#### Main effects
 
 @tbl-coefs2 reports the coefficients from the percentage of arena capacity models. 
 
@@ -566,20 +679,35 @@ vcov_pct <- mod_pct |>
 #| label: tbl-coefs2
 #| tbl-cap: "Table of coefficients from percentage of arena capacity models. "
 mod_pct_coefs <- map2(mod_pct, vcov_pct, lmtest::coeftest) |>
-  map(broom::tidy) |>
+  map(broom::tidy, conf.int = TRUE) |>
   bind_rows(.id = "model") 
 
 mod_pct_coefs |>
   filter_out(str_detect(term, "factor|name")) |>  
   mutate(
 #    term = ifelse(str_detect(term, "I\\("), paste0(model, ": fan engagment"), term),
-    term = ifelse(str_detect(term, "is_cc"), "Caitlin Clark", term),
+    term = ifelse(str_detect(term, "is_cc"), "P: Caitlin Clark", term),
+    term = ifelse(str_detect(term, "is_aw"), "P: A'ja Wilson", term),
     term = str_to_title(str_replace_all(term, "_", " "))
   ) |>
   arrange(term, model) |>
   janitor::clean_names(case = "title") |>
   knitr::kable(digits = 3)
 ```
+
+@fig-pct-coefs shows that...
+
+```{r}
+#| label: fig-pct-coefs
+#| fig-cap: "Relative magnitudes of coefficients in attendance model. Coefficients of interest are highlighted. Note the relatively large size of the coefficient associated with Caitlin Clark. "
+plot_attend_coefs +
+  mod_pct_coefs |>
+  filter_out(str_detect(term, "(arena)|:|Intercept|median")) |>
+  mutate(
+    hilite = str_detect(term, "is_cc|2025|uncertain")
+  )
+```
+
 
 @tbl-glance2 shows the model fit metrics for the percentage of arena capacity models. 
 
@@ -594,21 +722,18 @@ mod_pct |>
 
 @tbl-anova2 shows the analysis of variance for the percentage of arena capacity models. 
 
+#### Annual effects
+
 @fig-season-coefs2 displays the estimated effects of our fan engagement measures on attendance relative to the 1997 reference season. Similar to the overall attendance trends, these effects generally remained below their 1997 levels for much of the league's history and only returned to comparable levels recently. In the most recent years of measurement, however, we see the league exceeding previously record-holding levels.
 
 ```{r}
 #| label: fig-season-coefs2
 #| fig-cap: "Estimated season-level fixed effects for percentage of arena capacity models. "
-mod_pct_coefs |>
+plot_attend_seasons +
+  mod_pct_coefs |>
   filter(str_detect(term, "season_id")) |>
   filter_out(str_detect(term, ":")) |>
-  mutate(season_id = parse_number(str_sub(term, -4))) |>
-  ggplot(aes(x = season_id, y = estimate, color = model)) +
-  geom_hline(yintercept = 0, linetype = 3) +
-  geom_line() +
-  scale_x_continuous("Season") +
-  scale_y_continuous("Estimated Season Fixed Effect") +
-  theme_minimal(base_size = 10)
+  mutate(season_id = parse_number(str_sub(term, -4)))
 ```
 
 @fig-season-slopes2 shows that...??
@@ -616,24 +741,13 @@ mod_pct_coefs |>
 ```{r}
 #| label: fig-season-slopes2
 #| fig-cap: "Estimated season-level changes in slopes for percentage of arena capacity models. "
-mod_pct_coefs |>
+plot_attend_slopes +
+  mod_pct_coefs |>
   filter(str_detect(term, ":")) |>
   mutate(
     season_id = parse_number(str_sub(term, -4)),
-    type = ifelse(str_detect(term, ":"), "interaction", "linear"),
-    scaled_estimate = case_when(
-      model == "f1" ~ estimate * (mean(wnba_gl$quality_of_play)),
-      model == "f2" ~ estimate * (mean(wnba_gl$uncertain_outcome)),
-      model == "f3" ~ estimate * (mean(wnba_gl$loss_aversion))
-    )
-  ) |>
-  ggplot(aes(x = season_id, y = scaled_estimate, color = model)) +
-  geom_hline(yintercept = 0, linetype = 3) +
-  geom_line() +
-  geom_smooth(se = 0) +
-  scale_x_continuous("Season") +
-  scale_y_continuous("Estimated Season Fixed Effect") +
-  theme_minimal(base_size = 10)
+    variable = str_extract(term, "z_.+:")
+  ) 
 ```
 
 ### Fan engagement and attendance over time
@@ -699,5 +813,69 @@ mod_pct |>
 #| layout-ncol: 2 
 mod_attend |>
   map(plot, ask = FALSE)
+```
+
+### Tobit modeling
+
+```{r}
+#| eval: false
+mod_simple <- lm(log(attendance) ~ loss_aversion + factor(season_id) + factor(arena) + is_cc + name_current, data = mod_df)
+summary(mod_simple)
+plot(mod_simple, which = 1)
+
+mod_df_a <- mod_simple |>
+  broom::augment() |>
+  select(contains(".")) |>
+  bind_cols(mod_df)
+
+ggplot(data = mod_df_a, aes(y = .resid, x = .fitted, color = pct_capacity_safe)) +
+  geom_point() +
+  facet_wrap(vars(name_current))
+```
+
+
+```{r}
+#| eval: false
+library(VGAM)
+
+ggplot(data = mod_df, aes(y = arena_capacity - attendance, x = game_date)) +
+  geom_point(aes(color = pct_capacity_safe)) +
+  geom_point(aes(y = arena_capacity)) + 
+  facet_wrap(vars(name_current))
+
+ggplot(data = mod_df, aes(y = log(arena_capacity - attendance), x = quality_of_play)) +
+  geom_point(aes(color = pct_capacity_safe)) +
+#  geom_point(aes(y = arena_capacity)) + 
+  facet_wrap(vars(name_current))
+
+gl_pieces <- games_by_arena_size |>
+  group_split()
+
+mod_df |>
+  pull(attendance) |>
+  summary()
+
+mod_tobit <- vglm(log(attendance + 1) ~ loss_aversion, tobit(Upper = log(20000), imethod = 2), data = mod_df)
+
+mod_tobit_small <- vglm(log(attendance + 1) ~ home_win_prob * factor(period) + factor(wday(game_date)) + factor(month(game_date)) + name_current + is_cc + median_income  + median_pop, tobit(Upper = log(5000), imethod = 2), data = gl_pieces[[1]])
+
+mod_tobit_medium <- vglm(log(attendance) ~ home_win_prob * factor(period) + factor(wday(game_date)) + factor(month(game_date)) + name_current + is_cc + median_income  + median_pop, tobit(Upper = log(15000)), data = gl_pieces[[2]])
+
+mod_tobit_large <- vglm(log(attendance) ~ home_win_prob * factor(period) + factor(wday(game_date)) + factor(month(game_date)) + name_current + is_cc + median_income  + median_pop, tobit(Upper = log(22000)), data = gl_pieces[[3]])
+
+summary(mod_tobit)
+exp(-1.079e+00)
+
+
+
+
+mod_tobit <- vglm(pct_capacity ~ elo.A + elo.B + home_win_prob * factor(period) + factor(wday(game_date)) + factor(month(game_date)) + name_current + is_cc + median_income  + median_pop, tobit(Lower = 0, Upper = 1, imethod = 2), data = wnba_gl_reg)
+summary(mod_tobit)
+
+r <- residuals(mod_tobit, type = "response")[, 1]
+sqrt(mean(r^2))
+y_hat <- fitted.values(mod_tobit)[, 1]
+
+plot(y = r, x = y_hat)
 ```
 
