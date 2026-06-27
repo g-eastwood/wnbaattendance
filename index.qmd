@@ -377,11 +377,12 @@ The first and third have been rescaled so that they will have means close to 0.
 - Uncertainty of outcome hypothesis: fans may wish to attend a game for which the outcome is uncertain. We model this as the absolute difference in the two teams' Elo ratings: ($f_2(\hat{\theta}_i(t), \hat{\theta}_i(t)) = |\hat{\theta}_i(t) - \hat{\theta}_j(t)|$)
 - Loss aversion: fans may wish to attend a game to see their team (the home team) win. We model this using the estimated home win probability function above ($f_3(\hat{\theta}_i(t), \hat{\theta}_i(t)) = \hat{p}_{ij}(t)$)
 
-The distribution of attendance with respect to $f_1$ and $f_2$ are shown in @fig-attend-f1 and @fig-attend-f2, respectively, with the corresponding plots for percentage of arena capacity shown in @fig-capacity-f1 and @fig-capacity-f2. 
+The distribution of attendance with respect to $f_1$ and $f_2$ are shown in @fig-attend-f1 and @fig-attend-f2, respectively, with the corresponding plots for percentage of arena capacity shown in @fig-capacity-f1 and @fig-capacity-f2. Note that because our uncertainty of outcome metric is define as the absolute difference in Elo ratings between the two teams. Larger values indicate a less competitive matchup and therefore lower outcome uncertainty. If the uncertainty of outcome hypothesis is true, we would expect a negative relationship between this variable and attendance, as more competitive games should attract larger crowds. 
+
 
 ```{r}
 #| label: fig-attend-f1
-#| fig-cap: "WNBA game attendance by season, against the game-time sum of Elo ratings - 3000"
+#| fig-cap: "WNBA game attendance by season, against quality of play (game-time sum of Elo ratings - 3000). Higher values indicate matchups between stronger teams."
 plot_attend +
   aes(x = quality_of_play) +
   scale_x_continuous("Quality of Play: Sum of Elo rating - 3000") +
@@ -390,7 +391,7 @@ plot_attend +
 
 ```{r}
 #| label: fig-attend-f2
-#| fig-cap: "asd"
+#| fig-cap: "WNBA game attendance by season, against uncertainty of outcome. Games are more competetive when UOH is closer to zero."
 plot_attend +
   aes(x = uncertain_outcome) +
   scale_x_continuous("UOH: Absolute Difference in Elo rating") + 
@@ -401,7 +402,7 @@ plot_attend +
 #| label: fig-capacity-f1
 #| fig-cap: "asd"
 plot_capacity +
-  aes(x = quality_of_play) +
+  aes(x = quality_of_play) + 
   scale_x_continuous("Quality of Play: Sum of Elo rating - 3000")
 ```
 
@@ -511,8 +512,8 @@ f_control <- "factor(season_id) + factor(wday(game_date)) + factor(month(game_da
 f_exp <- c("(I(z_quality_of_play) + I(z_uncertain_outcome) + I(z_loss_aversion))")
 
 mod_df <- wnba_gl |>
-  filter(!season_id %in% c(2021), is_active) |>
-  filter_out(is.na(attendance))
+  filter(!season_id %in% c(2021), is_active) #|>
+#  filter_out(is.na(attendance))
 
 mod_attend <- f_exp |>
   map_chr(~paste("log(attendance + 1) ~ ", .x, "* factor(season_id) +", f_control)) |>
@@ -522,6 +523,56 @@ mod_attend <- f_exp |>
 
 #mod_attend |>
 #  map(summary)
+```
+
+```{r}
+mod <- mod_attend$f1
+coef_df <- broom::tidy(mod)
+int_df <- coef_df |>
+  filter(str_detect(term, ":factor\\(season_id\\)"))
+
+int_df <- int_df |>
+  mutate(
+    variable = str_extract(term, "^[^:]+"),
+    season = str_extract(term, "\\d{4}") |> as.integer()
+  )
+
+main_df <- coef_df |>
+  filter(term %in% c(
+    "z_quality_of_play",
+    "z_uncertain_outcome",
+    "z_loss_aversion"
+  )) |>
+  mutate(
+    variable = term,
+    season = min(mod_df$season_id, na.rm = TRUE)
+  )
+
+slopes <- bind_rows(
+  main_df |> select(variable, season, estimate = estimate),
+  int_df |> transmute(
+    variable,
+    season,
+    estimate = estimate
+  )
+) |>
+  arrange(variable, season)
+```
+
+```{r}
+library(ggplot2)
+
+ggplot(slopes, aes(x = season, y = estimate)) +
+  geom_point(alpha = 0.6) +
+  geom_line() +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap(~ variable, scales = "free_y") +
+  theme_minimal() +
+  labs(
+    x = "Season",
+    y = "Estimated Attendance Slope",
+    title = "Evolution of Attendance Drivers Over Time"
+  )
 ```
 
 
@@ -539,7 +590,7 @@ In keeping with recent guidance from @wasserstein2016asa and @wasserstein2019mov
 (All variables except for population achieve "statistical significance" at the 5\%-level, as shown in @tbl-anova). 
 Residual analysis for the attendance models are shown in @sec-resid-attend. 
 
-#### Main effects
+#### Baseline effects
 
 ```{r}
 #| label: tbl-coefs
@@ -566,12 +617,13 @@ mod_attend_coefs |>
   knitr::kable(digits = 3)
 ```
 
-Consider first the strong evidence for the Caitlin Clark effect. 
+@tbl-coefs reports estimates from the baseline interaction. Because each measure of fan engagement is interacted with season, the reported coefficients for quality of play, outcome uncertainty, and loss aversion represent their estimated effects in the reference season (1997). The interaction terms, discussed below, capture how these relationships evolve over time. In the reference season, the evidence for the quality of play ($f_1$) and uncertainty of outcome ($f_2$) hypotheses is weak, with those coefficients barely moving the needle. 
+For the loss aversion hypothesis, a 10 percentage point increase in the probability of the home team winning is associated with a modest `r round(100 * (exp(0.422/10) - 1), 2)`% increase in the expected attendance, after controlling for our other factors. 
+
+Among the control variables, games featuring Caitlin Clark were associated with significantly higher attendance, whole A'ja Wilson's presence was associated witha smaller but still significant increase in attendance.
 Even for the smallest coefficient in @tbl-coefs, the expected attendance nearly doubles (i.e., is multiplied by $\exp(0.623)$ = `r min_cc |> exp() |> round(2)`) when Clark plays in the game, and this is *after* controlling for the Indiana Fever team effect, the level of fan engagement, and the season effects! 
 The corresponding change in attendance for A'ja Wilson---by most accounts a better player than Clark---is a multiple of `r mod_attend_coefs |> filter(term == "is_aw") |> pull(estimate) |> min() |> exp() |> round(2)`.
-  
-Conversely, the evidence for the quality of play ($f_1$) and uncertainty of outcome ($f_2$) hypotheses is weak, with those coefficients barely moving the needle. 
-For the loss aversion hypothesis, a 10 percentage point increase in the probability of the home team winning is associated with a modest `r round(100 * (exp(0.422/10) - 1), 2)`% increase in the expected attendance, after controlling for our other factors. 
+
 
 ```{r}
 #| label: fig-attend-coefs
@@ -590,18 +642,64 @@ plot_attend_coefs <- mod_attend_coefs |>
 plot_attend_coefs
 ```
 
-
-@tbl-glance characterizes the model fits. 
-We can see that while all models achieve a similar fit, models $f_1$ (corresponding to the quality of play hypothesis) and $f_3$ (corresponding to the home win probability) are slightly superior by most metrics. 
+@tbl-glance characterizes the model's fit. 
+Our model explains $70.2%$ of the variance in game attendance, and the small difference between $r^2$ and $adj.r^2$ suggests that the complexity of our model is justified.
 
 ```{r}
 #| label: tbl-glance
-#| tbl-cap: "Comparison of models."
+#| tbl-cap: "Model fit"
 mod_attend |>
   map(broom::glance) |>
   bind_rows(.id = "model") |>
   knitr::kable(digits = 3)
 ```
+
+```{r}
+mod_base <- lm(
+  log(attendance + 1) ~
+    (z_quality_of_play +
+     z_uncertain_outcome +
+     z_loss_aversion) +
+    factor(season_id) +
+    factor(wday(game_date)) +
+    factor(month(game_date)) +
+    factor(arena) +
+    median_income + median_pop +
+    is_cc + is_aw + is_sellout,
+  data = mod_df
+)
+
+mod_int <- lm(
+  log(attendance + 1) ~
+    (z_quality_of_play +
+     z_uncertain_outcome +
+     z_loss_aversion) * factor(season_id) +
+    factor(wday(game_date)) +
+    factor(month(game_date)) +
+    factor(arena) +
+    median_income + median_pop +
+    is_cc + is_aw + is_sellout,
+  data = mod_df
+)
+
+#anova(mod_base, mod_int)
+anova_df <- tibble(
+  Model = c("Baseline (no season-varying slopes)",
+            "Season-varying slopes"),
+  `Residual df` = c(4961, 4883),
+  `Residual SS` = c(275.43, 265.62),
+  `Df added` = c(NA, 78),
+  `ΔSS` = c(NA, 9.8143),
+  `F-statistic` = c(NA, 2.3131),
+  `p-value` = c(NA, 7.477e-10)
+)
+
+#| label: tbl-anova
+#| tbl-cap: Model comparison: constant vs season-varying effects of fan engagement on attendance."
+kable(anova_df, digits = 3)
+```
+@tbl-anova compares a model fit with constant slope coefficients to our model which allows each effect to vary by season. The interactions introduce 78 additional terms corresponding to season specific slopes to our model. The nested F-test rejects the null hypothesis that season-specific interactions are equal to zero, indicating that the effects of our fan engagement measures differ significantly across seasons. 
+
 
 #### Annual effects
 
@@ -750,9 +848,6 @@ plot_attend_slopes +
     variable = str_extract(term, "z_.+:")
   ) 
 ```
-
-### Fan engagement and attendance over time
-
 
 ## Conclusion
 

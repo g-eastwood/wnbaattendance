@@ -206,7 +206,7 @@
 
 \title{Winning and Attendance in the WNBA}
 \author{Gabriela Eastwood \and Benjamin S. Baumer \and Andrew Zimbalist}
-\date{2026-06-18}
+\date{2026-06-27}
 \begin{document}
 \maketitle
 \begin{abstract}
@@ -465,16 +465,16 @@ Wilson played in the game, are recorded.
 \toprule
 Game Date & Home & Away & Arena & Attendance & Plus Minus & Clark & Wilson \\ 
 \midrule\addlinespace[2.5pt]
-20303 & CHI & PHX & Wintrust Arena & 7,081 & -16 & 0 & 0 \\ 
-12608 & CON & SAC & Mohegan Sun Arena & 6,771 & -15 & 0 & 0 \\ 
-15168 & NYL & ATL & Prudential Center & 14,314 & 22 & 0 & 0 \\ 
-15935 & ATL & WAS & Philips Arena & 4,873 & 18 & 0 & 0 \\ 
-16677 & TUL & IND & BOK Center & 4,512 & 6 & 0 & 0 \\ 
-20306 & GSV & LVA & Chase Center & 18,064 & -6 & 0 & 1 \\ 
-11173 & NYL & ORL & Madison Square Garden & 17,114 & 13 & 0 & 0 \\ 
-11165 & SAC & ORL & ARCO Arena & 7,196 & 7 & 0 & 0 \\ 
-15569 & MIN & WAS & Target Center & 10,933 & 29 & 0 & 0 \\ 
-19904 & NYL & ATL & Barclays Center & 10,823 & 6 & 0 & 0 \\ 
+19872 & NYL & PHO & Barclays Center & 9,182 & 3 & 0 & 0 \\ 
+17359 & CHI & DAL & Allstate Arena & 14,102 & 6 & 0 & 0 \\ 
+13736 & PHO & LAS & US Airways Center & 9,555 & 17 & 0 & 0 \\ 
+13316 & WAS & NYL & Verizon Center & 7,803 & 18 & 0 & 0 \\ 
+11521 & DET & NYL & Palace of Auburn Hills & 13,378 & -13 & 0 & 0 \\ 
+18511 & WAS & DAL & NA & NA & -7 & 0 & 0 \\ 
+17377 & PHO & SAN & Talking Stick Resort Arena & 10,108 & 17 & 0 & 0 \\ 
+16983 & CHI & WAS & Allstate Arena & 5,320 & 2 & 0 & 0 \\ 
+15920 & IND & CHI & Bankers Life Fieldhouse & 8,610 & 21 & 0 & 0 \\ 
+14447 & SEA & LAS & KeyArena & 7,154 & 11 & 0 & 0 \\ 
 \bottomrule
 \end{tabular*}
 
@@ -787,7 +787,13 @@ The distribution of attendance with respect to \(f_1\) and \(f_2\) are
 shown in Figure~\ref{fig-attend-f1} and Figure~\ref{fig-attend-f2},
 respectively, with the corresponding plots for percentage of arena
 capacity shown in Figure~\ref{fig-capacity-f1} and
-Figure~\ref{fig-capacity-f2}.
+Figure~\ref{fig-capacity-f2}. Note that because our uncertainty of
+outcome metric is define as the absolute difference in Elo ratings
+between the two teams. Larger values indicate a less competitive matchup
+and therefore lower outcome uncertainty. If the uncertainty of outcome
+hypothesis is true, we would expect a negative relationship between this
+variable and attendance, as more competitive games should attract larger
+crowds.
 
 \protect\phantomsection\label{cell-fig-attend-f1}
 \begin{figure}[H]
@@ -799,7 +805,8 @@ Figure~\ref{fig-capacity-f2}.
 }
 
 \caption{\label{fig-attend-f1}WNBA game attendance by season, against
-the game-time sum of Elo ratings - 3000}
+quality of play (game-time sum of Elo ratings - 3000). Higher values
+indicate matchups between stronger teams.}
 
 \end{figure}%
 
@@ -816,7 +823,9 @@ Notebook}}
 
 }
 
-\caption{\label{fig-attend-f2}asd}
+\caption{\label{fig-attend-f2}WNBA game attendance by season, against
+uncertainty of outcome. Games are more competetive when UOH is closer to
+zero.}
 
 \end{figure}%
 
@@ -1006,6 +1015,16 @@ function, \(\mathbf{X}\) is as above, and \(\mathbf{\eta^{(k)}}\) has
 the same structure as \(\mathbf{\beta}^{(k)}\) defined above.
 
 \section{Results}\label{results}
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+\pandocbounded{\includegraphics[keepaspectratio]{index_files/figure-pdf/unnamed-chunk-9-1.pdf}}
 
 \textsubscript{Source:
 \href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
@@ -1240,6 +1259,7 @@ I(elo_home_pregame^2):I(elo_away_pregame^2)      0.087551 .
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 
 Residual standard error: 0.2384 on 4960 degrees of freedom
+  (135 observations deleted due to missingness)
 Multiple R-squared:  0.684, Adjusted R-squared:  0.6776 
 F-statistic: 105.3 on 102 and 4960 DF,  p-value: < 2.2e-16
 \end{verbatim}
@@ -1293,7 +1313,7 @@ variables except for population achieve ``statistical significance'' at
 the 5\%-level, as shown in Table~\ref{tbl-anova}). Residual analysis for
 the attendance models are shown in Section~\ref{sec-resid-attend}.
 
-\subsubsection{Main effects}\label{main-effects}
+\subsubsection{Baseline effects}\label{baseline-effects}
 
 {
 
@@ -1356,21 +1376,29 @@ f1 & P: Caitlin Clark & 0.460 & 0.042 & 10.825 & 0.000 & 0.376 &
 \href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
 Notebook}}
 
-Consider first the strong evidence for the Caitlin Clark effect. Even
-for the smallest coefficient in Table~\ref{tbl-coefs}, the expected
-attendance nearly doubles (i.e., is multiplied by \(\exp(0.623)\) =
-1.58) when Clark plays in the game, and this is \emph{after} controlling
-for the Indiana Fever team effect, the level of fan engagement, and the
-season effects! The corresponding change in attendance for A'ja
-Wilson---by most accounts a better player than Clark---is a multiple of
-1.06.
+Table~\ref{tbl-coefs} reports estimates from the baseline interaction.
+Because each measure of fan engagement is interacted with season, the
+reported coefficients for quality of play, outcome uncertainty, and loss
+aversion represent their estimated effects in the reference season
+(1997). The interaction terms, discussed below, capture how these
+relationships evolve over time. In the reference season, the evidence
+for the quality of play (\(f_1\)) and uncertainty of outcome (\(f_2\))
+hypotheses is weak, with those coefficients barely moving the needle.
+For the loss aversion hypothesis, a 10 percentage point increase in the
+probability of the home team winning is associated with a modest 4.31\%
+increase in the expected attendance, after controlling for our other
+factors.
 
-Conversely, the evidence for the quality of play (\(f_1\)) and
-uncertainty of outcome (\(f_2\)) hypotheses is weak, with those
-coefficients barely moving the needle. For the loss aversion hypothesis,
-a 10 percentage point increase in the probability of the home team
-winning is associated with a modest 4.31\% increase in the expected
-attendance, after controlling for our other factors.
+Among the control variables, games featuring Caitlin Clark were
+associated with significantly higher attendance, whole A'ja Wilson's
+presence was associated witha smaller but still significant increase in
+attendance. Even for the smallest coefficient in Table~\ref{tbl-coefs},
+the expected attendance nearly doubles (i.e., is multiplied by
+\(\exp(0.623)\) = 1.58) when Clark plays in the game, and this is
+\emph{after} controlling for the Indiana Fever team effect, the level of
+fan engagement, and the season effects! The corresponding change in
+attendance for A'ja Wilson---by most accounts a better player than
+Clark---is a multiple of 1.06.
 
 \protect\phantomsection\label{cell-fig-attend-coefs}
 \begin{figure}[H]
@@ -1391,10 +1419,11 @@ relatively large size of the coefficient associated with Caitlin Clark.}
 \href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
 Notebook}}
 
-Table~\ref{tbl-glance} characterizes the model fits. We can see that
-while all models achieve a similar fit, models \(f_1\) (corresponding to
-the quality of play hypothesis) and \(f_3\) (corresponding to the home
-win probability) are slightly superior by most metrics.
+Table~\ref{tbl-glance} characterizes the model's fit. Our model explains
+\(70.2%
+\) of the variance in game attendance, and the small difference between
+\(r^2\) and \(adj.r^2\) suggests that the complexity of our model is
+justified.
 
 {
 
@@ -1413,7 +1442,7 @@ win probability) are slightly superior by most metrics.
   >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.1111}}
   >{\raggedleft\arraybackslash}p{(\linewidth - 24\tabcolsep) * \real{0.0463}}@{}}
 
-\caption{\label{tbl-glance}Comparison of models.}
+\caption{\label{tbl-glance}Model fit}
 
 \tabularnewline
 
@@ -1459,6 +1488,53 @@ f1 & 0.702 & 0.691 & 0.233 & 66.734 & 0 & 172 & 274.025 & -200.05 &
 \textsubscript{Source:
 \href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
 Notebook}}
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.3789}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1263}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1263}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0947}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0632}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1263}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.0842}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Model
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Residual df
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Residual SS
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Df added
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+ΔSS
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+F-statistic
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+p-value
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Baseline (no season-varying slopes) & 4961 & 275.43 & NA & NA & NA &
+NA \\
+Season-varying slopes & 4883 & 265.62 & 78 & 9.814 & 2.313 & 0 \\
+\end{longtable}
+}
+
+\textsubscript{Source:
+\href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
+Notebook}}
+
+Table~\ref{tbl-anova} compares a model fit with constant slope
+coefficients to our model which allows each effect to vary by season.
+The interactions introduce 78 additional terms corresponding to season
+specific slopes to our model. The nested F-test rejects the null
+hypothesis that season-specific interactions are equal to zero,
+indicating that the effects of our fan engagement measures differ
+significantly across seasons.
 
 \subsubsection{Annual effects}\label{annual-effects}
 
@@ -1531,7 +1607,7 @@ estimators for the covariance matrix.
 \href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
 Notebook}}
 
-\subsubsection{Main effects}\label{main-effects-1}
+\subsubsection{Main effects}\label{main-effects}
 
 Table~\ref{tbl-coefs2} reports the coefficients from the percentage of
 arena capacity models.
@@ -1721,9 +1797,6 @@ slopes for percentage of arena capacity models.}
 \textsubscript{Source:
 \href{https://g-eastwood.github.io/wnbaattendance/index.qmd.html}{Article
 Notebook}}
-
-\subsection{Fan engagement and attendance over
-time}\label{fan-engagement-and-attendance-over-time}
 
 \section{Conclusion}\label{conclusion}
 
