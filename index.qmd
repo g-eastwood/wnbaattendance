@@ -559,31 +559,6 @@ slopes <- bind_rows(
   arrange(variable, season)
 ```
 
-```{r}
-library(ggplot2)
-
-ggplot(slopes, aes(x = season, y = estimate)) +
-  geom_point(alpha = 0.6) +
-  geom_line() +
-  geom_smooth(method = "lm", se = FALSE) +
-  facet_wrap(~ variable, scales = "free_y") +
-  theme_minimal() +
-  labs(
-    x = "Season",
-    y = "Estimated Attendance Slope",
-    title = "Evolution of Attendance Drivers Over Time"
-  )
-```
-
-
-```{r}
-#| label: coates
-mod_coates <- lm(log(attendance) ~ elo_home_pregame + elo_away_pregame + I(elo_home_pregame^2) * I(elo_away_pregame^2) + factor(season_id) + factor(wday(game_date)) + factor(month(game_date)) + factor(arena) + median_income + median_pop + is_cc + is_aw, data = mod_df)
-summary(mod_coates)
-anova(mod_coates)
-```
-
-
 ### Attendance {#sec-attend}
 
 In keeping with recent guidance from @wasserstein2016asa and @wasserstein2019moving, and with a sample size of over 5000 observations and dozens of coefficients, we are less interested in the p-values shown in @tbl-coefs, and focus our attention on the magnitude and practical impact of the fitted coefficients. 
@@ -695,11 +670,10 @@ anova_df <- tibble(
 )
 
 #| label: tbl-anova
-#| tbl-cap: Model comparison: constant vs season-varying effects of fan engagement on attendance."
+#| tbl-cap: "Model comparison: constant vs season-varying effects of fan engagement on attendance."
 kable(anova_df, digits = 3)
 ```
 @tbl-anova compares a model fit with constant slope coefficients to our model which allows each effect to vary by season. The interactions introduce 78 additional terms corresponding to season specific slopes to our model. The nested F-test rejects the null hypothesis that season-specific interactions are equal to zero, indicating that the effects of our fan engagement measures differ significantly across seasons. 
-
 
 #### Annual effects
 
@@ -725,12 +699,7 @@ plot_attend_seasons <- mod_attend_coefs |>
 plot_attend_seasons
 ```
 
-@fig-season-slopes shows a general increase in the slope of the interaction terms in all three models in recent years. 
-For all three models, these change in slope coefficients were decidedly negative until around 2015. 
-This suggests that the relationship between attendance and fan engagement was more moderate during those years. 
-(Note that for all three models, the main effect of the fan engagement term in @tbl-coefs is positive.)
-While the change in slope associated with model $f_1$ is still negative, it is closer to zero than it has been in the past. 
-The changes in slope associated with models $f_2$ and $f_3$ are now positive, although it is difficult to assess the long-term trend due to the pandemic being only a few years past. 
+@fig-season-slopes shows the season-by-season slopes on the interaction terms for our three hypotheses, relative to the 1997 reference season. Where the seasonal fixed effects convey broad attendance trends, the interaction term slopes identify trends in how fan behavior is driven by game outcomes. Where general attendance dropped off after the opening season, the extent to which fan behavior is influenced by game outcome seems to improve past the first season. In particular, the interaction coefficients on our loss aversion variable are positive and generally increasing, suggesting that the attendance response to home win probability has strengthened over the league's history. The importance of outcome uncertainty and quality of play on attendance appears to be weaker and not substantially improved in recent years.
 
 ```{r}
 #| label: fig-season-slopes
@@ -747,10 +716,45 @@ plot_attend_slopes <- mod_attend_coefs |>
 #  geom_errorbar(aes(ymin = conf.low, ymax = conf.high, width = 0.2)) +
   geom_smooth(se = 0) +
   scale_x_continuous("Season") +
-  scale_y_continuous("Estimated Season Fixed Effect") +
+  scale_y_continuous("Seasonal interaction coefficients (relative to 1997") +
   theme_minimal(base_size = 10)
 plot_attend_slopes
 ```
+
+```{r}
+#| label: fig-season-slopes-actual
+#| fig-cap: "Estimated season level slopes for attendance models"
+baseline <- tibble(
+  variable = c(
+    "I(z_loss_aversion)",
+    "I(z_quality_of_play)",
+    "I(z_uncertain_outcome)"
+  ),
+  baseline = c(
+    -0.081,
+    0.003,
+    -0.053
+  )
+)
+
+slopes_actual <- slopes|>
+  left_join(baseline, by = "variable")|>
+  mutate(slope = estimate + baseline)
+
+actual_slopes_plot <- slopes_actual |>
+ggplot(aes(x = season, y = slope, color = variable)) +
+  geom_hline(yintercept = 0, linetype = 3) +
+  geom_line() +
+#  geom_errorbar(aes(ymin = conf.low, ymax = conf.high, width = 0.2)) +
+  geom_smooth(se = 0) +
+  scale_x_continuous("Season") +
+  scale_y_continuous("Seasonal interaction coefficients") +
+  theme_minimal(base_size = 10)
+  
+actual_slopes_plot
+
+```
+
 
 ### Percentage of Arena Capacity
 
