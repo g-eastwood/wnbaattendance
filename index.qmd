@@ -145,11 +145,7 @@ Specifically, we focus on whether on-court factors are becoming more important t
 ### Existing scholarship on team performance and game attendance
 
 A key line of research in sports economics links fan demand to expectations about game outcomes. 
-Early work such as the uncertainty-of-outcome hypothesis suggests that attendance is higher when game results are less predictable, increasing perceived excitement. 
-
-::: {.callout-note title="Ben"}
-We need a citation for the Uncertainty of Outcome Hypothesis
-:::
+Early work such as the uncertainty-of-outcome hypothesis suggests that attendance is higher when game results are less predictable, increasing perceived excitement [@rottenberg1956baseball; @neale1964peculiar]. 
 
 @CoatesHumphreysZhou2014 use more recent behavioral economics models to suggest that people evaluate gains and losses relative to a reference point and tend to dislike losses more than they like equivalent wins. 
 They argue that applying this idea of loss aversion may better explain why fans choose to go to games than the uncertainty of outcome hypothesis. 
@@ -165,6 +161,7 @@ Multiple subsequent studies on men’s professional team sports continued to fin
 Differences in the literature over how to measure team quality (wins, wins lagged, number of championships in past years, win probability, star power), attendance (logs, lags, linear regression or censored), the inclusion of control variables and non-linear forms also emerged [@wiseman2003team; @woltring2018attendance; @kim2023winning; @deschriver2002determinants; @paul2019attendance].
 
 Studies of attendance and winning percentage often consider the latter as causing the former. 
+
 @davis2008interaction and @horowitz2007if both found that attendance and winning percentage were related. 
 Horowitz concluded a bidirectional relationship between the two, while Davis suggested that causation runs from winning percentage to attendance. 
 In a following study, @davis2009analyzing found winning percentage as a significant determinant of attendance for 12 National League teams. 
@@ -175,14 +172,7 @@ There is evidence that causation may run from attendance to winning percentage, 
 ::: {.callout-note title="Ben"}
 What evidence? We should cite something if there is evidence. 
 
-Also, really? Attedance causes winning percentage to rise???
-:::
-
-	
-Finally, situating these revenue models within the broader league structure, sports economists have written extensively about the relationship between winningness and team revenue, particularly about how competitive balance benefits teams across the league in generating revenue. 
-
-::: {.callout-note title="Ben"}
-What revenue models??
+Also, really? Attendance causes winning percentage to rise???
 :::
 
 While teams and fans want to win as many games as possible, significant imbalance in winning percentages across a professional sports league will tend to decrease viewership as spectators will only watch a game if they have some uncertainty about the outcome [@PerlineNobleStoldt2018]. 
@@ -245,6 +235,15 @@ While many other variables are omitted from the table, we note that the attendan
 #| label: tbl-attendance
 #| fig-cap: "Sample of Game-level WNBA data. The data indicates (among other things) which teams were playing, who won, the arena, the attendance, and whether Caitlin Clark and/or A'ja Wilson played in the game."
 
+my_gt <- function(x) {
+  x |>
+    gt() |>
+    tab_options(
+      table.font.size = px(11),
+      table.width = pct(100)
+    )
+}
+
 wnba_gl |>
   select(
     game_date,
@@ -257,8 +256,9 @@ wnba_gl |>
     wilson = is_aw
   ) |>
   slice_sample(n = 10) |>
+  mutate(game_date = as.character(game_date)) |>
   janitor::clean_names(case = "title") |>
-  gt() |>
+  my_gt() |>
   tab_header(
     title = "WNBA Game Data (1997-2025)",
     subtitle = "Sample of game-level records"
@@ -266,10 +266,6 @@ wnba_gl |>
   fmt_number(
     columns = Attendance,
     decimals = 0
-  ) |>
-  tab_options(
-    table.font.size = px(11),
-    table.width = pct(100)
   )
 ```
 
@@ -294,7 +290,7 @@ attend_pct_increase <- 100 * (attend_hi / attend_prev_hi - 1)
 
 Several broad observations can be made from @fig-boxplots. 
 First, after some initial enthusiasm during the first three years of the league, attendance largely plateaued or steadily but slightly declined from 2000 to 2017. 
-[Note that @AghaBerri2023 used only data through 2017.] 
+(Note that @AghaBerri2023 used only data through 2017.) 
 The two years preceding the pandemic (2018-2019) had notably lower attendance. 
 However, since the pandemic, attendance has rebounded, exceeding its initial levels by 2024 and reaching new heights in 2025. 
 In fact, average WNBA attendance in 2025 was `r format(round(attend_hi), scientific = FALSE, big.mark = ",")`, which was `r round(attend_pct_increase, 1)`% higher than the previous high in 1998. 
@@ -324,7 +320,7 @@ plot_attend_eda +
   scale_y_log10()
 ```
 
-### Arena capacity
+### Arena capacity {#sec-arenas}
 
 While we recorded reported arena capacities, those capacities were difficult to obtain for venues not in current use, they change over time, and some games had attendance that exceeded the arena's reported capacity. 
 Thus, we estimate each arena's capacity as the larger of the reported capacity, or the maximum recorded attendance at that arena in the sample. 
@@ -333,6 +329,7 @@ This ensures that our figures for the percentage of estimated arena capacity are
 We designate a sellout as a game in which the attendance exceeds 92% of the arena's estimated capacity.
 Using our definition, we deem `r round(100 * nrow(filter(wnba_gl, is_sellout)) / nrow(wnba_gl), 1)`% of the games to be sellouts, with nearly half of those occurring in the past two seasons. 
 `r nrow(filter(wnba_gl, is_sellout, is_cc == 1))` of Clark's `r nrow(filter(wnba_gl, is_cc == 1))` games have sold out. 
+The overall average percentage of arena capacity is `r wnba_gl$pct_capacity |> mean(na.rm = TRUE) |> round(3)`.
 
 @fig-boxplots-capacity shows the distribution of attendance as a percentage of the arena's estimated capacity. 
 
@@ -410,7 +407,7 @@ wnba_gl |>
   ) |>
   mutate(diff = obs_home_wpct - bin_midpoint) |>
   janitor::clean_names(case = "title") |>
-  gt() |>
+  my_gt() |>
   tab_header(
     title = "WNBA Home Win Probability Model Calibration (1997-2025)",
     subtitle = "10 Equally-spaced Bins"
@@ -418,12 +415,7 @@ wnba_gl |>
   fmt_number(
     decimals = 3
   ) |>
-  fmt_number(columns = Games, decimals = 0) |>
-  tab_options(
-    table.font.size = px(11),
-    table.width = pct(100)
-  )
-
+  fmt_number(columns = Games, decimals = 0)
 ```
 
 
@@ -512,7 +504,9 @@ wnba_gl |>
     avg_capacity = avg_attendance / max_attendance
   ) |>
   janitor::clean_names(case = "title") |>
-  knitr::kable(digits = c(0, 0, 0, 0, 1, 0, 2, 2))
+  my_gt() |>
+  fmt_number(columns = `Avg Attendance`, decimals = 1) |>
+  fmt_number(columns = c(`Pct Sellouts`, `Avg Capacity`), decimals = 3)
 ```
 
 
@@ -539,12 +533,14 @@ We note that @tbl-cor shows that our three fan engagement variables are largely 
 
 ```{r}
 #| label: tbl-cor
-#| tbl-cap: "Correlations among normalized fan engagment variables. "
+#| tbl-cap: "Correlations among normalized fan engagement variables. "
 wnba_gl |>
   select(matches("^z[0-9]_")) |>
   cor() |>
   janitor::clean_names(case = "title") |>
-  knitr::kable(digits = 3)
+  as_tibble() |>
+  my_gt() |>
+  fmt_number(decimals = 3)
 ```
 
 @fig-all-z illustrates how our normalized measures of fan engagement vary with respect to the estimated (pregame) strength of the home and away teams. 
@@ -554,7 +550,7 @@ Although this metric is not used directly in our analysis, it might be considere
 
 ```{r}
 #| label: fig-all-z
-#| fig-cap: "Distribution of normalized fan engagment measures as a function of home and away pregrame Elo ratings. The lack of correlation across these measures is obvious. The 4th panel shows the simple sum of all three measures. "
+#| fig-cap: "Distribution of normalized fan engagement measures as a function of home and away pregame Elo ratings. The lack of correlation across these measures is obvious. The 4th panel shows the simple sum of all three measures. "
 wnba_gl |>
   select(contains("pregame"), matches("^z")) |>
   pivot_longer(cols = !contains("pregame"), names_to = "variable", values_to = "value") |>
@@ -574,7 +570,7 @@ As time-related control variables, we include the season ($\tau_1$), the month o
 To control for city-related effects, we also include the team name ($\phi_1$), as well as the metropolitan area median income ($\phi_2$, in thousands of USD) and population ($\phi_3$, in millions) of the home city[^median].
 Finally, we include an indicator based on whether Caitlin Clark or A'ja Wilson played more than 0 minutes in the game ($\chi_1, \chi_2$, respectively). 
 
-[^median]: The data for the population and the median income of cities comes from the American Community Survey, access to which was provided in R by the `r pkg("tidycensus")` package. Because the population and median income statistics were available at irregular time periods (due to the COVID-19 pandemic and other factors), impute missing values using a cubic spline for interpolated values and the last observation carried forward (or backward) for extraploted values.  
+[^median]: The data for the population and the median income of cities comes from the American Community Survey, access to which was provided in R by the `r pkg("tidycensus")` package. Because the population and median income statistics were available at irregular time periods (due to the COVID-19 pandemic and other factors), impute missing values using a cubic spline for interpolated values and the last observation carried forward (or backward) for extrapolated values.  
 
 ### Interaction
 
@@ -604,10 +600,6 @@ form_interaction <- update(form_basic, paste(". ~ . + ", f_exp, "* factor(season
 mod_ols_basic <- lm(formula = form_basic, data = wnba_df)
 mod_ols <- lm(formula = form_interaction, data = wnba_df)
 ```
-
-
-Because the raw attendance figures are not normally distributed, we model the logarithm of attendance. 
-Similarly, because the percentage of arena capacity are bound above by 1 and below by 0, we employ a Tobit regression model. 
 
 Like @CoatesHumphreysZhou2014, we model the natural logarithm of attendance. 
 
@@ -643,9 +635,16 @@ mod_tobit <- vglm(
 )
 ```
 
-::: {.callout-note title="Ben"}
-Need to add details about Tobit modeling. 
-:::
+Also like @CoatesHumphreysZhou2014, we employ a Tobit model [@tobin1958estimation; @mcdonald1980uses], because the observed attendance is censored by the arena's capacity. 
+This means that what we are modeling is an unobserved, latent potential attendance, that may or may not exceed the arena's capacity. 
+In this Tobit model, we have:
+
+$$
+  \mathbb{E}(\ln{y}) = \begin{cases} y^*_k & \text{if } \symbf{X} \symbf{\beta} > 0.92 \cdot y^*_k \,, \\
+                         \symbf{X} \symbf{\beta} & \text{if } \symbf{X} \symbf{\beta} \leq 0.92 \cdot y^*_k
+                         \end{cases} \,,
+$$
+where $y^*_k$ is the estimated capacity of arena $k$, as described in @sec-arenas. 
 
 We fit the Tobit model in R using the `vglm()` and `tobit()` functions from the `r pkg("VGAM")` package. 
 
@@ -661,9 +660,8 @@ where $G(z) = \frac{e^z}{1 + e^z}$ is the (vectorized) logistic function, $\symb
 
 ## Results
 
-In keeping with recent guidance from @wasserstein2016asa and @wasserstein2019moving, and with a sample size of over 5000 observations and dozens of coefficients, we are less interested in the p-values shown in @tbl-coefs, and focus our attention on the magnitude and practical impact of the fitted coefficients. 
-(All variables except for population achieve "statistical significance" at the 5\%-level, as shown in @tbl-anova-tobit). 
-
+In keeping with recent guidance from the American Statistical Association [@wasserstein2016asa; @wasserstein2019moving], we focus our attention on the magnitude and practical impact of the fitted coefficients. 
+With a sample size of over 5000 observations and dozens of coefficients, it is not so surprising that many of our statistical tests result in p-values less than 0.05. 
 
 ```{r}
 #| include: false
@@ -697,8 +695,8 @@ tidy.vglm <- broom.helpers::tidy_vgam
 
 #### Baseline effects
 
-@tbl-coefs reports estimates from the Tobit model. 
-Because each measure of fan engagement interacts with season, the reported coefficients for quality of play, outcome uncertainty, and loss aversion represent their estimated effects for the reference levels: a home game for the Atlanta Dream taking place on a Sunday in May (in which neither Clark nor Wilson is playing).
+@tbl-coefs reports estimated coefficients in the Tobit model. 
+Because each measure of fan engagement interacts with season, the reported coefficients for quality of play, outcome uncertainty, and loss aversion represent their estimated effects for the reference level: a home game for the Atlanta Dream taking place on a Sunday in August 1997, in which neither Clark nor Wilson is playing.
 The interaction terms, discussed in @sec-annual, capture how these relationships evolve over time. 
 
 ```{r}
@@ -737,25 +735,22 @@ mod_attend_coefs |>
   mutate(term = sanitize_terms(term)) |>
   arrange(term) |>
   janitor::clean_names(case = "title") |>
-  knitr::kable(digits = 3)
+  my_gt() |>
+  fmt_number(decimals = 3)
 ```
 
 In the reference season, the evidence for loss aversion ($Z_3$) and uncertainty of outcome ($Z_2$) is weak, with those coefficients being of little significance, either practically or statistically. 
-The coefficient for quality of play (which *is* statistically significant) suggest that in 1997, a 1 standard deviation increase in the quality of play (as measured by the product of the Elo ratings) is associated with a modest `r round(100 * (exp(beta_quality/10) - 1), 2)`% increase in the expected attendance, after controlling for our other factors. 
-The strong support for quality of play (relative to uncertainty of outcome and loss aversion) is a key finding. 
+The coefficient for quality of play (which *is* statistically significant) suggest that in 1997, a 1 standard deviation increase in the quality of play (as measured by the product of the Elo ratings) is associated with a modest `r round(100 * (exp(beta_quality/10) - 1), 2)`% increase in the expected latent attendance, after controlling for our other factors. 
+The support for quality of play (relative to uncertainty of outcome and loss aversion) as a driver of attendance is a key finding. 
 
-Games featuring Caitlin Clark were associated with significantly higher attendance, while A'ja Wilson's presence was associated with a smaller but still nontrivial increase in attendance.
-The expected attendance more than doubles (i.e., is multiplied by $\exp(\text{`r round(min_cc, 3)`})$ = `r min_cc |> exp() |> round(2)`) when Clark plays in the game, and this is *after* controlling for the Indiana Fever team effect, the level of fan engagement, and the season effects! 
-The corresponding change in attendance for A'ja Wilson---by most accounts a better player than Clark---is multiplying by just `r mod_attend_coefs |> filter(term == "is_aw") |> pull(estimate) |> min() |> exp() |> round(2)`.
-
-::: {.callout-note title="Ben"}
-Need to provide an interpretation for the Tobit coefficient. 
-:::
+Games featuring Caitlin Clark were associated with substantially higher attendance, while A'ja Wilson's presence was associated with a smaller but still nontrivial increase in attendance.
+The expected latent attendance more than doubles (i.e., is multiplied by $\exp(\text{`r round(min_cc, 3)`})$ = `r min_cc |> exp() |> round(2)`) when Clark plays in the game, and this is *after* controlling for the Indiana Fever team effect, the levels of fan engagement, and the season effects! 
+The corresponding change in attendance for A'ja Wilson---by most accounts a better player than Clark---is multiplication by just `r mod_attend_coefs |> filter(term == "is_aw") |> pull(estimate) |> exp() |> round(2)`.
 
 Among the control variables, median income and metro area population had small negative effects after controlling for other variables. 
 
 @fig-attend-coefs presents the results of @tbl-coefs and some additional coefficients graphically.
-Confidence intervals for the coefficient associated with the Golden State Valkyries is omitted because it was so large that it renders all of the other effects indistinguishable. 
+Confidence intervals for the coefficient associated with the Golden State Valkyries (who have sold out all 22 of their home games) is omitted because it was so large that it renders all of the other effects indistinguishable. 
 The New York Liberty have the largest team effect, and all teams are positive relative to the Dream. 
 Saturday games have the highest attendance, as do games later in the season. 
 
@@ -793,7 +788,8 @@ glance.vglm <- function(x, ...) {
 }
 ```
 
-@tbl-glance characterizes the model's fit. 
+@tbl-glance characterizes the model's fit and @tbl-anova-tobit shows the ANOVA table. 
+The Tobit coefficient of `r tobit_coef <- mod_attend_coefs |> filter(original_term == "(Intercept):2") |> pull(estimate); tobit_coef |> round(2)` approximates the standard deviation of the latent attendance (on the log scale) when exponentiated (i.e., `r round(exp(tobit_coef), 3)`).
 
 #### Annual effects {#sec-annual}
 
@@ -801,18 +797,20 @@ glance.vglm <- function(x, ...) {
 The interactions introduce 78 additional terms corresponding to season specific slopes to our model. 
 The likelihood ratio test rejects the null hypothesis that all season-specific changes in slope are equal to zero, indicating that the effects of our fan engagement measures differ significantly across seasons. 
 
-The ANOVA tables shown in @tbl-anova-tobit further support the inclusion of all three sets of interaction terms. 
+The ANOVA table shown in @tbl-anova-tobit further support the inclusion of all three sets of interaction terms. 
 
 ```{r}
 #| label: tbl-lrt
 #| tbl-cap: "Model comparison: constant vs season-varying effects of fan engagement on attendance."
 anova(mod_tobit_basic, mod_tobit, type = "I") |>
-  knitr::kable(digits = 3)
+  my_gt() |>
+  fmt_number(columns = `Pr(>Chi)`, decimals = 3)
 ```
 
 @fig-season-coefs isolates the change in intercept associated with each WNBA season. 
-These reveal that even after controlling for our others variables---including the Caitlin Clark effect---expected attendance has exceeded its 1997 baseline in the most recent seasons. 
-Thus, after controlling for the influence of Clark and Wilson, league expected attendance has fully recovered from the COVID-19 pandemic and the malaise of the early 2000s and 2010s. 
+These reveal that even after controlling for our other variables---including the Caitlin Clark effect---expected attendance has exceeded its 1997 baseline in the most recent seasons. 
+Thus, even after controlling for the influence of Clark and Wilson, league expected attendance has fully recovered from the COVID-19 pandemic and the malaise of the early 2000s and 2010s. 
+This is a second key finding. 
 
 ```{r}
 #| label: fig-season-coefs
@@ -837,19 +835,17 @@ plot_attend_seasons
 The initial values (corresponding to 1997), match those in @tbl-coefs, and the subsequent interaction terms modify the relationships between attendance and fan engagement. 
 In @fig-season-slopes, we can see that there is little to no association with attendance from the uncertainty of the outcome.[^uoh] 
 The slope associated with loss aversion always positive and generally increasing, suggesting that the attendance response to home win probability has strengthened over the league's history. 
-This suggests that fan behavior in the WNBA may be becoming more similar to the behavior observed in MLB by @CoatesHumphreysZhou2014.
+This suggests that fan behavior in the WNBA may be becoming more similar to the behavior observed in Major League Baseball by @CoatesHumphreysZhou2014.
 
-[^uoh]: See the previous note about possible misspecification of the uncertainty of outcome response. 
+[^uoh]: See the previous note about possible misspecification of the uncertainty of outcome variable. 
 
 ::: {.callout-note title="Ben"}
 Say something about how this tracks with Agha and Berri. 
 :::
 
 Similarly, the slope associated with quality of play is always positive and generally increasing, following a steep fall after the league's first season. 
-
-::: {.callout-note title="Ben"}
-I'm not sure why the quality of play initial coefficient is so high and then drops off. 
-:::
+One possible explanation for the anomolously large fitted slope in 1997 is that a few very good and/or very bad teams stood out in the first year in the league. 
+Another plausible explanation is that since all teams started with an initial Elo rating of 1500, it took a while for the relationship between attendance and team strength to settle down. 
 
 In the case of quality of play and loss aversion, the exponentiated fitted coefficient value of approximately 0.1 in recent years means that a one standard deviation increase in these measures is associated with an increase in attendance that is about 10% higher than it would have been in the league's early years. 
 This is another key finding. 
@@ -904,8 +900,6 @@ plot_attend_slopes
 
 ### Modeling percentage of arena capacity
 
-Because our response variable $\gamma$ is constrained between 0 and 1, but has significant mass at 1 exactly, we fit a Papke-Wooldridge fractional response model [@papke1996econometric] with HC1 sandwich estimators for the covariance matrix. 
-
 ```{r}
 #| label: fit-tobit-pct
 # Arena capacity
@@ -933,11 +927,11 @@ vcov_pct <- vcovHC(mod_pct, type = "HC1")
 
 #### Main effects
 
-@tbl-coefs2 reports the coefficients from the percentage of arena capacity models. 
+@tbl-coefs2 reports the coefficients from the percentage of estimated arena capacity model, while @fig-pct-coefs graphically illustrates the relatively magnitude of the coefficients. 
 
 ```{r}
 #| label: tbl-coefs2
-#| tbl-cap: "Table of coefficients from percentage of arena capacity models. "
+#| tbl-cap: "Table of coefficients from percentage of estimated arena capacity model. "
 mod_pct_coefs <- mod_pct |>
   lmtest::coeftest(vcov_pct) |>
   broom::tidy(conf.int = TRUE)
@@ -947,10 +941,14 @@ mod_pct_coefs |>
   mutate(term = sanitize_terms(term)) |>
   arrange(term) |>
   janitor::clean_names(case = "title") |>
-  knitr::kable(digits = 3)
+  my_gt() |>
+  fmt_number(decimals = 3)
 ```
 
-@fig-pct-coefs shows that...
+In this model, the effect associated with Caitlin Clark's appearance is even more dramatic. 
+After controlling for our other factors, Clark's presence is associated with a `r cc_pct <- mod_pct_coefs |> filter(term == "is_cc") |> pull(estimate); cc_pct |> exp() |> round(2)`-fold increase in the ratio of the expected percentage of the arena filled relative to the percentage that is empty. 
+In other words, for an arena that would otherwise be expected to be half-full, Clark's marginal effect corresponds to a jump in the expected percentage of arena capacity to nearly `r (0.5 + 0.5^2 * cc_pct) |> round(2)`\%. 
+Clark has played all but one of her games in arena's that were more than 85% full (recall that the league average is about 50%). 
 
 ```{r}
 #| label: fig-pct-coefs
@@ -964,14 +962,13 @@ plot_attend_coefs +
   )
 ```
 
-
 @tbl-glance2 and @tbl-anova2 show model fit metrics and analysis of variance for the percentage of estimated arena capacity models, respectively. 
 
 #### Annual effects
 
 @fig-season-coefs2 displays the estimated effects of our fan engagement measures on attendance relative to the 1997 reference season. 
-Similar to the overall attendance trends, these effects generally remained below their 1997 levels for much of the league's history and only returned to comparable levels recently. 
-In the most recent years of measurement, however, we see the league exceeding previously record-holding levels.
+Similar to the attendance trends shown in @fig-season-coefs, these effects generally remained below their 1997 levels for much of the league's history and only returned to comparable levels recently. 
+In the most recent years of measurement, however, we see the league exceeding its previous highs.
 
 ```{r}
 #| label: fig-season-coefs2
@@ -984,7 +981,7 @@ plot_attend_seasons +
   bind_rows(tibble(season_id = 1997, estimate = 0))
 ```
 
-@fig-season-slopes2 shows that...??
+@fig-season-slopes2 shows that the changes in slopes associated with our measures of fan engagment follow similar patterns to those shown in @fig-season-slopes. 
 
 ```{r}
 #| label: fig-season-slopes2
@@ -998,18 +995,27 @@ plot_attend_slopes +
 
 ### Key results
 
-### Limitations
+After considering attendance across the entire history of the WNBA, we arrive at several conclusions. 
 
-Because the percentage of arena capacity data is right-censored, we considered a Tobit regression model [@mcdonald1980uses], but our residuals violated the normality and homoskedasticity conditions. 
-We also considered fitting a Beta regression model with a logit link function, and converting the fixed effects for seasons to random effects, but those models didn't converge. 
+- The effect on attendance associated with Caitlin Clark's appearance in the game is very large, even after controlling for a variety of other factors. 
+- Attendance has reached new heights in recent years, even after controlling for Clark's arrival and several other factors. 
+- The strength of the relationship between quality of play and attendance appears to be stronger in recent years. In this manner, the WNBA is showing signs of maturity, as fans attend games to see a high-quality product on the court. 
+
+### Limitations and future work
 
 We also considered fitting a period-based model but ultimately decided against this approach. 
 Defining periods by hand would require subjective decisions about the timing of structural breaks and would risk introducing researcher bias into the analysis. 
 
+There are reasonable objections to the way that we defined our measures of fan engagement. 
+We sought definitions that were supported in the literature and could be compared directly, but other approaches could also be valid. 
+In particular, our definition of the uncertainty of outcome is maximized when the two teams are equally strong, but one could argue that this should not be where the maximum occurs. 
 
-### Future work
+There is no theoretical explanation for why the slopes in @fig-season-slopes2 should converge. 
 
-possibly testing different definitions of UOH and Loss Aversion
+With just two seasons in our data set, while Clark's impact on attendance is undeniable, only time will tell if this impact is persistent. 
+It may very well be the case that as Clark's novelty wears off, her effect on attendance wanes. 
+A follow-up study could investigate this possibility. 
+
 
 
 ## References {.unnumbered}
@@ -1093,7 +1099,8 @@ mod_attend |>
 mod_attend |>
   anova() |>
   janitor::clean_names(case = "title") |>
-  knitr::kable(digits = 3)
+  my_gt() |>
+  fmt_number(columns = c(`X2 log Lik Diff`, `Log Lik`, `Pr Chi`), decimals = 3)
 ```
 
 ### Model fitting metrics for percentage of arena capacity model {#sec-fit-papke}
@@ -1114,6 +1121,7 @@ mod_pct |>
   broom::tidy() |>
   filter_out(str_detect(term, "NULL")) |>
   janitor::clean_names(case = "title") |>
-  knitr::kable(digits = 3)
+  my_gt() |>
+  fmt_number(columns = c(`Deviance`, `Residual Deviance`, `P Value`), decimals = 3)
 ```
 
