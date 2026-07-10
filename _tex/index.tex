@@ -149,22 +149,6 @@
 \usepackage{multirow}
 \KOMAoption{captions}{tableheading}
 \makeatletter
-\@ifpackageloaded{tcolorbox}{}{\usepackage[skins,breakable]{tcolorbox}}
-\@ifpackageloaded{fontawesome5}{}{\usepackage{fontawesome5}}
-\definecolor{quarto-callout-color}{HTML}{909090}
-\definecolor{quarto-callout-note-color}{HTML}{0758E5}
-\definecolor{quarto-callout-important-color}{HTML}{CC1914}
-\definecolor{quarto-callout-warning-color}{HTML}{EB9113}
-\definecolor{quarto-callout-tip-color}{HTML}{00A047}
-\definecolor{quarto-callout-caution-color}{HTML}{FC5300}
-\definecolor{quarto-callout-color-frame}{HTML}{acacac}
-\definecolor{quarto-callout-note-color-frame}{HTML}{4582ec}
-\definecolor{quarto-callout-important-color-frame}{HTML}{d9534f}
-\definecolor{quarto-callout-warning-color-frame}{HTML}{f0ad4e}
-\definecolor{quarto-callout-tip-color-frame}{HTML}{02b875}
-\definecolor{quarto-callout-caution-color-frame}{HTML}{fd7e14}
-\makeatother
-\makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
 \ifdefined\contentsname
@@ -223,7 +207,7 @@
 \title{Everyone Watches Women's Basketball: Attendance and Fan
 Engagement in the WNBA}
 \author{Gabriela Eastwood \and Benjamin S. Baumer \and Andrew Zimbalist}
-\date{2026-07-08}
+\date{2026-07-10}
 \begin{document}
 \maketitle
 \begin{abstract}
@@ -291,21 +275,18 @@ when game results are less predictable, increasing perceived excitement
 
 Coates et al. (2014) use more recent behavioral economics models to
 suggest that people evaluate gains and losses relative to a reference
-point and tend to dislike losses more than they like equivalent wins.
-They argue that applying this idea of loss aversion may better explain
-why fans choose to go to games than the uncertainty of outcome
-hypothesis. They use MLB live-game attendance data to find patterns
-consistent with the hypothesis that fans are less likely to attend games
-in which they expect the home team to lose (Coates et al. 2014). These
-frameworks together suggest that attendance decisions are sensitive not
-only to team quality, but to expectations about competitive performance
-and likely game outcomes.
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Ben}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-Let's say more about expected utility and non-linearity
-
-\end{tcolorbox}
+point and place greater weight on avoiding expected losses than on
+achieving comparable gains. Rather than predicting a simple linear
+relationship between attendance and win probability, their model
+theorizes that attendance relates non-linearly to win probability. They
+argue that applying this idea of loss aversion may better explain why
+fans choose to go to games than the uncertainty of outcome hypothesis.
+They use MLB live-game attendance data to find patterns consistent with
+the hypothesis that fans are less likely to attend games in which they
+expect the home team to lose (Coates et al. 2014). These frameworks
+together suggest that attendance decisions are sensitive not only to
+team quality, but to expectations about competitive performance and
+likely game outcomes.
 
 In the first study in sports economics that sought to empirically
 identify the factors that affected attendance, Noll (1974) considered
@@ -318,31 +299,19 @@ significant correlation between team quality and attendance. Differences
 in the literature over how to measure team quality (wins, wins lagged,
 number of championships in past years, win probability, star power),
 attendance (logs, lags, linear regression or censored), the inclusion of
-control variables and non-linear forms also emerged (Wiseman and
+control variables and nonlinear forms also emerged (Wiseman and
 Chatterjee 2003; Woltring 2018; Kim and Chang 2023; DeSchriver and
 Jensen 2002; Paul et al. 2019).
 
 Studies of attendance and winning percentage often consider the latter
-as causing the former.
-
-Davis (2008) and Horowitz (2007) both found that attendance and winning
-percentage were related. Horowitz concluded a bidirectional relationship
-between the two, while Davis suggested that causation runs from winning
-percentage to attendance. In a following study, Davis (2009) found
-winning percentage as a significant determinant of attendance for 12
-National League teams. The study did not establish causation both ways.
-Lemke et al. (2010) found attendance increases as home team win
-probability increases. There is evidence that causation may run from
-attendance to winning percentage, but the bulk of the literature has
-found the other way.
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Ben}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-What evidence? We should cite something if there is evidence.
-
-Also, really? Attendance causes winning percentage to rise???
-
-\end{tcolorbox}
+as causing the former. Davis (2008) and Horowitz (2007) both found that
+attendance and winning percentage were related. Horowitz concluded a
+bidirectional relationship between the two, while Davis suggested that
+causation runs from winning percentage to attendance. In a following
+study, Davis (2009) found winning percentage as a significant
+determinant of attendance for 12 National League teams. The study did
+not establish causation both ways. Lemke et al. (2010) found attendance
+increases as home team win probability increases.
 
 While teams and fans want to win as many games as possible, significant
 imbalance in winning percentages across a professional sports league
@@ -475,16 +444,16 @@ Wilson played in the game are recorded.
 \toprule
 Game Date & Home & Away & Arena & Attendance & Plus Minus & Clark & Wilson \\ 
 \midrule\addlinespace[2.5pt]
-2009-07-22 & PHO & MIN & Footprint Center & 7,360 & -13 & 0 & 0 \\ 
-2022-08-14 & WAS & IND & Entertainment and Sports Arena & 4,200 & 12 & 0 & 0 \\ 
-1998-06-19 & WAS & UTA & Capital One Arena & 20,674 & 9 & 0 & 0 \\ 
-2006-08-03 & PHO & CHA & Footprint Center & 7,078 & 28 & 0 & 0 \\ 
-1998-08-02 & NYL & CHA & Madison Square Garden & 14,684 & 18 & 0 & 0 \\ 
-2019-07-17 & CHI & ATL & Wintrust Arena & 10,143 & 1 & 0 & 0 \\ 
-1999-07-23 & CLE & DET & Quicken Loans Arena & 8,106 & -9 & 0 & 0 \\ 
-2018-08-08 & DAL & CON & College Park Center & 3,483 & -9 & 0 & 0 \\ 
-2016-08-28 & PHO & LAS & Footprint Center & 11,905 & 4 & 0 & 0 \\ 
-2007-08-16 & HOU & CHI & Toyota Center & 6,814 & -11 & 0 & 0 \\ 
+2000-06-15 & MIN & ORL & Target Center & 7,189 & 6 & 0 & 0 \\ 
+2022-05-15 & NYL & DAL & Barclays Center & 3,095 & -10 & 0 & 0 \\ 
+2013-09-06 & CON & WAS & Mohegan Sun Arena & 5,611 & 7 & 0 & 0 \\ 
+2009-08-01 & MIN & PHO & Target Center & 6,631 & -13 & 0 & 0 \\ 
+2010-08-06 & IND & ATL & Gainbridge Fieldhouse & 9,214 & 2 & 0 & 0 \\ 
+2020-08-09 & LAS & MIN & NA & NA & 16 & 0 & 0 \\ 
+2011-06-09 & ATL & WAS & State Farm Arena & 5,020 & -8 & 0 & 0 \\ 
+2008-09-13 & CON & WAS & Mohegan Sun Arena & 8,652 & 6 & 0 & 0 \\ 
+1999-07-31 & MIN & CHA & Target Center & 12,690 & -4 & 0 & 0 \\ 
+2009-09-05 & MIN & SEA & Target Center & 8,170 & 8 & 0 & 0 \\ 
 \bottomrule
 \end{tabular*}
 
@@ -700,17 +669,17 @@ Since we know the arena in which the game took place and the capacity of
 that arena, we also developed an alternative response variable:
 percentage of estimated arena capacity filled (\(\gamma\)).
 
-In Figure~\ref{fig-attendance-year}, we observe the relationship between
+In Figure~\ref{fig-attendance-year}, we examine the relationship between
 attendance and estimated home win probability. We add a simple quadratic
-regression line to reflect the quadratic relationship posited by Coates
-et al. (2014). In most years, the slope appears to be positive and the
-curvature concave up.
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Ben}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-How does this compare to Coates, et al?
-
-\end{tcolorbox}
+regression line as a flexible approximation of the nonlinear
+relationship posited by Coates et al. (2014). In most years, the slope
+appears to be positive and the curvature concave up. This pattern is
+broadly consistent with Coates et al. (2014)'s hypothesis that the
+expected utility of attending a game increases as the likelihood of a
+home-team victory rises. However, these observed relationships do not
+provide strong evidence that fans primarily seek to avoid losses. We do
+not observe a pronounced decline in attendance for games in which the
+home team's estimated win probability falls below 50\%.
 
 \protect\phantomsection\label{cell-fig-attendance-year}
 \begin{figure}[H]
@@ -1148,19 +1117,20 @@ uncertainty of the outcome.\footnote{See the previous note about
   possible misspecification of the uncertainty of outcome variable.} The
 slope associated with loss aversion always positive and generally
 increasing, suggesting that the attendance response to home win
-probability has strengthened over the league's history. This suggests
-that fan behavior in the WNBA may be becoming more similar to the
-behavior observed in Major League Baseball by Coates et al. (2014).
-
-\begin{tcolorbox}[enhanced jigsaw, arc=.35mm, bottomrule=.15mm, bottomtitle=1mm, breakable, colback=white, colbacktitle=quarto-callout-note-color!10!white, colframe=quarto-callout-note-color-frame, coltitle=black, left=2mm, leftrule=.75mm, opacityback=0, opacitybacktitle=0.6, rightrule=.15mm, title=\textcolor{quarto-callout-note-color}{\faInfo}\hspace{0.5em}{Ben}, titlerule=0mm, toprule=.15mm, toptitle=1mm]
-
-Say something about how this tracks with Agha and Berri.
-
-\end{tcolorbox}
+probability has strengthened over the league's history. While Agha and
+Berri (2023) did not find a statistically significant relationship
+between team strength and demand between 2004 and 2017, our analysis
+finds that estimated home win probability is a statistically significant
+predictor of attendance. We use game-level expected probabilities and
+incorporate a more recent period of league growth, finding that
+estimated home win probability is a statistically significant predictor
+of attendance and that its effect has strengthened over time. This
+suggests that fan behavior in the WNBA may be becoming more similar to
+the behavior observed in Major League Baseball by Coates et al. (2014).
 
 Similarly, the slope associated with quality of play is always positive
 and generally increasing, following a steep fall after the league's
-first season. One possible explanation for the anomolously large fitted
+first season. One possible explanation for the anomalously large fitted
 slope in 1997 is that a few very good and/or very bad teams stood out in
 the first year in the league. Another plausible explanation is that
 since all teams started with an initial Elo rating of 1500, it took a
@@ -1278,8 +1248,8 @@ for percentage of arena capacity models.}
 \end{figure}%
 
 Figure~\ref{fig-season-slopes2} shows that the changes in slopes
-associated with our measures of fan engagment follow similar patterns to
-those shown in Figure~\ref{fig-season-slopes}.
+associated with our measures of fan engagement follow similar patterns
+to those shown in Figure~\ref{fig-season-slopes}.
 
 \protect\phantomsection\label{cell-fig-season-slopes2}
 \begin{figure}[H]
@@ -1302,36 +1272,50 @@ slopes for percentage of arena capacity models.}
 After considering attendance across the entire history of the WNBA, we
 arrive at several conclusions.
 
-\begin{itemize}
-\tightlist
-\item
-  The effect on attendance associated with Caitlin Clark's appearance in
-  the game is very large, even after controlling for a variety of other
-  factors.
-\item
-  Attendance has reached new heights in recent years, even after
-  controlling for Clark's arrival and several other factors.
-\item
-  The strength of the relationship between quality of play and
-  attendance appears to be stronger in recent years. In this manner, the
-  WNBA is showing signs of maturity, as fans attend games to see a
-  high-quality product on the court.
-\end{itemize}
+Firstly, the effect of Caitlin Clark's presence on attendance is
+substantial. As discussed above, Clark's presence in a game more than
+doubles the expected attendance, even after controlling for other
+factors. Although interest in a single star player is not, by itself,
+evidence of sustained development, it is notable that earlier work did
+not find star players to be significant drivers of WNBA game attendance
+(Agha and Berri 2023).
+
+Secondly, as has been widely reported, attendance has reached new
+heights in recent years even after controlling for Clark's presence and
+other game, team, and market characteristics. This means that the
+league's recent success cannot be attributed only to the ``Caitlin Clark
+effect'' and instead indicates a broader increase in demand.
+
+Finally, we find evidence that the relationship between quality of play
+and attendance has strengthened over time. Both the home team's win
+probability and the combined strength of the two teams in a match up are
+significant predictors of attendance, and their effects have grown
+stronger in recent seasons. These findings suggest that the WNBA is
+entering a more mature stage of development, in which fans increasingly
+attend games for the product on the court rather than primarily out of
+novelty or support for women's sports.
 
 \subsection{Limitations and future
 work}\label{limitations-and-future-work}
 
-We also considered fitting a period-based model but ultimately decided
-against this approach. Defining periods by hand would require subjective
-decisions about the timing of structural breaks and would risk
-introducing researcher bias into the analysis.
+We considered fitting a period-based model that would allow us to
+isolate specific periods across the league's history and craft a more
+narrative explanation of fan engagement trends. We ultimately decided
+against this approach because defining periods by hand would require
+subjective decisions about the timing of structural breaks and would
+risk introducing researcher bias into the analysis.
 
 There are reasonable objections to the way that we defined our measures
 of fan engagement. We sought definitions that were supported in the
 literature and could be compared directly, but other approaches could
 also be valid. In particular, our definition of the uncertainty of
 outcome is maximized when the two teams are equally strong, but one
-could argue that this should not be where the maximum occurs.
+could argue that this should not be where the maximum occurs or that
+fans seek a range of uncertainty rather than a single point. Coates et
+al. (2014) use a reference based definition of uncertainty and find that
+fans only respond to uncertainty when other conditions are met,
+incorporating a reference based definition could be useful in future
+research in the WNBA context.
 
 There is no theoretical explanation for why the slopes in
 Figure~\ref{fig-season-slopes2} should converge.
@@ -1341,6 +1325,12 @@ attendance is undeniable, only time will tell if this impact is
 persistent. It may very well be the case that as Clark's novelty wears
 off, her effect on attendance wanes. A follow-up study could investigate
 this possibility.
+
+Finally, while we chose to focus on live, in-person game attendance, fan
+engagement with games on television and streaming also provide important
+insight into league health and development. Future research might
+investigate what drives fans' engagement with games from their own
+homes, where the lower cost of engagement might influence fan behavior.
 
 \section*{References}\label{references}
 \addcontentsline{toc}{section}{References}
