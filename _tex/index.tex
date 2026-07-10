@@ -311,7 +311,11 @@ causation runs from winning percentage to attendance. In a following
 study, Davis (2009) found winning percentage as a significant
 determinant of attendance for 12 National League teams. The study did
 not establish causation both ways. Lemke et al. (2010) found attendance
-increases as home team win probability increases.
+increases as home team win probability increases. The bulk of the
+literature has found that the causal direction runs from winning
+percentage to attendance\footnote{For a discussion of modeling causal
+  direction for time series data in the sports context, see Hall et al.
+  (2002).}.
 
 While teams and fans want to win as many games as possible, significant
 imbalance in winning percentages across a professional sports league
@@ -398,15 +402,15 @@ Our analysis is based on game-level data that spans WNBA history,
 beginning in 1997 and continuing through the end of the 2025 season. Our
 final data set contains observations from 6,164 games.
 
-First, we collected game-level attendance data from (Zimmerman 2026), an
-online repository for women's basketball data that collects attendance
-numbers directly from the league's records\footnote{Note that, as in
-  most sports leagues, there is always the possibility of finagling with
-  game attendance figures. The WNBA appears to give attendance counting
-  instructions to teams that define attendance as tickets out, including
-  total ticket sales, plus complimentary tickets and promotions. There
-  is considerable room for these factors to be manipulated, rendering
-  the possibility of noise in the attendance figures we use.}.
+First, we collected game-level attendance data from an online repository
+for women's basketball data that collects attendance numbers\footnote{Note
+  that, as in most sports leagues, there is always the possibility of
+  finagling with game attendance figures. The WNBA appears to give
+  attendance counting instructions to teams that define attendance as
+  tickets out, including total ticket sales, plus complimentary tickets
+  and promotions. There is considerable room for these factors to be
+  manipulated, rendering the possibility of noise in the attendance
+  figures we use.} directly from the league's records (Zimmerman 2026).
 Attendance data was unavailable for only 152 games, while (due to the
 COVID-19 pandemic) 2 games (accurately) recorded attendance of 0. The
 arenas in which WNBA teams play vary widely in size. For example, the
@@ -444,16 +448,16 @@ Wilson played in the game are recorded.
 \toprule
 Game Date & Home & Away & Arena & Attendance & Plus Minus & Clark & Wilson \\ 
 \midrule\addlinespace[2.5pt]
-2000-06-15 & MIN & ORL & Target Center & 7,189 & 6 & 0 & 0 \\ 
-2022-05-15 & NYL & DAL & Barclays Center & 3,095 & -10 & 0 & 0 \\ 
-2013-09-06 & CON & WAS & Mohegan Sun Arena & 5,611 & 7 & 0 & 0 \\ 
-2009-08-01 & MIN & PHO & Target Center & 6,631 & -13 & 0 & 0 \\ 
-2010-08-06 & IND & ATL & Gainbridge Fieldhouse & 9,214 & 2 & 0 & 0 \\ 
-2020-08-09 & LAS & MIN & NA & NA & 16 & 0 & 0 \\ 
-2011-06-09 & ATL & WAS & State Farm Arena & 5,020 & -8 & 0 & 0 \\ 
-2008-09-13 & CON & WAS & Mohegan Sun Arena & 8,652 & 6 & 0 & 0 \\ 
-1999-07-31 & MIN & CHA & Target Center & 12,690 & -4 & 0 & 0 \\ 
-2009-09-05 & MIN & SEA & Target Center & 8,170 & 8 & 0 & 0 \\ 
+2020-08-20 & NYL & CHI & NA & NA & -16 & 0 & 0 \\ 
+2012-06-28 & SAN & LAS & AT\&T Center & 15,184 & 14 & 0 & 0 \\ 
+2006-06-23 & PHO & IND & Footprint Center & 5,968 & -10 & 0 & 0 \\ 
+2023-06-27 & PHO & DAL & Footprint Center & 5,652 & -15 & 0 & 0 \\ 
+2019-08-25 & WAS & NYL & Entertainment and Sports Arena & 4,200 & 29 & 0 & 0 \\ 
+2019-08-14 & WAS & SEA & Entertainment and Sports Arena & 3,917 & 29 & 0 & 0 \\ 
+1998-06-15 & DET & CLE & Palace of Auburn Hills & 7,102 & -11 & 0 & 0 \\ 
+2007-05-20 & MIN & SAC & Target Center & 9,831 & -10 & 0 & 0 \\ 
+2010-08-06 & LAS & TUL & Crypto.com Arena & 8,962 & 7 & 0 & 0 \\ 
+2000-06-30 & SEA & MIN & Climate Pledge Arena & 9,131 & -12 & 0 & 0 \\ 
 \bottomrule
 \end{tabular*}
 
@@ -899,19 +903,20 @@ engagement (\(f_k\)) and season (\(\tau_1\)).
 Like Coates et al. (2014), we model the natural logarithm of attendance.
 
 Our general regression model for attendance is: \begin{align*}
-  \ln{y} &= \beta_0 + \underbrace{\beta_2 Z_1 + \beta_3 Z_2 + \beta_4 Z_3}_{\text{fan engagement}} \\
-    &+ \underbrace{\beta_5 \tau_1 + \beta_6 \tau_2 + \beta_7 \tau_3}_{\text{time-related}} + \underbrace{\beta_8 \phi_1 + \beta_9 \phi_2 + \beta_{10} \phi_3}_{\text{ city-related }} \\
-    &+ \underbrace{\beta_{11} \chi_1 + \beta_{12} \chi_2}_{\text{player-related}} + \underbrace{\beta_{13} Z_1 \tau_1 + \beta_{14} Z_2 \tau_2 + \beta_{15} Z_3 \tau_3}_{\text{interaction}} + \epsilon \\
+  \ln{y} &= \beta_0 + \underbrace{\beta_1 Z_1 + \beta_2 Z_2 + \beta_3 Z_3}_{\text{fan engagement}} \\
+    &+ \underbrace{\beta_4 \tau_1 + \beta_5 \tau_2 + \beta_6 \tau_3}_{\text{time-related}} + \underbrace{\beta_7 \phi_1 + \beta_8 \phi_2 + \beta_9 \phi_3}_{\text{ city-related }} \\
+    &+ \underbrace{\beta_{10} \chi_1 + \beta_{11} \chi_2}_{\text{player-related}} + \underbrace{\beta_{12} Z_1 \tau_1 + \beta_{13} Z_2 \tau_2 + \beta_{14} Z_3 \tau_3}_{\text{interaction}} + \epsilon \\
     &= \symbf{X} \symbf{\beta} + \epsilon \,,
 \end{align*} where \(\beta_j \in \mathbb{R}\) for
-\(j = \{0, 1, 2, 3, 11, 12\}\), while the other \(\beta_j\) coefficients
-are vectors of length equal to the number of factor levels in their
-corresponding categorical explanatory variable minus 1. Most notably
-\(\beta_5\) and \(\beta_8\) have 26 values (corresponding to each season
-after 1997) and \(\beta_5\) has 12 values (corresponding to each team).
-Only current WNBA franchises are included in the regression model. We
-also excluded all data from the 2020 and 2021 seasons, since there were
-no fans allowed in all or parts of both seasons.
+\(j = \{0, 1, 2, 3, 8, 9, 10, 11\}\), while the other \(\beta_j\)
+coefficients are vectors of length equal to the number of factor levels
+in their corresponding categorical explanatory variable minus 1. Most
+notably \(\beta_4, \beta_{12}, \beta_{13}, \beta_{14}\) have 26 values
+(corresponding to each season after 1997) and \(\beta_7\) has 12 values
+(corresponding to each team). Only current WNBA franchises are included
+in the regression model. We also excluded all data from the 2020 and
+2021 seasons, since there were no fans allowed in all or parts of both
+seasons.
 
 Also like Coates et al. (2014), we employ a Tobit model (Tobin 1958;
 McDonald and Moffitt 1980), because the observed attendance is censored
@@ -975,19 +980,19 @@ model for the natural logarithm of attendance.}
 \centering{
 
 \fontsize{8.0pt}{10.0pt}\selectfont
-\begin{tabular*}{1\linewidth}{@{\extracolsep{\fill}}lrrrrrr}
+\begin{tabular*}{1\linewidth}{@{\extracolsep{\fill}}llrrrrrr}
 \toprule
-Term & Estimate & Std Error & Statistic & P Value & Conf Low & Conf High \\ 
+Coef & Term & Estimate & Std Error & Statistic & P Value & Conf Low & Conf High \\ 
 \midrule\addlinespace[2.5pt]
-(Intercept):1 & 9.185 & 0.085 & 107.839 & 0.000 & 9.018 & 9.352 \\ 
-(Intercept):2 & -1.181 & 0.010 & -117.733 & 0.000 & -1.201 & -1.162 \\ 
-I(z1\_quality\_of\_play) & 0.212 & 0.079 & 2.677 & 0.007 & 0.057 & 0.368 \\ 
-I(z2\_uncertain\_outcome) & 0.019 & 0.045 & 0.430 & 0.667 & -0.069 & 0.108 \\ 
-I(z3\_loss\_aversion) & 0.025 & 0.056 & 0.440 & 0.660 & -0.085 & 0.135 \\ 
-Player: A'ja Wilson & 0.048 & 0.026 & 1.828 & 0.068 & -0.003 & 0.099 \\ 
-Player: Caitlin Clark & 0.846 & 0.054 & 15.543 & 0.000 & 0.739 & 0.953 \\ 
-median\_income & -0.006 & 0.001 & -4.169 & 0.000 & -0.008 & -0.003 \\ 
-metro\_pop & -0.016 & 0.006 & -2.586 & 0.010 & -0.029 & -0.004 \\ 
+\(\hat{\beta}_0\) & (Intercept):1 & 9.185 & 0.085 & 107.839 & 0.000 & 9.018 & 9.352 \\ 
+\(\hat{\sigma}\) & (Intercept):2 & -1.181 & 0.010 & -117.733 & 0.000 & -1.201 & -1.162 \\ 
+\(\hat{\beta}_1\) & I(z1\_quality\_of\_play) & 0.212 & 0.079 & 2.677 & 0.007 & 0.057 & 0.368 \\ 
+\(\hat{\beta}_2\) & I(z2\_uncertain\_outcome) & 0.019 & 0.045 & 0.430 & 0.667 & -0.069 & 0.108 \\ 
+\(\hat{\beta}_3\) & I(z3\_loss\_aversion) & 0.025 & 0.056 & 0.440 & 0.660 & -0.085 & 0.135 \\ 
+\(\hat{\beta}_{11}\) & Player: A'ja Wilson & 0.048 & 0.026 & 1.828 & 0.068 & -0.003 & 0.099 \\ 
+\(\hat{\beta}_{10}\) & Player: Caitlin Clark & 0.846 & 0.054 & 15.543 & 0.000 & 0.739 & 0.953 \\ 
+\(\hat{\beta}_8\) & median\_income & -0.006 & 0.001 & -4.169 & 0.000 & -0.008 & -0.003 \\ 
+\(\hat{\beta}_9\) & metro\_pop & -0.016 & 0.006 & -2.586 & 0.010 & -0.029 & -0.004 \\ 
 \bottomrule
 \end{tabular*}
 
@@ -995,38 +1000,41 @@ metro\_pop & -0.016 & 0.006 & -2.586 & 0.010 & -0.029 & -0.004 \\
 
 \end{table}%
 
-In the reference season, the evidence for loss aversion (\(Z_3\)) and
-uncertainty of outcome (\(Z_2\)) is weak, with those coefficients being
-of little significance, either practically or statistically. The
-coefficient for quality of play (which \emph{is} statistically
-significant) suggest that in 1997, a 1 standard deviation increase in
-the quality of play (as measured by the product of the Elo ratings) is
-associated with a modest 2.15\% increase in the expected latent
-attendance, after controlling for our other factors. The support for
-quality of play (relative to uncertainty of outcome and loss aversion)
-as a driver of attendance is a key finding.
+In the reference season, the evidence for loss aversion
+(\(\hat{\beta}_3\)) and uncertainty of outcome (\(\hat{\beta}_2\)) is
+weak, with those coefficients being of little significance, either
+practically or statistically. The coefficient for quality of play
+(\(\hat{\beta}_1\), which \emph{is} statistically significant) suggests
+that in 1997, a 1 standard deviation increase in the quality of play (as
+measured by the product of the Elo ratings) is associated with a modest
+2.15\% increase in the expected latent attendance, after controlling for
+our other factors. The support for quality of play (relative to
+uncertainty of outcome and loss aversion) as a driver of attendance is a
+key finding.
 
 Games featuring Caitlin Clark were associated with substantially higher
-attendance, while A'ja Wilson's presence was associated with a smaller
-but still nontrivial increase in attendance. The expected latent
-attendance more than doubles (i.e., is multiplied by
-\(\exp(\text{0.846})\) = 2.33) when Clark plays in the game, and this is
-\emph{after} controlling for the Indiana Fever team effect, the levels
-of fan engagement, and the season effects! The corresponding change in
-attendance for A'ja Wilson---by most accounts a better player than
-Clark---is multiplication by just 1.05.
+attendance (\(\hat{\beta}_{10}\)), while A'ja Wilson's presence was
+associated with a smaller but still nontrivial increase in attendance
+(\(\hat{\beta}_{11}\)). The expected latent attendance more than doubles
+(i.e., is multiplied by \(\exp(\text{0.846})\) = 2.33) when Clark plays
+in the game, and this is \emph{after} controlling for the Indiana Fever
+team effect, the levels of fan engagement, and the season effects! The
+corresponding change in attendance for A'ja Wilson---by most accounts a
+better player than Clark---is multiplication by just 1.05.
 
-Among the control variables, median income and metro area population had
-small negative effects after controlling for other variables.
+Among the control variables, median income (\(\hat{\beta}_8\)) and metro
+area population (\(\hat{\beta}_9\)) had small negative effects after
+controlling for other variables.
 
 Figure~\ref{fig-attend-coefs} presents the results of
 Table~\ref{tbl-coefs} and some additional coefficients graphically.
 Confidence intervals for the coefficient associated with the Golden
 State Valkyries (who have sold out all 22 of their home games) is
 omitted because it was so large that it renders all of the other effects
-indistinguishable. The New York Liberty have the largest team effect,
-and all teams are positive relative to the Dream. Saturday games have
-the highest attendance, as do games later in the season.
+indistinguishable. The New York Liberty have the largest team effect
+(\(\hat{\beta}_7\)), and all teams are positive relative to the Dream.
+Saturday games have the highest attendance (\(\hat{\beta}_6\)), as do
+games later in the season (\(\hat{\beta}_5\)).
 
 \protect\phantomsection\label{cell-fig-attend-coefs}
 \begin{figure}[H]
@@ -1085,13 +1093,14 @@ Resid. Df & LogLik & Df & 2 * LogLik Diff. & Pr(>Chi) \\
 \end{table}%
 
 Figure~\ref{fig-season-coefs} isolates the change in intercept
-associated with each WNBA season. These reveal that even after
-controlling for our other variables---including the Caitlin Clark
-effect---expected attendance has exceeded its 1997 baseline in the most
-recent seasons. Thus, even after controlling for the influence of Clark
-and Wilson, league expected attendance has fully recovered from the
-COVID-19 pandemic and the malaise of the early 2000s and 2010s. This is
-a second key finding.
+associated with each WNBA season (the various values of the vector
+\(\hat{\beta}_4\)). These reveal that even after controlling for our
+other variables---including the Caitlin Clark effect---expected
+attendance has exceeded its 1997 baseline in the most recent seasons.
+Thus, even after controlling for the influence of Clark and Wilson,
+league expected attendance has fully recovered from the COVID-19
+pandemic and the malaise of the early 2000s and 2010s. This is a second
+key finding.
 
 \protect\phantomsection\label{cell-fig-season-coefs}
 \begin{figure}[H]
@@ -1103,39 +1112,43 @@ a second key finding.
 }
 
 \caption{\label{fig-season-coefs}Estimated season-level fixed effects
-for Tobit attendance model.}
+for Tobit attendance model (\(\hat{\beta}_7\)).}
 
 \end{figure}%
 
 Figure~\ref{fig-season-slopes} shows the exponentiated season-by-season
 combined slopes for our three measures of fan engagement. The initial
-values (corresponding to 1997), match those in Table~\ref{tbl-coefs},
-and the subsequent interaction terms modify the relationships between
-attendance and fan engagement. In Figure~\ref{fig-season-slopes}, we can
-see that there is little to no association with attendance from the
-uncertainty of the outcome.\footnote{See the previous note about
-  possible misspecification of the uncertainty of outcome variable.} The
-slope associated with loss aversion always positive and generally
-increasing, suggesting that the attendance response to home win
-probability has strengthened over the league's history. While Agha and
-Berri (2023) did not find a statistically significant relationship
-between team strength and demand between 2004 and 2017, our analysis
-finds that estimated home win probability is a statistically significant
-predictor of attendance. We use game-level expected probabilities and
-incorporate a more recent period of league growth, finding that
-estimated home win probability is a statistically significant predictor
-of attendance and that its effect has strengthened over time. This
-suggests that fan behavior in the WNBA may be becoming more similar to
-the behavior observed in Major League Baseball by Coates et al. (2014).
+values (\(\hat{\beta}_1, \hat{\beta}_2, \hat{\beta}_3\), corresponding
+to 1997), match those in Table~\ref{tbl-coefs}, and the subsequent
+interaction terms
+(\(\hat{\beta}_{12}, \hat{\beta}_{13}, \hat{\beta}_{14}\)) modify the
+relationships between attendance and fan engagement. In
+Figure~\ref{fig-season-slopes}, we can see that there is little to no
+association with attendance from the uncertainty of the
+outcome.\footnote{See the previous note about possible misspecification
+  of the uncertainty of outcome variable.} The slope associated with
+loss aversion (\(\hat{\beta}_3 + \hat{\beta}_{14}\)) is always positive
+and generally increasing, suggesting that the attendance response to
+home win probability has strengthened over the league's history. While
+Agha and Berri (2023) did not find a statistically significant
+relationship between team strength and demand between 2004 and 2017, our
+analysis finds that estimated home win probability is a statistically
+significant predictor of attendance. We use game-level expected
+probabilities and incorporate a more recent period of league growth,
+finding that estimated home win probability is a statistically
+significant predictor of attendance and that its effect has strengthened
+over time. This suggests that fan behavior in the WNBA may be becoming
+more similar to the behavior observed in Major League Baseball by Coates
+et al. (2014).
 
-Similarly, the slope associated with quality of play is always positive
-and generally increasing, following a steep fall after the league's
-first season. One possible explanation for the anomalously large fitted
-slope in 1997 is that a few very good and/or very bad teams stood out in
-the first year in the league. Another plausible explanation is that
-since all teams started with an initial Elo rating of 1500, it took a
-while for the relationship between attendance and team strength to
-settle down.
+Similarly, the slope associated with quality of play
+(\(\hat{\beta}_1 + \hat{\beta}_{12}\)) is always positive and generally
+increasing, following a steep fall after the league's first season. One
+possible explanation for the anomalously large fitted slope in 1997 is
+that a few very good and/or very bad teams stood out in the first year
+in the league. Another plausible explanation is that since all teams
+started with an initial Elo rating of 1500, it took a while for the
+relationship between attendance and team strength to settle down.
 
 In the case of quality of play and loss aversion, the exponentiated
 fitted coefficient value of approximately 0.1 in recent years means that
@@ -1166,6 +1179,8 @@ capacity}\label{modeling-percentage-of-arena-capacity}
 Table~\ref{tbl-coefs2} reports the coefficients from the percentage of
 estimated arena capacity model, while Figure~\ref{fig-pct-coefs}
 graphically illustrates the relatively magnitude of the coefficients.
+The results largely mirror those of the Tobit model (compare to
+Table~\ref{tbl-coefs}).
 
 \begin{table}
 
@@ -1175,18 +1190,18 @@ estimated arena capacity model.}
 \centering{
 
 \fontsize{8.0pt}{10.0pt}\selectfont
-\begin{tabular*}{1\linewidth}{@{\extracolsep{\fill}}lrrrrrr}
+\begin{tabular*}{1\linewidth}{@{\extracolsep{\fill}}llrrrrrr}
 \toprule
-Term & Estimate & Std Error & Statistic & P Value & Conf Low & Conf High \\ 
+Coef & Term & Estimate & Std Error & Statistic & P Value & Conf Low & Conf High \\ 
 \midrule\addlinespace[2.5pt]
-(Intercept) & -0.495 & 0.184 & -2.695 & 0.007 & -0.855 & -0.135 \\ 
-I(z1\_quality\_of\_play) & 0.506 & 0.181 & 2.793 & 0.005 & 0.151 & 0.862 \\ 
-I(z2\_uncertain\_outcome) & 0.136 & 0.097 & 1.396 & 0.163 & -0.055 & 0.326 \\ 
-I(z3\_loss\_aversion) & 0.099 & 0.110 & 0.902 & 0.367 & -0.116 & 0.315 \\ 
-Player: A'ja Wilson & 0.275 & 0.064 & 4.329 & 0.000 & 0.151 & 0.400 \\ 
-Player: Caitlin Clark & 1.917 & 0.114 & 16.809 & 0.000 & 1.694 & 2.141 \\ 
-median\_income & 0.006 & 0.003 & 1.844 & 0.065 & 0.000 & 0.012 \\ 
-metro\_pop & 0.111 & 0.012 & 8.954 & 0.000 & 0.086 & 0.135 \\ 
+\(\hat{\beta}_0\) & (Intercept) & -0.495 & 0.184 & -2.695 & 0.007 & -0.855 & -0.135 \\ 
+\(\hat{\beta}_1\) & I(z1\_quality\_of\_play) & 0.506 & 0.181 & 2.793 & 0.005 & 0.151 & 0.862 \\ 
+\(\hat{\beta}_2\) & I(z2\_uncertain\_outcome) & 0.136 & 0.097 & 1.396 & 0.163 & -0.055 & 0.326 \\ 
+\(\hat{\beta}_3\) & I(z3\_loss\_aversion) & 0.099 & 0.110 & 0.902 & 0.367 & -0.116 & 0.315 \\ 
+\(\hat{\beta}_{11}\) & Player: A'ja Wilson & 0.275 & 0.064 & 4.329 & 0.000 & 0.151 & 0.400 \\ 
+\(\hat{\beta}_{10}\) & Player: Caitlin Clark & 1.917 & 0.114 & 16.809 & 0.000 & 1.694 & 2.141 \\ 
+\(\hat{\beta}_8\) & median\_income & 0.006 & 0.003 & 1.844 & 0.065 & 0.000 & 0.012 \\ 
+\(\hat{\beta}_9\) & metro\_pop & 0.111 & 0.012 & 8.954 & 0.000 & 0.086 & 0.135 \\ 
 \bottomrule
 \end{tabular*}
 
@@ -1194,15 +1209,15 @@ metro\_pop & 0.111 & 0.012 & 8.954 & 0.000 & 0.086 & 0.135 \\
 
 \end{table}%
 
-In this model, the effect associated with Caitlin Clark's appearance is
-even more dramatic. After controlling for our other factors, Clark's
-presence is associated with a 6.8-fold increase in the ratio of the
-expected percentage of the arena filled relative to the percentage that
-is empty. In other words, for an arena that would otherwise be expected
-to be half-full, Clark's marginal effect corresponds to a jump in the
-expected percentage of arena capacity to nearly 0.98\%. Clark has played
-all but one of her games in arena's that were more than 85\% full
-(recall that the league average is about 50\%).
+In this model, the effect associated with Caitlin Clark's appearance
+(\(\hat{\beta}_{10}\)) is even more dramatic. After controlling for our
+other factors, Clark's presence is associated with a 6.8-fold increase
+in the ratio of the expected percentage of the arena filled relative to
+the percentage that is empty. In other words, for an arena that would
+otherwise be expected to be half-full, Clark's marginal effect
+corresponds to a jump in the expected percentage of arena capacity to
+nearly 0.98\%. Clark has played all but one of her games in arena's that
+were more than 85\% full (recall that the league average is about 50\%).
 
 \protect\phantomsection\label{cell-fig-pct-coefs}
 \begin{figure}[H]
@@ -1243,7 +1258,7 @@ its previous highs.
 }
 
 \caption{\label{fig-season-coefs2}Estimated season-level fixed effects
-for percentage of arena capacity models.}
+for percentage of arena capacity models (\(\hat{\beta}_7\)).}
 
 \end{figure}%
 
@@ -1272,28 +1287,32 @@ slopes for percentage of arena capacity models.}
 After considering attendance across the entire history of the WNBA, we
 arrive at several conclusions.
 
-Firstly, the effect of Caitlin Clark's presence on attendance is
+First, the effect of Caitlin Clark's presence on attendance is
 substantial. As discussed above, Clark's presence in a game more than
 doubles the expected attendance, even after controlling for other
-factors. Although interest in a single star player is not, by itself,
+factors. Although interest in a single star player is not by itself
 evidence of sustained development, it is notable that earlier work did
 not find star players to be significant drivers of WNBA game attendance
 (Agha and Berri 2023).
 
-Secondly, as has been widely reported, attendance has reached new
-heights in recent years even after controlling for Clark's presence and
-other game, team, and market characteristics. This means that the
-league's recent success cannot be attributed only to the ``Caitlin Clark
-effect'' and instead indicates a broader increase in demand.
+Second, as has been widely reported, attendance has reached new heights
+in recent years even after controlling for Clark's presence and other
+game, team, and market characteristics. This means that the league's
+recent success cannot be attributed only to the ``Caitlin Clark effect''
+and instead indicates a broader increase in demand. The Golden State
+Valkyries filled all 18,064 seats in each one of their 22 home games in
+2025, only one of which involved Clark.
 
-Finally, we find evidence that the relationship between quality of play
-and attendance has strengthened over time. Both the home team's win
-probability and the combined strength of the two teams in a match up are
-significant predictors of attendance, and their effects have grown
-stronger in recent seasons. These findings suggest that the WNBA is
-entering a more mature stage of development, in which fans increasingly
-attend games for the product on the court rather than primarily out of
-novelty or support for women's sports.
+Finally, we find evidence that the relationships between attendance and
+our measurements of both quality of play and loss aversion have
+strengthened over time. The effect of quality of play appears to be more
+robust than the effect of our measurements of either loss aversion or
+uncertainty of outcome.
+
+These findings suggest that the WNBA is entering a more mature stage of
+development, in which fans increasingly attend games for the product on
+the court rather than primarily out of novelty or support for women's
+sports.
 
 \subsection{Limitations and future
 work}\label{limitations-and-future-work}
@@ -1318,13 +1337,16 @@ incorporating a reference based definition could be useful in future
 research in the WNBA context.
 
 There is no theoretical explanation for why the slopes in
-Figure~\ref{fig-season-slopes2} should converge.
+Figure~\ref{fig-season-slopes2} should converge to the same value.
 
 With just two seasons in our data set, while Clark's impact on
 attendance is undeniable, only time will tell if this impact is
-persistent. It may very well be the case that as Clark's novelty wears
-off, her effect on attendance wanes. A follow-up study could investigate
-this possibility.
+persistent.\footnote{The excitement that Clark has brought to the WNBA
+  may be reminiscent of the infusion of interest in the NBA that
+  occurred in the early- to mid-1980s with the arrival of Magic Johnson,
+  Larry Bird, and Michael Jordan.} It may very well be the case that as
+Clark's novelty wears off, her effect on attendance wanes. A follow-up
+study could investigate this possibility.
 
 Finally, while we chose to focus on live, in-person game attendance, fan
 engagement with games on television and streaming also provide important
@@ -1393,6 +1415,13 @@ in the Context of Successful Women's Professional Team Sports: A
 Mixed-Methods Case Study of Portland Thorns Fandom.''} \emph{Sport in
 Society} 21 (7): 1013--30.
 \url{https://doi.org/10.1080/17430437.2017.1346620}.
+
+\bibitem[\citeproctext]{ref-hall2002testing}
+Hall, Stephen, Stefan Szymanski, and Andrew S Zimbalist. 2002.
+{``Testing Causality Between Team Performance and Payroll: The Cases of
+Major League Baseball and English Soccer.''} \emph{Journal of Sports
+Economics} 3 (2): 149--68.
+\url{https://doi.org/10.1177/152700250200300204}.
 
 \bibitem[\citeproctext]{ref-horowitz2007if}
 Horowitz, Ira. 2007. {``If You Play Well They Will Come-and Vice Versa:
@@ -1585,7 +1614,8 @@ model}\label{sec-fit-tobit}
 
 \begin{longtable}[]{@{}lrrrrr@{}}
 
-\caption{\label{tbl-glance}Model fit}
+\caption{\label{tbl-glance}Model fit metrics for the Tobit model for
+attendance.}
 
 \tabularnewline
 
@@ -1609,24 +1639,24 @@ for the natural logarithm of attendance.}
 \centering{
 
 \fontsize{8.0pt}{10.0pt}\selectfont
-\begin{tabular*}{1\linewidth}{@{\extracolsep{\fill}}rrrrr}
+\begin{tabular*}{1\linewidth}{@{\extracolsep{\fill}}lrrrrr}
 \toprule
-Df & X2 log Lik Diff & Resid Df & Log Lik & Pr Chi \\ 
+Term & Df & X2 log Lik Diff & Resid Df & Log Lik & Pr Chi \\ 
 \midrule\addlinespace[2.5pt]
-1 & 210.087 & 10018 & -1,474.428 & 0.000 \\ 
-1 & 0.196 & 10018 & -1,305.246 & 0.658 \\ 
-1 & 173.653 & 10018 & -1,463.765 & 0.000 \\ 
-12 & 1,026.381 & 10003 & -1,796.867 & 0.000 \\ 
-1 & 17.205 & 9992 & -1,292.279 & 0.000 \\ 
-1 & 6.669 & 9992 & -1,287.011 & 0.010 \\ 
-1 & 245.851 & 9992 & -1,406.602 & 0.000 \\ 
-1 & 3.322 & 9992 & -1,285.338 & 0.068 \\ 
-26 & 774.641 & 10095 & -1,869.156 & 0.000 \\ 
-6 & 179.939 & 9997 & -1,373.646 & 0.000 \\ 
-4 & 152.937 & 9995 & -1,360.145 & 0.000 \\ 
-26 & 171.416 & 10017 & -1,369.385 & 0.000 \\ 
-26 & 42.942 & 10017 & -1,305.148 & 0.020 \\ 
-26 & 186.524 & 10017 & -1,376.939 & 0.000 \\ 
+I(z1\_quality\_of\_play) & 1 & 210.087 & 10018 & -1,474.428 & 0.000 \\ 
+I(z2\_uncertain\_outcome) & 1 & 0.196 & 10018 & -1,305.246 & 0.658 \\ 
+I(z3\_loss\_aversion) & 1 & 173.653 & 10018 & -1,463.765 & 0.000 \\ 
+factor(name\_current) & 12 & 1,026.381 & 10003 & -1,796.867 & 0.000 \\ 
+median\_income & 1 & 17.205 & 9992 & -1,292.279 & 0.000 \\ 
+metro\_pop & 1 & 6.669 & 9992 & -1,287.011 & 0.010 \\ 
+is\_cc & 1 & 245.851 & 9992 & -1,406.602 & 0.000 \\ 
+is\_aw & 1 & 3.322 & 9992 & -1,285.338 & 0.068 \\ 
+factor(season\_id) & 26 & 774.641 & 10095 & -1,869.156 & 0.000 \\ 
+as.character(wday(game\_date, label = TRUE, abbr = FALSE)) & 6 & 179.939 & 9997 & -1,373.646 & 0.000 \\ 
+as.character(month(game\_date, label = TRUE, abbr = FALSE)) & 4 & 152.937 & 9995 & -1,360.145 & 0.000 \\ 
+I(z1\_quality\_of\_play):factor(season\_id) & 26 & 171.416 & 10017 & -1,369.385 & 0.000 \\ 
+I(z2\_uncertain\_outcome):factor(season\_id) & 26 & 42.942 & 10017 & -1,305.148 & 0.020 \\ 
+I(z3\_loss\_aversion):factor(season\_id) & 26 & 186.524 & 10017 & -1,376.939 & 0.000 \\ 
 \bottomrule
 \end{tabular*}
 
@@ -1649,8 +1679,8 @@ model}\label{sec-fit-papke}
   >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1600}}
   >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.0667}}@{}}
 
-\caption{\label{tbl-glance2}Comparison of percentage of arena capacity
-models.}
+\caption{\label{tbl-glance2}Model fit metrics for the percentage of
+arena capacity model.}
 
 \tabularnewline
 
