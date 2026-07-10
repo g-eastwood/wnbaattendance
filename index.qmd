@@ -66,14 +66,14 @@ library(knitr)
 library(gt)
 
 pkg <- function(x, ...) {
-  if (knitr::is_html_output()) {
+#  if (knitr::is_html_output()) {
     paste0("**", x, "** [@R-", x, "]")
-  } else {
+#  } else {
     # isn't working:
 #    https://github.com/beanumber/datascience2/issues/7
 #    paste0(r"(\pkg{)", x, r"(\})")
-    paste0("**", x, "**")
-  }
+#    paste0("**", x, "**")
+#  }
 }
 ```
 
