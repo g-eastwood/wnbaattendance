@@ -207,7 +207,7 @@
 \title{Everyone Watches Women's Basketball: Attendance and Fan
 Engagement in the WNBA}
 \author{Gabriela Eastwood \and Benjamin S. Baumer \and Andrew Zimbalist}
-\date{2026-07-10}
+\date{2026-07-11}
 \begin{document}
 \maketitle
 \begin{abstract}
@@ -448,16 +448,16 @@ Wilson played in the game are recorded.
 \toprule
 Game Date & Home & Away & Arena & Attendance & Plus Minus & Clark & Wilson \\ 
 \midrule\addlinespace[2.5pt]
-2020-08-20 & NYL & CHI & NA & NA & -16 & 0 & 0 \\ 
-2012-06-28 & SAN & LAS & AT\&T Center & 15,184 & 14 & 0 & 0 \\ 
-2006-06-23 & PHO & IND & Footprint Center & 5,968 & -10 & 0 & 0 \\ 
-2023-06-27 & PHO & DAL & Footprint Center & 5,652 & -15 & 0 & 0 \\ 
-2019-08-25 & WAS & NYL & Entertainment and Sports Arena & 4,200 & 29 & 0 & 0 \\ 
-2019-08-14 & WAS & SEA & Entertainment and Sports Arena & 3,917 & 29 & 0 & 0 \\ 
-1998-06-15 & DET & CLE & Palace of Auburn Hills & 7,102 & -11 & 0 & 0 \\ 
-2007-05-20 & MIN & SAC & Target Center & 9,831 & -10 & 0 & 0 \\ 
-2010-08-06 & LAS & TUL & Crypto.com Arena & 8,962 & 7 & 0 & 0 \\ 
-2000-06-30 & SEA & MIN & Climate Pledge Arena & 9,131 & -12 & 0 & 0 \\ 
+2014-07-08 & ATL & CON & McCamish Pavilion & 3,496 & 12 & 0 & 0 \\ 
+2021-06-05 & CON & NYL & Mohegan Sun Arena & 2,118 & 21 & 0 & 0 \\ 
+2001-06-17 & DET & MIN & Palace of Auburn Hills & 5,076 & -8 & 0 & 0 \\ 
+2003-06-21 & MIN & IND & Target Center & 5,755 & 8 & 0 & 0 \\ 
+2021-08-26 & CON & LAS & Mohegan Sun Arena & 3,702 & 4 & 0 & 0 \\ 
+2014-07-05 & ATL & WAS & State Farm Arena & 6,382 & 13 & 0 & 0 \\ 
+2013-07-02 & PHO & NYL & Footprint Center & 7,636 & 7 & 0 & 0 \\ 
+2024-07-02 & NYL & MIN & Barclays Center & 10,846 & 9 & 0 & 0 \\ 
+2005-06-11 & SAN & CON & AT\&T Center & 9,772 & -9 & 0 & 0 \\ 
+2010-06-11 & CHI & WAS & Allstate Arena & 3,107 & -17 & 0 & 0 \\ 
 \bottomrule
 \end{tabular*}
 
@@ -587,7 +587,7 @@ rating will decrease by the same amount. Note that if team \(j\) upsets
 team \(i\), the corresponding changes in rating will be 22.51 points.
 This larger amount reflects the less likely outcome.
 
-We fit Elo ratings using the \textbf{elo} package for R.
+We fit Elo ratings using the \textbf{elo} (Heinzen 2023) package for R.
 Figure~\ref{fig-elo} shows the evolution of Elo rating
 \(\hat{\theta}_i(t)\) by franchise for the 12 teams who were active
 during the 2024 season. The recent poor performance of the Los Angeles
@@ -882,14 +882,14 @@ team name (\(\phi_1\)), as well as the metropolitan area median income
 (\(\phi_2\), in thousands of USD) and population (\(\phi_3\), in
 millions) of the home city\footnote{The data for the population and the
   median income of cities comes from the American Community Survey,
-  access to which was provided in R by the \textbf{tidycensus} package.
-  Because the population and median income statistics were available at
-  irregular time periods (due to the COVID-19 pandemic and other
-  factors), impute missing values using a cubic spline for interpolated
-  values and the last observation carried forward (or backward) for
-  extrapolated values.}. Finally, we include an indicator based on
-whether Caitlin Clark or A'ja Wilson played more than 0 minutes in the
-game (\(\chi_1, \chi_2\), respectively).
+  access to which was provided in R by the \textbf{tidycensus} (Walker
+  and Herman 2026) package. Because the population and median income
+  statistics were available at irregular time periods (due to the
+  COVID-19 pandemic and other factors), impute missing values using a
+  cubic spline for interpolated values and the last observation carried
+  forward (or backward) for extrapolated values.}. Finally, we include
+an indicator based on whether Caitlin Clark or A'ja Wilson played more
+than 0 minutes in the game (\(\chi_1, \chi_2\), respectively).
 
 \subsection{Interaction}\label{interaction}
 
@@ -932,7 +932,7 @@ arena's capacity. In this Tobit model, we have:
 described in Section~\ref{sec-arenas}.
 
 We fit the Tobit model in R using the \texttt{vglm()} and
-\texttt{tobit()} functions from the \textbf{VGAM} package.
+\texttt{tobit()} functions from the \textbf{VGAM} (Yee 2025) package.
 
 \subsection{Model formulation for percentage of arena
 capacity}\label{sec-mod-cap}
@@ -944,7 +944,7 @@ response model (Papke and Wooldridge 1996). This is equivalent to
 fitting a generalized linear model with a logit link function and
 applying HC1 sandwich estimators (MacKinnon and White 1985) for the
 covariance matrix, which we accomplish using the \textbf{sandwich}
-package in R. \[
+(Zeileis and Lumley 2024) package in R. \[
   \mathbb{E}{(\gamma | \symbf{X})} = G(\symbf{X} \symbf{\eta}) \,,
 \] where \(G(z) = \frac{e^z}{1 + e^z}\) is the (vectorized) logistic
 function, \(\symbf{X}\) is as above, and \(\symbf{\eta}\) has the same
@@ -1423,6 +1423,10 @@ Major League Baseball and English Soccer.''} \emph{Journal of Sports
 Economics} 3 (2): 149--68.
 \url{https://doi.org/10.1177/152700250200300204}.
 
+\bibitem[\citeproctext]{ref-R-elo}
+Heinzen, Ethan. 2023. \emph{Elo: Ranking Teams by Elo Rating and
+Comparable Methods}. \url{https://github.com/eheinzen/elo}.
+
 \bibitem[\citeproctext]{ref-horowitz2007if}
 Horowitz, Ira. 2007. {``If You Play Well They Will Come-and Vice Versa:
 Bidirectional Causality in Major-League Baseball.''} \emph{Managerial
@@ -1497,6 +1501,11 @@ Tobin, James. 1958. {``Estimation of Relationships for Limited Dependent
 Variables.''} \emph{Econometrica}, 24--36.
 \url{https://doi.org/10.2307/1907382}.
 
+\bibitem[\citeproctext]{ref-R-tidycensus}
+Walker, Kyle, and Matt Herman. 2026. \emph{Tidycensus: Load US Census
+Boundary and Attribute Data as Tidyverse and Sf-Ready Data Frames}.
+\url{https://walker-data.com/tidycensus/}.
+
 \bibitem[\citeproctext]{ref-wasserstein2016asa}
 Wasserstein, Ronald L, and Nicole A Lazar. 2016. {``The ASA Statement on
 p-Values: Context, Process, and Purpose.''} \emph{The American
@@ -1524,6 +1533,15 @@ Woltring, Mitchell T. 2018. {``Attendance Still Matters in MLB: The
 Relationship with Winning Percentage.''} \emph{The Sport Journal},
 November 22.
 \url{https://thesportjournal.org/article/attendance-still-matters-in-mlb-the-relationship-with-winning-percentage/}.
+
+\bibitem[\citeproctext]{ref-R-VGAM}
+Yee, Thomas. 2025. \emph{VGAM: Vector Generalized Linear and Additive
+Models}. \url{https://www.stat.auckland.ac.nz/~yee/VGAM/}.
+
+\bibitem[\citeproctext]{ref-R-sandwich}
+Zeileis, Achim, and Thomas Lumley. 2024. \emph{Sandwich: Robust
+Covariance Matrix Estimators}.
+\url{https://sandwich.R-Forge.R-project.org/}.
 
 \bibitem[\citeproctext]{ref-AcrossTheTimeline}
 Zimmerman, Kurtis. 2026. \emph{Game-by-Game Attendance}. Across the
