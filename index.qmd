@@ -3,9 +3,11 @@ title: "Everyone Watches Women's Basketball: Attendance and Fan Engagement in th
 author:
   - name: Gabriela Eastwood
     corresponding: true
-    email: geastwood@smith.edu
+    email: geastwood@uchicago.edu
+    orcid: 0009-0004-7969-198X
     affiliations:
       - ref: smith
+      - ref: uchicago
   - name: 
       given: Benjamin S. 
       family: Baumer
@@ -142,12 +144,10 @@ As a relatively young league with rapid growth in viewership [@wnba2024recordsea
 In this paper we set out to determine how the underlying causes shape game attendance and explain these more recent trends. 
 Specifically, we focus on whether on-court factors are becoming more important to WNBA game attendance in recent years.
 
-### Existing scholarship on team performance and game attendance
+### Existing theories of fan behavior
 
 A key line of research in sports economics links fan demand to expectations about game outcomes. 
-Early work such as the uncertainty-of-outcome hypothesis suggests that attendance is higher when game results are less predictable, increasing perceived excitement [@rottenberg1956baseball; @neale1964peculiar]. 
-
-@CoatesHumphreysZhou2014 use more recent behavioral economics models to suggest that people evaluate gains and losses relative to a reference point and place greater weight on avoiding expected losses than on achieving comparable gains. Rather than predicting a simple linear relationship between attendance and win probability, their model theorizes that attendance relates non-linearly to win probability. 
+Early work such as the uncertainty-of-outcome hypothesis suggests that attendance is higher when game results are less predictable, increasing perceived excitement [@rottenberg1956baseball; @neale1964peculiar]. @CoatesHumphreysZhou2014 use more recent behavioral economics models to suggest that people evaluate gains and losses relative to a reference point and place greater weight on avoiding expected losses than on achieving comparable gains. Rather than predicting a simple linear relationship between attendance and win probability, their model theorizes that attendance relates non-linearly to win probability. 
 They argue that applying this idea of loss aversion may better explain why fans choose to go to games than the uncertainty of outcome hypothesis. 
 They use MLB live-game attendance data to find patterns consistent with the hypothesis that fans are less likely to attend games in which they expect the home team to lose [@CoatesHumphreysZhou2014]. 
 These frameworks together suggest that attendance decisions are sensitive not only to team quality, but to expectations about competitive performance and likely game outcomes.
@@ -156,9 +156,9 @@ In the first study in sports economics that sought to empirically identify the f
 Multiple subsequent studies on men’s professional team sports continued to find a statistically significant correlation between team quality and attendance.
 Differences in the literature over how to measure team quality (wins, wins lagged, number of championships in past years, win probability, star power), attendance (logs, lags, linear regression or censored), the inclusion of control variables and nonlinear forms also emerged [@wiseman2003team; @woltring2018attendance; @kim2023winning; @deschriver2002determinants; @paul2019attendance].
 
-Studies of attendance and winning percentage often consider the latter as causing the former. 
+Studies of attendance and winning percentage most often theorize the latter as causing the former, although some work has considered a bidirectional causal relationship. 
 @davis2008interaction and @horowitz2007if both found that attendance and winning percentage were related. 
-Horowitz concluded a bidirectional relationship between the two, while Davis suggested that causation runs from winning percentage to attendance. 
+Horowitz concluded a bidirectional relationship between the two, while Davis suggested that causation runs from winning percentage to attendance. More broadly, sports economists have shown that causal relationships involving team performance may operate in both directions. For example, @hall2002 found evidence of a bidirectional causal relationship between payroll and team performance in Major League Baseball, suggesting that game attendance drives a feedback loop between payroll, performance, and revenue. 
 In a following study, @davis2009analyzing found winning percentage as a significant determinant of attendance for 12 National League teams. 
 The study did not establish causation both ways. 
 @lemke2010estimating found attendance increases as home team win probability increases. 
