@@ -7,7 +7,10 @@ author:
     orcid: 0009-0004-7969-198X
     affiliations:
       - ref: smith
-      - ref: uchicago
+      - id: uchicago
+        name: University of Chicago
+        department: Harris School of Public Policy
+        address: Chicago, IL
   - name: 
       given: Benjamin S. 
       family: Baumer
@@ -158,7 +161,7 @@ Differences in the literature over how to measure team quality (wins, wins lagge
 
 Studies of attendance and winning percentage most often theorize the latter as causing the former, although some work has considered a bidirectional causal relationship. 
 @davis2008interaction and @horowitz2007if both found that attendance and winning percentage were related. 
-Horowitz concluded a bidirectional relationship between the two, while Davis suggested that causation runs from winning percentage to attendance. More broadly, sports economists have shown that causal relationships involving team performance may operate in both directions. For example, @hall2002 found evidence of a bidirectional causal relationship between payroll and team performance in Major League Baseball, suggesting that game attendance drives a feedback loop between payroll, performance, and revenue. 
+Horowitz concluded a bidirectional relationship between the two, while Davis suggested that causation runs from winning percentage to attendance. More broadly, sports economists have shown that causal relationships involving team performance may operate in both directions.  
 In a following study, @davis2009analyzing found winning percentage as a significant determinant of attendance for 12 National League teams. 
 The study did not establish causation both ways. 
 @lemke2010estimating found attendance increases as home team win probability increases. 
