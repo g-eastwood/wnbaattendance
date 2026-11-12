@@ -192,10 +192,14 @@
 \usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
+% fallback for those not using the hyperref driver hyperxmp:
+\makeatletter
+\@ifundefined{xmpquote}{\newcommand{\xmpquote}[1]{#1}}{}
+\makeatother
 \hypersetup{
   pdftitle={Everyone Watches Women's Basketball: Attendance and Fan Engagement in the WNBA},
   pdfauthor={Gabriela Eastwood; Benjamin S. Baumer; Andrew Zimbalist},
-  pdfkeywords={WNBA, Game Attendance},
+  pdfkeywords={\xmpquote{WNBA}, \xmpquote{Game Attendance}},
   colorlinks=true,
   linkcolor={blue},
   filecolor={Maroon},
@@ -207,7 +211,7 @@
 \title{Everyone Watches Women's Basketball: Attendance and Fan
 Engagement in the WNBA}
 \author{Gabriela Eastwood \and Benjamin S. Baumer \and Andrew Zimbalist}
-\date{2026-07-12}
+\date{2026-11-12}
 \begin{document}
 \maketitle
 \begin{abstract}
@@ -449,16 +453,16 @@ Wilson played in the game are recorded.
 \toprule
 Game Date & Home & Away & Arena & Attendance & Plus Minus & Clark & Wilson \\ 
 \midrule\addlinespace[2.5pt]
-2015-08-07 & IND & ATL & Gainbridge Fieldhouse & 7,869 & 29 & 0 & 0 \\ 
-2013-07-14 & SEA & ATL & Climate Pledge Arena & 6,479 & 8 & 0 & 0 \\ 
-2007-06-02 & SAC & LAS & ARCO Arena & 17,317 & 3 & 0 & 0 \\ 
-2003-08-18 & NYL & HOU & Madison Square Garden & 13,547 & 3 & 0 & 0 \\ 
-2025-09-01 & SEA & LAS & Climate Pledge Arena & 12,500 & -6 & 0 & 0 \\ 
-1997-08-16 & UTA & LAS & EnergySolutions Arena & 8,970 & -10 & 0 & 0 \\ 
-2006-07-06 & DET & PHO & Palace of Auburn Hills & 9,832 & -15 & 0 & 0 \\ 
-2004-09-17 & CON & NYL & Mohegan Sun Arena & 8,286 & -3 & 0 & 0 \\ 
-2008-07-24 & SAN & CHI & AT\&T Center & 9,372 & 11 & 0 & 0 \\ 
-2009-09-01 & SAC & CON & ARCO Arena & 6,015 & 20 & 0 & 0 \\ 
+2016-06-19 & SEA & MIN & Climate Pledge Arena & 5,749 & -12 & 0 & 0 \\ 
+2016-05-19 & SAN & CON & AT\&T Center & 6,267 & -4 & 0 & 0 \\ 
+2021-06-05 & LAS & CHI & Los Angeles Convention Center & 430 & 5 & 0 & 0 \\ 
+2002-08-12 & UTA & SAC & EnergySolutions Arena & 10,985 & 2 & 0 & 0 \\ 
+2023-08-28 & NYL & LVA & Barclays Center & 11,615 & 9 & 0 & 1 \\ 
+2017-09-03 & MIN & WAS & Xcel Energy Center & 10,321 & 14 & 0 & 0 \\ 
+2013-08-06 & SAN & MIN & AT\&T Center & 5,390 & -13 & 0 & 0 \\ 
+2012-09-11 & CHI & MIN & Allstate Arena & 4,296 & 13 & 0 & 0 \\ 
+2003-07-26 & CON & CHA & Hartford Civic Center & 5,731 & 4 & 0 & 0 \\ 
+2015-08-12 & CON & TUL & Mohegan Sun Arena & 4,682 & 6 & 0 & 0 \\ 
 \bottomrule
 \end{tabular*}
 
@@ -1542,7 +1546,7 @@ Models}. \url{https://www.stat.auckland.ac.nz/~yee/VGAM/}.
 \bibitem[\citeproctext]{ref-R-sandwich}
 Zeileis, Achim, and Thomas Lumley. 2026. \emph{Sandwich: Robust
 Covariance Matrix Estimators}.
-\url{https://sandwich.R-Forge.R-project.org/}.
+\url{https://zeileis.codeberg.page/sandwich/}.
 
 \bibitem[\citeproctext]{ref-AcrossTheTimeline}
 Zimmerman, Kurtis. 2026. \emph{Game-by-Game Attendance}. Across the
@@ -1629,8 +1633,6 @@ normalized uncertainty of outcome.}
 \subsection{Model fitting metrics for attendance
 model}\label{sec-fit-tobit}
 
-{
-
 \begin{longtable}[]{@{}lrrrrr@{}}
 
 \caption{\label{tbl-glance}Model fit metrics for the Tobit model for
@@ -1647,8 +1649,6 @@ model & nobs & df.residual & logLik & AIC & BIC \\
 1 & 5063 & 9991 & -1283.677 & 2837.354 & 3718.865 \\
 
 \end{longtable}
-
-}
 
 \begin{table}
 
@@ -1685,8 +1685,6 @@ I(z3\_loss\_aversion):factor(season\_id) & 26 & 186.524 & 10017 & -1,376.939 & 0
 
 \subsection{Model fitting metrics for percentage of arena capacity
 model}\label{sec-fit-papke}
-
-{
 
 \begin{longtable}[]{@{}
   >{\raggedleft\arraybackslash}p{(\linewidth - 14\tabcolsep) * \real{0.1867}}
@@ -1729,8 +1727,6 @@ nobs
 5063 \\
 
 \end{longtable}
-
-}
 
 \begin{table}
 
