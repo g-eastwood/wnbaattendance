@@ -14,7 +14,7 @@ franchises <- wnba_gamelogs |>
     season_first = min(season_id),
     season_last = max(season_id),
     name_current = last(team_name),
-    is_active = season_last == 2025
+    is_active = season_last == 2026
   )
 
 wnba_gl_active <- wnba_gamelogs |>
@@ -111,3 +111,4 @@ wnba_gl_elo |>
 
 
 write_rds(wnba_gl_elo, here::here("data/wnba_gl_elo.rds"))
+
